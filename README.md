@@ -6,3 +6,4 @@ ClueLess Server and Client
 # Naming Conventions
 Branches should be naming with the issue number in the name
 Commits should reference the issue number in the message
+Pull request should use the conventions detailed at https://help.github.com/articles/closing-issues-using-keywords/ to properly link up to issues
