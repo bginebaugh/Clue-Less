@@ -3,7 +3,7 @@ import React from 'react';
 export default class Login extends React.Component {
 
     alertMe() {
-        alert("Look at me! Hello NorthRaki!");
+        alert("Look at me! Hello NorthRaki! Adding more text");
     }
 
     render() {
