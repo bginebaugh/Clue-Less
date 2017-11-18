@@ -4,14 +4,17 @@
     <meta charset="UTF-8">
     <title>NorthRaki Clue-Less!</title>
   </head>
-  <body>
+  <body className="bg-dark">
     <div id="app">
       Loading...
     </div>
 
-    <script>
+  <script>
     // You can also require other files to run in this process
     // install babel hooks in the main process
+
+    var socket = undefined;
+    var tcpConnection = undefined;
 
     var bundlePath = './bundle/renderer.bundle.js';
 
