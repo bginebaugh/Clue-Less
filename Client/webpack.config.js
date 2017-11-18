@@ -18,6 +18,7 @@ const config = {
     libraryTarget: 'commonjs2'
   },
   module: {
+    noParse: [/\.ws$/],
     loaders: [
       { test: /\.js$/,
         loader: 'babel-loader',
@@ -37,6 +38,7 @@ const config = {
       }
     ]
   },
+  externals: ['ws'],
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
   ]
