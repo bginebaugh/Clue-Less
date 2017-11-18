@@ -1,4 +1,5 @@
 import { List } from 'immutable';
+import 'bootstrap';
 
 let id = 0;
 const initialState = { items:List([])}

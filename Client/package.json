@@ -38,13 +38,20 @@
     "webpack-hot-middleware": "^2.20.0"
   },
   "dependencies": {
+    "autoprefixer": "^7.1.6",
     "axios": "^0.17.1",
     "immutable": "^3.8.2",
+    "jquery": "^3.2.1",
+    "net": "^1.0.2",
+    "popper.js": "^1.12.9",
+    "postcss-loader": "^2.0.8",
+    "precss": "^2.0.0",
     "react": "^16.1.0",
     "react-dom": "^16.1.0",
     "react-redux": "^5.0.6",
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
+    "sass-loader": "^6.0.6",
     "socket.io-client": "^2.0.4"
   }
 }
