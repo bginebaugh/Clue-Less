@@ -1,6 +1,15 @@
 # Compiled class file
 *.class
 
+# Temporary swp files
+.*.swp
+
+# Gradle Stuff
+.gradle/
+
+# Build
+build/
+
 # Log file
 *.log
 
@@ -23,3 +32,4 @@ hs_err_pid*
 
 # Client stuff
 Client/node_modules
+
