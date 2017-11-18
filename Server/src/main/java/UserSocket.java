@@ -13,8 +13,8 @@ public class UserSocket {
 
 	public UserSocket(Socket socket) throws IOException {
 		m_socket = socket;
-		m_input = new InputStreamReader(m_socket.getInputStream(), StandardCharsets.UTF_8);
 		m_output = new OutputStreamWriter(m_socket.getOutputStream(), StandardCharsets.UTF_8);
+		m_input = new InputStreamReader(m_socket.getInputStream(), StandardCharsets.UTF_8);
 		System.out.println("Connected to client at address " + m_socket.getLocalAddress() + ":" + m_socket.getLocalPort());
 	}
 
@@ -29,6 +29,8 @@ public class UserSocket {
 		String jsonText = out.toString();
 		try {
 			m_output.write(jsonText, 0, jsonText.length());
+			m_output.flush();
+			System.out.println("Successfully sent to User: " + jsonText);
 		} catch (IOException e) {
 			System.out.println(e);
 			System.out.println("Failed to send warning to user");
