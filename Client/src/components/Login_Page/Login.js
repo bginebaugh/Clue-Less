@@ -1,5 +1,7 @@
 import React from 'react';
 import './Login.css';
+import net from "net";
+import Settings from '../../Settings';
 
 export default class Login extends React.Component {
 
@@ -9,10 +11,6 @@ export default class Login extends React.Component {
         this.state = {
             showCustomServer: false
         }
-    }
-
-    alertMe() {
-        alert("Look at me! Hello NorthRaki! Adding more text. Even more text");
     }
 
     customServer() {
@@ -48,10 +46,28 @@ export default class Login extends React.Component {
                     {this.customServer()}
                     {this.customizeServerToggle()}
                     <hr/>
-                    <a className="btn btn-primary btn-block pointer-cursor" href="index.html">Login</a>
+                    <div className="btn btn-primary btn-block pointer-cursor" onClick={this.testLoginToServer.bind(this)}>Click me to test TCP connection</div>
                 </div>
             </div>
       </div>;
+    }
+
+    // todo: this is just a test for now
+    testLoginToServer() {
+        tcpConnection = new net.Socket();
+        
+        tcpConnection.connect(Settings.serverPort, Settings.serverBaseUrl, function() {
+            console.log('Connected');
+            tcpConnection.write('Hello, server! Love, Client.');
+        });
+        
+        tcpConnection.on('data', function(data) {
+            console.log('Received: ' + data);
+        });
+        
+        tcpConnection.on('close', function() {
+            console.log('Connection closed');
+        });
     }
 
     render() {
