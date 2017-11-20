@@ -1,10 +1,29 @@
+import { store } from '../../renderer';
+
 export default {
 
-    generateUsernameJsonString(name) {
+    generateMessageHeader(messageType, userId, gameId) {
+
         let obj = {
-            name: name
-        }
+            messageType: messageType,
+            userId: userId,
+            gameId
+        };
+
+        return obj;
+
+    },
+
+    generateLoginMessage(name) {
+
+        let userId = store.getState().User.userId;
+        let gameId = store.getState().User.gameId;
+
+        let messageHeader = this.generateMessageHeader("loginMessage", userId, gameId);
+
+        let obj = Object.assign({}, messageHeader, { message: { username: name } });
+
         return JSON.stringify(obj);
     }
-    
+
 }
