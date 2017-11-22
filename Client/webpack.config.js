@@ -28,7 +28,7 @@ const config = {
         ],
         exclude: /node_modules/,
         query: {
-          presets: ['es2015', 'react', 'react-hmre']
+          presets: ['es2015', 'react', 'react-hmre','stage-2']
         }
       },
       { test: /\.scss$/, loader: 'style-loader!css-loader!sass-loader' },

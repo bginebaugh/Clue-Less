@@ -40,6 +40,7 @@
   "dependencies": {
     "autoprefixer": "^7.1.6",
     "axios": "^0.17.1",
+    "babel-preset-stage-2": "^6.24.1",
     "bootstrap": "^4.0.0-beta.2",
     "immutable": "^3.8.2",
     "jquery": "^3.2.1",
@@ -50,6 +51,7 @@
     "react": "^16.1.0",
     "react-dom": "^16.1.0",
     "react-redux": "^5.0.6",
+    "react-router-dom": "^4.2.2",
     "reactstrap": "^5.0.0-alpha.4",
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
