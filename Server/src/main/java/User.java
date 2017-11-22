@@ -23,5 +23,6 @@ class User extends Thread {
 	public void run() {
 		System.out.println("Thread for user \"" + m_username + "\" started!");
 		m_userSocket.sendWarningMessage();
+		m_userSocket.testInputStream();
 	}
 }
