@@ -41,7 +41,7 @@ export default {
 
     loginToServer(username, ip, port, cb) {
 
-        let usernameJson = Messages.generateUsernameJsonString(username);
+        let usernameJson = Messages.generateLoginMessage(username);
 
         // fixme: right way to set a timeout on trying to connect
         // let connectToServer = (port, ip, usernameJson) => {
