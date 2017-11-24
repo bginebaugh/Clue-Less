@@ -1,5 +1,7 @@
 import React from 'react';
 import './Login.css';
+import { Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
 import Settings from '../../Settings';
 import { Button, Form, FormGroup, Label, Input,
     Modal, ModalHeader, ModalBody, ModalFooter
@@ -7,7 +9,13 @@ import { Button, Form, FormGroup, Label, Input,
 import Messages from '../../classes/Messages';
 import ServerProxy from '../../classes/ServerProxy';
 
-export default class Login extends React.Component {
+const mapStateToProps = (state = {}) => {
+    return {
+        isLoggedIn: state.User.isLoggedIn
+    };
+};
+
+export class Login extends React.Component {
 
     constructor() {
         super();
@@ -22,7 +30,7 @@ export default class Login extends React.Component {
     componentDidMount() {
         this.resetIpToDefault();       
     }
-    
+
     resetIpToDefault() {
         this.ip = Settings.serverBaseUrl;
         this.port = Settings.serverPort;
@@ -118,11 +126,17 @@ export default class Login extends React.Component {
 
     render() {
 
-        return (<div>
-            {this.loginPage()}
-            {this.renderModal()}
-        </div>);
+        if (this.props.isLoggedIn) {
+            return <Redirect to='/lobby'/>;
+        } else {
+            return (<div>
+                {this.loginPage()}
+                {this.renderModal()}
+            </div>);
+        }
 
     }
 
 }
+
+export default connect(mapStateToProps)(Login);

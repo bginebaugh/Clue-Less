@@ -16,13 +16,22 @@ const User = (state = initialState, action) => {
         } 	
 
     case 'UPDATE_GAMEID':
-	  return {
+        return {
             // code
-      }
+        }
+
     case 'UPDATE_USERNAME':
-    return {
+        return {
             // code
-      }
+        }
+
+    case 'UPDATE_LOGIN_STATUS':
+        console.log("updating login status", action);
+
+        return {
+            ...state,
+            isLoggedIn: action.loggedInBool
+        }
 
     default:
       return state

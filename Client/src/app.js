@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import io from "socket.io-client";
-import { BrowserRouter as Router, Redirect, Route, Link } from 'react-router-dom';
+import { HashRouter as Router, Redirect, Route, Link, Switch, hashHistory } from 'react-router-dom';
 
 import 'bootstrap';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
@@ -29,31 +29,28 @@ export class App extends React.Component {
     }
 
     render() {
-        return (<Router>
+        const { isLoggedIn } = this.props;
+        return (<Router history={hashHistory}>
             <div>
                 <ul>
-                    <li><Link to="/login">Login Pagee</Link></li>
-                    <li><Link to="/lobby">Lobby Page</Link></li>
+                    { !isLoggedIn ? <li><Link to="/login" replace>Login Page</Link></li> : null }
+                    <li><Link to="/lobby" replace>Lobby Page</Link></li>
                 </ul>
-                <Route path="/login" component={Login}/>
-                <PrivateRoute path="/lobby" component={Lobby}/>
+                <hr/>
+                <Route exact path="/login" component={Login}/>
+                <Route exact path="/lobby" component={Lobby}/>
             </div>
         </Router>);
     }
   
 }
 
-const PrivateRoute = ({ component: Component, ...rest }) => {
-    return <Route {...rest} render={props => (
-      loggedIn() ? (
-        <Component {...props}/>
-      ) : (
-        <Redirect to={{
-          pathname: '/login',
-          state: { from: props.location }
-        }}/>
-      )
-    )}/>
-}
+// const PrivateRoute = ({ component: Component, ...rest }) => {
+//     return <Route {...rest} render={props => (
+//       loggedIn() ? (
+//         <Component {...props}/>
+//       ) : null
+//     )}/>
+// }
 
-export default connect(mapStateToProps)(App)
+export default connect(mapStateToProps)(App);

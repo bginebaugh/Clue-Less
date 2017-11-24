@@ -1,3 +1,5 @@
+import { store } from '../../renderer';
+import { updateLoginStatus } from "../redux_app-state/actions/actions";
 import Messages from "./Messages";
 import net from "net";
 
@@ -70,7 +72,14 @@ export default {
             });
 
             tcpConnection.on('data', (data) => {
+
                 console.log('Received: ' + data);
+                let jsonResponse = Messages.parseJsonResponseFromServer(data);
+                let messageType = jsonResponse && jsonResponse.messageType ? jsonResponse.messageType : "";
+                
+                // all listeners established here
+                Messages.incomingMessageHandler(jsonResponse, messageType);
+
             });
 
             tcpConnection.on('error', (error) => {
@@ -89,6 +98,22 @@ export default {
             alert("The connection is not available! ::", err);
 
         }
+    },
+
+    handleLoginSuccessOrError(jsonResponse) {
+
+        console.log("handling login")
+
+        //successful login
+        if (jsonResponse && jsonResponse.message && jsonResponse.message.valid) {
+            store.dispatch(updateLoginStatus(true));
+        }
+
+        //unsuccessful login
+        if (jsonResponse && jsonResponse.message && !jsonResponse.message.valid) {
+            store.dispatch(updateLoginStatus(false));
+        }
+
     }
 
 }

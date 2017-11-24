@@ -1,5 +1,7 @@
 import { store } from '../../renderer';
 
+import ServerProxy from "./ServerProxy";
+
 export default {
 
     generateMessageHeader(messageType, userId, gameId) {
@@ -31,6 +33,26 @@ export default {
     generateMessageEnder() {
 
         return "\n";
+
+    },
+
+    parseJsonResponseFromServer(incomingMessage) {
+
+        return JSON.parse(incomingMessage);
+
+    },
+
+    incomingMessageHandler(jsonObject, messageType) {
+
+        switch(messageType) {
+            
+            case "loginMessageResponse":
+                ServerProxy.handleLoginSuccessOrError(jsonResponse);
+
+            default:
+                console.log("Error :: not a proper messageType ::", messageType);
+                
+        }
 
     }
 
