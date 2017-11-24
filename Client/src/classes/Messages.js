@@ -23,7 +23,15 @@ export default {
 
         let obj = Object.assign({}, messageHeader, { message: { username: name } });
 
-        return JSON.stringify(obj);
+        let messageEnd = this.generateMessageEnder();
+
+        return JSON.stringify(obj) + messageEnd;
+    },
+
+    generateMessageEnder() {
+
+        return "\n";
+
     }
 
 }
