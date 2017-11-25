@@ -69,6 +69,7 @@ export default {
                 cb(false);
                 console.log('Connected');
                 tcpConnection.write(usernameJson);
+                store.dispatch(updateLoginStatus(true)); // temporary. need to fix with actual login
             });
 
             tcpConnection.on('data', (data) => {
@@ -113,6 +114,18 @@ export default {
         if (jsonResponse && jsonResponse.message && !jsonResponse.message.valid) {
             store.dispatch(updateLoginStatus(false));
         }
+
+    },
+
+    /**
+     * 
+     * @param {*} game string
+     * @param {*} newGame boolean
+     */
+    joinGame(game, newGame) {
+
+        let gameMessage = Messages.generateJoinGameMessage(game, newGame);
+        tcpConnection.write(gameMessage);
 
     }
 

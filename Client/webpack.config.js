@@ -55,7 +55,16 @@ const config = {
         }, {
           loader: 'sass-loader' // compiles SASS to CSS
         }]
-      }      
+      },
+      {
+        test: /\.(png|jpg|gif)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {}  
+          }
+        ]
+      }     
     ]
   },
   externals: ['ws'],

@@ -4,7 +4,10 @@ import ServerProxy from "./ServerProxy";
 
 export default {
 
-    generateMessageHeader(messageType, userId, gameId) {
+    generateMessageHeader(messageType) {
+
+        let userId = store.getState().User.userId;
+        let gameId = store.getState().User.gameId;
 
         let obj = {
             messageType: messageType,
@@ -16,12 +19,16 @@ export default {
 
     },
 
+    generateMessageEnder() {
+
+        return "\n";
+
+    },
+
     generateLoginMessage(name) {
 
-        let userId = store.getState().User.userId;
-        let gameId = store.getState().User.gameId;
 
-        let messageHeader = this.generateMessageHeader("loginMessage", userId, gameId);
+        let messageHeader = this.generateMessageHeader("loginMessage");
 
         let obj = Object.assign({}, messageHeader, { message: { username: name } });
 
@@ -30,10 +37,19 @@ export default {
         return JSON.stringify(obj) + messageEnd;
     },
 
-    generateMessageEnder() {
+    generateJoinGameMessage(gameName, isNew) {
+        
+        
+        let messageHeader = this.generateMessageHeader("joinGame");
 
-        return "\n";
+        let obj = Object.assign({}, messageHeader, { message: { 
+            gameRoomName: gameName,
+            isNew: isNew
+        }});
 
+        let messageEnd = this.generateMessageEnder();
+        
+        return JSON.stringify(obj) + messageEnd;
     },
 
     parseJsonResponseFromServer(incomingMessage) {
@@ -50,7 +66,7 @@ export default {
                 ServerProxy.handleLoginSuccessOrError(jsonResponse);
 
             default:
-                console.log("Error :: not a proper messageType ::", messageType);
+                console.log("Response error :: not a proper messageType ::", messageType);
                 
         }
 
