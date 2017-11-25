@@ -15,9 +15,11 @@ public class Cell
 	{ 
 	    Character CharacterToAdd = new Character(); 
 	    CharacterToAdd.m_id = id; 
+	    CharacterToAdd.m_location = new Cell(); 
+	    CharacterToAdd.m_location.m_x = m_x; 
+	    CharacterToAdd.m_location.m_y = m_y; 
 	    m_characterList.add(CharacterToAdd); 
 		return true; 
-	
 	} 
 	
 	public boolean addWeapon(int id) 
