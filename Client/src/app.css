@@ -1,3 +1,8 @@
+body {
+    font-size: 12px !important;
+    background-color: whitesmoke !important;
+}
+
 .image-logo {
     max-height: 15%;
     max-width: 15%;

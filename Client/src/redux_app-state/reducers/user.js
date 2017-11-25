@@ -1,5 +1,3 @@
-import { List } from 'immutable';
-
 const initialState = { 
     userId: -1,
     gameId: -1,

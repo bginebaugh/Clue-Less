@@ -11,6 +11,7 @@ import { store } from '../renderer';
 
 import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink } from 'reactstrap';
 
+import Game from "./components/Game_Page/Game";
 import Home from "./components/Home_Page/Home";
 import Login from "./components/Login_Page/Login";
 import Lobby from "./components/Lobby_Page/Lobby";
@@ -88,6 +89,7 @@ export class App extends React.Component {
                 <Route exact path="/" component={Home}/>
                 <Route exact path="/login" component={Login}/>
                 <Route exact path="/lobby" component={Lobby}/>
+                <Route exact path="/game" component={Game}/>
             </div>
         </Router>);
     }

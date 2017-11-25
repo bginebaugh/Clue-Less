@@ -1,6 +1,6 @@
 import React from 'react';
 import './Lobby.css';
-import { Redirect } from 'react-router-dom';
+import { Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Button, Card, CardTitle, CardText, Form, FormGroup, Label, Input,
     Modal, ModalHeader, ModalBody, ModalFooter, Row, Col,
@@ -10,6 +10,8 @@ import { Button, Card, CardTitle, CardText, Form, FormGroup, Label, Input,
 import { updateLoginStatus } from "../../redux_app-state/actions/actions";
 
 import ServerProxy from '../../classes/ServerProxy';
+
+import Game from "../Game_Page/Game";
 
 const mapStateToProps = (state = {}) => {
     return {
@@ -104,6 +106,9 @@ export class Lobby extends React.Component {
             console.log("This is the room typed in", this.newRoomName.value);
             ServerProxy.joinGame(this.newRoomName.value, true);
             this.newRoomName.value = "";
+
+            let path = '/game';
+            this.props.history.push(path);
             
         }
 
@@ -137,5 +142,7 @@ export class Lobby extends React.Component {
     }
 
 }
+
+Lobby = withRouter(Lobby);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Lobby);
