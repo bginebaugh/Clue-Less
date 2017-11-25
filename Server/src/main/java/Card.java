@@ -3,9 +3,11 @@
 import java.io.*; 
 import java.util.*; 
 
+// Do we need any methods? 
+// Do we need any getters or setters? 
 public class Card
 {
-	private int m_type; 
-	private int m_cardId; 
+	public int m_type; 
+	public int m_cardId; 
 
 } 

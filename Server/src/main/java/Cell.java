@@ -2,6 +2,7 @@
 import java.io.*; 
 import java.util.*; 
 
+// Question: Does anymore methods need to be added? 
 public class Cell
 {
 	private int m_x; 
@@ -11,21 +12,37 @@ public class Cell
 	private String m_name;  
 	private int m_weapon; 
 	
+	// Question: What about the name for the character? 
+	// Should we detrmine that from the id? 
 	public boolean addCharater(int id) 
 	{ 
-	    Character CharacterToAdd = new Character(); 
-	    CharacterToAdd.m_id = id; 
-	    CharacterToAdd.m_location = new Cell(); 
-	    CharacterToAdd.m_location.m_x = m_x; 
-	    CharacterToAdd.m_location.m_y = m_y; 
-	    m_characterList.add(CharacterToAdd); 
-		return true; 
+	    if( id <= 6) 
+	    { 
+	    	Character CharacterToAdd = new Character(); 
+	    	CharacterToAdd.m_id = id; 
+	    	CharacterToAdd.m_location = new Cell(); 
+	    	CharacterToAdd.m_location.m_x = m_x; 
+	    	CharacterToAdd.m_location.m_y = m_y; 
+	    	m_characterList.add(CharacterToAdd); 
+			return true;
+		}  
+		else 
+		{ 
+			return false; 
+		} 
 	} 
 	
 	public boolean addWeapon(int id) 
 	{
-		m_weapon = id; 
-		return true;  
+		if( id <= 6) 
+		{ 
+			m_weapon = id; 
+			return true; 
+		} 
+		else 
+		{ 
+			return false;
+		}  
 	} 
 	
 	public void setString(String name) 
