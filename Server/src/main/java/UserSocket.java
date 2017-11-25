@@ -39,14 +39,25 @@ public class UserSocket {
 		}
 	}
 
+	// todo: brian - i added this while-loop so it continually reads the 
+	// incoming buffer. let's discuss
 	public void testInputStream() {
-		try {
-			System.out.println("Attempting to read inBuffer");
-			System.out.println(m_inBuffer.readLine());
-			System.out.println("Read inBuffer");
+		boolean systemRunning = true;
+		while (systemRunning) {
+			try {
+				String m_incomingString;
+				System.out.println("Attempting to read inBuffer");
+				m_incomingString = m_inBuffer.readLine();
+				System.out.println(m_incomingString);
+				System.out.println("Read inBuffer");
+				if (m_incomingString == null) {
+					System.out.println("A user disconnected.");
+					systemRunning = false;
+				}
 
-		} catch (IOException e) {
-			System.out.println("OH SHIT!");
+			} catch (IOException e) {
+				System.out.println("OH SHIT!");
+			}
 		}
 	}
 }

@@ -28,9 +28,9 @@ export class Home extends React.Component {
 
     render() {
         const { isLoggedIn } = this.props;
-        return (<div>
+        return (<div className="container">
             <Jumbotron>
-                <h1 className="display-3">Welcome to Clue-Less!</h1>
+                <h1 className="display-3">Wlcm to Clue-Less!</h1>
                 <p className="lead">This is an online version of Clue. More description of this game here. </p>
                 <hr className="my-2" />
                 <p className="lead">

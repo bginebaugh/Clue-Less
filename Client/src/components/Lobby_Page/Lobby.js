@@ -4,7 +4,7 @@ import { Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Button, Card, CardTitle, CardText, Form, FormGroup, Label, Input,
     Modal, ModalHeader, ModalBody, ModalFooter, Row, Col,
-    Dropdown, DropdownToggle, DropdownMenu, DropdownItem
+    Dropdown, DropdownToggle, DropdownMenu, DropdownItem, ListGroup, ListGroupItem
 } from 'reactstrap';
 
 import { updateLoginStatus } from "../../redux_app-state/actions/actions";
@@ -36,6 +36,8 @@ export class Lobby extends React.Component {
             dropdownOpen: false,
             dropdownValue: ""
         }
+        this.dummyRoomOptions = ["Canhs Room", "Brians Room", "Christina's Room", "Simran's room", 
+            "Sam's room", "Canhs Room", "Brians Room", "Christina's Room", "Simran's room", "Sam's room", "Canhs Room", "Brians Room", "Christina's Room", "Simran's room", "Sam's room"]
     }
 
     toggleExistingRoomDropdown() {
@@ -67,6 +69,38 @@ export class Lobby extends React.Component {
         </Row>;
     }
 
+    // renderRoomOptions() {
+    //     const { newRoomSelected } = this.state;
+    //     if ( newRoomSelected !== null && newRoomSelected === true) {
+    //         return <Form onSubmit={this.handleNewRoomSubmit.bind(this)}>
+    //             <FormGroup>
+    //                 <Label for="new-room">Enter a game name</Label>
+    //                 <Input type="text" name="new-room" id="new-room" innerRef={node => this.newRoomName = node} />
+    //                 <Button className="btn btn-block pointer-cursor">Submit</Button>
+    //             </FormGroup>
+    //         </Form>
+    //     } else if ( newRoomSelected !== null && newRoomSelected === false ) {
+    //         return <div><Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggleExistingRoomDropdown}>
+    //             <DropdownToggle caret>
+    //                 Room Options
+    //             </DropdownToggle>
+    //             <DropdownMenu>
+    //                 <DropdownItem header>Available Games</DropdownItem>
+    //                 <DropdownItem onClick={this.selectDropdownItem}>Canh's game</DropdownItem>
+    //                 <DropdownItem onClick={this.selectDropdownItem}>Brian's game</DropdownItem>
+    //                 <DropdownItem divider />
+    //                 <DropdownItem header>Unavailable Games</DropdownItem>
+    //                 <DropdownItem disabled>Christina's game</DropdownItem>
+    //                 <DropdownItem disabled>Simran's game</DropdownItem>
+    //             </DropdownMenu>
+    //         </Dropdown>
+    //         { this.state.dropdownValue ? `You want to join :: ${this.state.dropdownValue}` : null }
+    //         <hr/>
+    //         <Button disabled={this.state.dropdownValue.length === 0} onClick={this.handleExistingRoomSubmit.bind(this)} className="btn pointer-cursor">Submit</Button>
+    //         </div>
+    //     }
+    // }
+
     renderRoomOptions() {
         const { newRoomSelected } = this.state;
         if ( newRoomSelected !== null && newRoomSelected === true) {
@@ -78,20 +112,11 @@ export class Lobby extends React.Component {
                 </FormGroup>
             </Form>
         } else if ( newRoomSelected !== null && newRoomSelected === false ) {
-            return <div><Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggleExistingRoomDropdown}>
-                <DropdownToggle caret>
-                    Room Options
-                </DropdownToggle>
-                <DropdownMenu>
-                    <DropdownItem header>Available Games</DropdownItem>
-                    <DropdownItem onClick={this.selectDropdownItem}>Canh's game</DropdownItem>
-                    <DropdownItem onClick={this.selectDropdownItem}>Brian's game</DropdownItem>
-                    <DropdownItem divider />
-                    <DropdownItem header>Unavailable Games</DropdownItem>
-                    <DropdownItem disabled>Christina's game</DropdownItem>
-                    <DropdownItem disabled>Simran's game</DropdownItem>
-                </DropdownMenu>
-            </Dropdown>
+            return <div><ListGroup>
+                {this.dummyRoomOptions.map((a, i) => {
+                    return <ListGroupItem key={i} className="pointer-cursor" onClick={this.selectDropdownItem}>{a}</ListGroupItem>
+                })}
+            </ListGroup>
             { this.state.dropdownValue ? `You want to join :: ${this.state.dropdownValue}` : null }
             <hr/>
             <Button disabled={this.state.dropdownValue.length === 0} onClick={this.handleExistingRoomSubmit.bind(this)} className="btn pointer-cursor">Submit</Button>

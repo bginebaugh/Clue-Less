@@ -129,7 +129,7 @@ export class Login extends React.Component {
         if (this.props.isLoggedIn) {
             return <Redirect to='/lobby'/>;
         } else {
-            return (<div>
+            return (<div className="container">
                 {this.loginPage()}
                 {this.renderModal()}
             </div>);

@@ -19,4 +19,17 @@ img {
 
 .border-bottom {
     border-bottom: 1px solid grey;
+    position: absolute;
+}
+
+.navbar {
+    position: fixed !important;
+    top: 0 !important;
+    width: 100% !important;
+    z-index: 1000 !important;
+    background-color: whitesmoke;
+}
+
+.container {
+    margin-top: 100px !important;
 }
