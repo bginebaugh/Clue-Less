@@ -5,7 +5,7 @@ import java.util.*;
 
 public class Character
 {
-	private Cell m_location; 
-	private int m_id; 
-	private String m_name;
+	public Cell m_location; 
+	public int m_id; 
+	public String m_name;
 } 

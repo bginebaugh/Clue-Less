@@ -6,20 +6,23 @@ public class Cell
 {
 	private int m_x; 
 	private int m_y; 
-	private ArrayList<Character> m_charaterList; 
+	private ArrayList<Character> m_characterList; 
 	private boolean m_isHallway;  
 	private String m_name;  
+	private int m_weapon; 
 	
 	public boolean addCharater(int id) 
 	{ 
-	    //Need to implement
+	    Character CharacterToAdd = new Character(); 
+	    CharacterToAdd.m_id = id; 
+	    m_characterList.add(CharacterToAdd); 
 		return true; 
 	
 	} 
 	
 	public boolean addWeapon(int id) 
-	{ 
-		// Need to implement.
+	{
+		m_weapon = id; 
 		return true;  
 	} 
 	
