@@ -1,29 +1,40 @@
 //package clue-less server 
-
 import java.io.*; 
 import java.util.*; 
 
-// Question overall: Do we any additional methods? 
 public class Hand
 { 
 	private ArrayList<Card> m_cardList; 
 	
-	// Question: Should we just search for the CardId
-	// in the m_cardList? Should we pass the card type? 
 	public boolean hasCard(int cardId, int type)
 	{ 
-		// Need to implement
-		return true; 
+		for(int i=0; i<m_cardList.size(); i++) 
+		{ 
+			if(m_cardList.get(i).m_cardId == cardId) 
+			{ 
+				for(int j=0; j<m_cardList.size(); j++) 
+				{ 
+					if(m_cardList.get(j).m_type == type) 
+					{ 
+						return true; 
+					} 
+					else 
+					{ 
+						return false; 
+					} 
+				} 
+			} 
+			else 
+			{ 
+				return false;  
+			} 
+		} 
+		return false;  
 	} 
 	
-	// Question: How do we detrmine what the card type is?
-	// Store ref. 
-	public boolean addCard(int cardId) 
+	public boolean addCard(Card card) 
 	{ 
-		Card CardAdded = new Card(); 
-		CardAdded.m_cardId = cardId; 
-		//CardAdded.m_type = ??
-		m_cardList.add(CardAdded); 
+		m_cardList.add(card); 
 		return true; 
 	} 
 } 
