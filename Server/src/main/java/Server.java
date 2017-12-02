@@ -2,9 +2,10 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
-class Server {
+public class Server {
+	static private ArrayList<User> m_userList = null;
 	public static void main(String[] args) {
-		ArrayList<User> m_userList = new ArrayList<User>();
+		m_userList = new ArrayList<User>();
 		ServerSocket connListener;
 		try {
 			connListener = new ServerSocket(11000);
@@ -28,20 +29,25 @@ class Server {
 			UserSocket myUserSocket;
 			try {
 				myUserSocket = new UserSocket(clientSocket);
+				User newUser = new User(myUserSocket);
+				newUser.setUserId(m_userList.size());
+				newUser.start();
+				int numCurrentUsers = m_userList.size();
+				m_userList.add(newUser);
+				if (m_userList.size() != numCurrentUsers) {
+					System.out.println("There are now " + m_userList.size() + " users in the system");
+				}
 			} catch (IOException e) {
 				System.out.println(e);
 				return;
 			}
-
-			User newUser = new User(myUserSocket);
-
-			newUser.start();
-
-			int numCurrentUsers = m_userList.size();
-			m_userList.add(newUser);
-			if (m_userList.size() != numCurrentUsers) {
-				System.out.println("There are now " + m_userList.size() + " users in the system");
-			}
+		}
+		
+		try {
+			connListener.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
 		return;

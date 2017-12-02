@@ -19,6 +19,15 @@ public class UserSocket {
 		m_inBuffer = new BufferedReader(m_input);
 		System.out.println("Connected to client at address " + m_socket.getRemoteSocketAddress());
 	}
+	
+	public void sendMessage(String msg) {
+		try {
+			m_output.write(msg);
+			m_output.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public void sendWarningMessage() {
 		JSONObject obj = new JSONObject();
@@ -39,25 +48,14 @@ public class UserSocket {
 		}
 	}
 
-	// todo: brian - i added this while-loop so it continually reads the 
-	// incoming buffer. let's discuss
-	public void testInputStream() {
-		boolean systemRunning = true;
-		while (systemRunning) {
-			try {
-				String m_incomingString;
-				System.out.println("Attempting to read inBuffer");
-				m_incomingString = m_inBuffer.readLine();
-				System.out.println(m_incomingString);
-				System.out.println("Read inBuffer");
-				if (m_incomingString == null) {
-					System.out.println("A user disconnected.");
-					systemRunning = false;
-				}
-
-			} catch (IOException e) {
-				System.out.println("OH SHIT!");
-			}
+	public String waitOnMessage() {
+		String message = null;
+		try {
+			message = m_inBuffer.readLine();
+		} catch (IOException e) {
+			System.out.println("UserSocket failed to waitOnMessage");
 		}
+		
+		return message;
 	}
 }
