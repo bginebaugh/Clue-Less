@@ -6,81 +6,115 @@ import java.util.*;
 public class Game
 { 
 	static public int MAX_NUM_PLAYERS = 6; 
-	//private ArrayList<User> m_userList; 
+	private ArrayList<User> m_userList; 
 	private ArrayList<Card> m_secretEnvelope; 
-	//private User m_currentUser; 
+	private User m_currentUser; 
 	private ArrayList<Card> m_cardList; 
 	
-	// Note: Can't implement yet the user class is not created. 
-	public void addUser(int userId) 
+	public void addUser(User user) 
 	{ 
-		// ToDo: Implement 
+		m_userList.add(user); 
 	} 
 	
-	// Note: Can't implement yet the user class is not created. 
-	public void removeUser(int userId) 
+	public void removeUser(User user) 
 	{ 
-		// ToDo: Implement 
+		m_userList.remove(user); 
 	} 
-	
-	// Note: Can't implement yet the user class is not created. 
+	 
 	public void removeAllUsers()
 	{ 
-		// ToDo: Implement 
+		m_userList = null; 
 	} 
 	
-	// Note Can't implement yet the user class is not created. 
 	public int getNumUsers() 
 	{ 
-		// ToDo: Implement 
-		return 1; 
+ 
+		return m_userList.size(); 
 	} 
 	
 	public boolean isFull() 
 	{ 
-		// ToDo: Implement
-		return true;
+		if (m_userList.size() >= MAX_NUM_PLAYERS) 
+		{ 
+			return true;
+		} 
+		return false; 
 	} 
 	
+	// What exactly should happen here? The User class doesn't have a hand. 
+	// Also where does the secret envelope get stored. 
 	public void setup()
 	{ 
-		//ToDo: Implement 
+		// ToDo!!
 	} 
 	
-	public boolean setCharacter(int userId, int CharacterId) 
+	public boolean setCharacter(int userId, Character character) 
 	{ 
-		//TODo: Implement 
-		return true; 
+		for (int i=0; i<m_userList.size(); i++) 
+		{ 
+			if(m_userList.get(i).m_userId == userId) 
+			{ 
+				m_userList.get(i).m_character = character; 
+				return true; 
+			}
+		} 
+		return false; 
 	} 
 	
 	public boolean moveCharacter(int userId, int posX, int posY) 
 	{ 
-		//ToDo: Implement
-		return true; 
+		for (int i=0; i<m_userList.size(); i++) 
+		{ 
+			if(m_userList.get(i).m_userId == userId) 
+			{ 
+				m_userList.get(i).m_character.m_location.m_x = posX; 
+				m_userList.get(i).m_character.m_location.m_y = posY; 
+				return true; 
+			}
+		} 
+		return false; 
 	} 
 	
+	//Is this going to just form a message and send it?? 
 	public void makeSuggestion(int userId, ArrayList<Card> cards) 
 	{ 
 		//ToDo: Implement 
 	} 
 	
+	//Is this going to just form a message and send it???
 	public void makeAccusation(int userId, ArrayList<Card> cards) 
 	{ 
 		//ToDo: Implement 
 	} 
 	
+	// Is this going to just form a message and send it?? 
 	public void showCardToUser(int userId, int cardId) 
 	{ 
 		//ToDo: Implement 
 	} 
 	
+	//What should this function have in it??
 	public void start()
 	{ 
 		//ToDo: Implement 
 	} 
 	
+	// Is this a message? 
+	public void notifyPlayers(int notice) 
+	{ 
+		//ToDo:Implement 
+	} 
 	
+	private boolean compareToEnvelope(ArrayList<Card> cards) 
+	{ 
+		//ToDo:Implement 
+		return true; 
+	} 
 	
-	
+	//Should this be like a list?
+	public void removeUserFromTurn(int userId) 
+	{ 
+		//ToDo: Implement
+	} 
 	
 } 
