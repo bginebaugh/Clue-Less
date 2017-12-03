@@ -69,7 +69,6 @@ export default {
                 cb(false);
                 console.log('Connected');
                 tcpConnection.write(usernameJson);
-                store.dispatch(updateLoginStatus(true)); // temporary. need to fix with actual login
             });
 
             tcpConnection.on('data', (data) => {
@@ -106,12 +105,12 @@ export default {
         console.log("handling login")
 
         //successful login
-        if (jsonResponse && jsonResponse.message && jsonResponse.message.valid) {
+        if (jsonResponse && jsonResponse.content && jsonResponse.content.valid) {
             store.dispatch(updateLoginStatus(true));
         }
 
         //unsuccessful login
-        if (jsonResponse && jsonResponse.message && !jsonResponse.message.valid) {
+        if (jsonResponse && jsonResponse.content && !jsonResponse.content.valid) {
             store.dispatch(updateLoginStatus(false));
         }
 

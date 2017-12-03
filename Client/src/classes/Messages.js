@@ -30,7 +30,7 @@ export default {
 
         let messageHeader = this.generateMessageHeader("loginMessage");
 
-        let obj = Object.assign({}, messageHeader, { message: { username: name } });
+        let obj = Object.assign({}, messageHeader, { content: { username: name } });
 
         let messageEnd = this.generateMessageEnder();
 
@@ -42,7 +42,7 @@ export default {
         
         let messageHeader = this.generateMessageHeader("joinGame");
 
-        let obj = Object.assign({}, messageHeader, { message: { 
+        let obj = Object.assign({}, messageHeader, { content: { 
             gameRoomName: gameName,
             isNew: isNew
         }});
@@ -58,16 +58,17 @@ export default {
 
     },
 
-    incomingMessageHandler(jsonObject, messageType) {
+    incomingMessageHandler(jsonResponse, messageType) {
 
         switch(messageType) {
             
-            case "loginMessageResponse":
+            case "loginResponse":
                 ServerProxy.handleLoginSuccessOrError(jsonResponse);
+                break;
 
             default:
                 console.log("Response error :: not a proper messageType ::", messageType);
-                
+                break;
         }
 
     }

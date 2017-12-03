@@ -11,7 +11,7 @@ public class CluelessDeserializer implements JsonDeserializer<MessageBase> {
 		String messageType = je.getAsJsonObject().get("messageType").getAsString();
 		MessageBase obj = null;
 		Gson gson = new Gson();
-		JsonElement message = je.getAsJsonObject().get("message");
+		JsonElement message = je.getAsJsonObject().get("content");
 
 		switch (messageType) {
 			case "loginMessage":

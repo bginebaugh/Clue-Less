@@ -13,7 +13,7 @@ public class MessageHandler {
 			LoginResponse rsp = new LoginResponse();
 			
 			rsp.setValid(true);
-			out.setMessageType("LoginResponse");
+			out.setMessageType("loginResponse");
 			out.setUserId(user.getUserId());
 			out.setGameId(-1);
 			out.setContent(rsp);
