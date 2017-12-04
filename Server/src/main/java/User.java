@@ -10,4 +10,11 @@ public class User
 	public String m_userSocket; 
 	public Character m_character; 
 	public Game m_game; 
+	public Hand m_hand; 
+	
+	public void addCard(Card card)
+	{ 
+		m_hand.m_cardList.add(card); 
+	} 
+	
 } 
