@@ -55,71 +55,53 @@ export class Lobby extends React.Component {
     }
 
     renderNewVsExistingGameButtons() {
+        let newButtonDisabled = false;
+        let existingButtonDisabled = false;
+        let { newRoomSelected } = this.state;
+
+        if (newRoomSelected !== null && newRoomSelected === true) {
+            newButtonDisabled = true;
+            existingButtonDisabled = false;
+        } else if (newRoomSelected !== null && newRoomSelected === false) {
+            newButtonDisabled = false;
+            existingButtonDisabled = true;
+        }
+
         return <Row>
             <Col sm="6">
                 <Card body>
-                    <Button onClick={() => this.setState({newRoomSelected: true})}>New Game</Button>
+                    <Button disabled={newButtonDisabled} onClick={() => this.setState({newRoomSelected: true})}>New Game</Button>
                 </Card>
             </Col>
             <Col sm="6">
                 <Card body>
-                    <Button onClick={() => this.setState({newRoomSelected: false})}>Join Existing Game</Button>
+                    <Button disabled={existingButtonDisabled} onClick={() => this.setState({newRoomSelected: false})}>Existing Game</Button>
                 </Card>
             </Col>
         </Row>;
     }
-
-    // renderRoomOptions() {
-    //     const { newRoomSelected } = this.state;
-    //     if ( newRoomSelected !== null && newRoomSelected === true) {
-    //         return <Form onSubmit={this.handleNewRoomSubmit.bind(this)}>
-    //             <FormGroup>
-    //                 <Label for="new-room">Enter a game name</Label>
-    //                 <Input type="text" name="new-room" id="new-room" innerRef={node => this.newRoomName = node} />
-    //                 <Button className="btn btn-block pointer-cursor">Submit</Button>
-    //             </FormGroup>
-    //         </Form>
-    //     } else if ( newRoomSelected !== null && newRoomSelected === false ) {
-    //         return <div><Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggleExistingRoomDropdown}>
-    //             <DropdownToggle caret>
-    //                 Room Options
-    //             </DropdownToggle>
-    //             <DropdownMenu>
-    //                 <DropdownItem header>Available Games</DropdownItem>
-    //                 <DropdownItem onClick={this.selectDropdownItem}>Canh's game</DropdownItem>
-    //                 <DropdownItem onClick={this.selectDropdownItem}>Brian's game</DropdownItem>
-    //                 <DropdownItem divider />
-    //                 <DropdownItem header>Unavailable Games</DropdownItem>
-    //                 <DropdownItem disabled>Christina's game</DropdownItem>
-    //                 <DropdownItem disabled>Simran's game</DropdownItem>
-    //             </DropdownMenu>
-    //         </Dropdown>
-    //         { this.state.dropdownValue ? `You want to join :: ${this.state.dropdownValue}` : null }
-    //         <hr/>
-    //         <Button disabled={this.state.dropdownValue.length === 0} onClick={this.handleExistingRoomSubmit.bind(this)} className="btn pointer-cursor">Submit</Button>
-    //         </div>
-    //     }
-    // }
 
     renderRoomOptions() {
         const { newRoomSelected } = this.state;
         if ( newRoomSelected !== null && newRoomSelected === true) {
             return <Form onSubmit={this.handleNewRoomSubmit.bind(this)}>
                 <FormGroup>
-                    <Label for="new-room">Enter a game name</Label>
+                    <h3 for="new-room">Enter the name of your new game room</h3>
                     <Input type="text" name="new-room" id="new-room" innerRef={node => this.newRoomName = node} />
-                    <Button className="btn btn-block pointer-cursor">Submit</Button>
+                    <hr/>
+                    <Button className="btn btn-block pointer-cursor">Submit and Join Game</Button>
                 </FormGroup>
             </Form>
         } else if ( newRoomSelected !== null && newRoomSelected === false ) {
             return <div><ListGroup>
+                <h3 for="new-room">Select one of the existing games below</h3>
                 {this.dummyRoomOptions.map((a, i) => {
                     return <ListGroupItem key={i} className="pointer-cursor" onClick={this.selectDropdownItem}>{a}</ListGroupItem>
                 })}
             </ListGroup>
             { this.state.dropdownValue ? `You want to join :: ${this.state.dropdownValue}` : null }
             <hr/>
-            <Button disabled={this.state.dropdownValue.length === 0} onClick={this.handleExistingRoomSubmit.bind(this)} className="btn pointer-cursor">Submit</Button>
+            <Button disabled={this.state.dropdownValue.length === 0} onClick={this.handleExistingRoomSubmit.bind(this)} className="btn btn-block pointer-cursor">Join Game</Button>
             </div>
         }
     }
@@ -132,6 +114,7 @@ export class Lobby extends React.Component {
             ServerProxy.joinGame(this.newRoomName.value, true);
             this.newRoomName.value = "";
 
+            // todo: have this respond to join room successful or not
             let path = '/game';
             this.props.history.push(path);
             
@@ -147,18 +130,22 @@ export class Lobby extends React.Component {
             ServerProxy.joinGame(this.state.dropdownValue, false);
         }
         this.setState({ dropdownValue: "" });
+
+        // todo: have this respond to join room successful or not
+        let path = '/game';
+        this.props.history.push(path);
     }
 
     render() {
 
         if (this.props.isLoggedIn) {
             return (<div className="container">
+                { this.renderRoomOptions() }
                 <div className="mt-5">
-                    <div className="card-header">Choose your game options</div>
+                    <div className="card-header">New or Existing Game</div>
                     {this.renderNewVsExistingGameButtons()}
                 </div>
                 <hr/>
-                { this.renderRoomOptions() }
             </div>);
         } else {
             return <Redirect to='/login'/>;
