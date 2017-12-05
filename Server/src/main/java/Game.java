@@ -3,14 +3,15 @@
 import java.io.*; 
 import java.util.*; 
 
+
 public class Game
 { 
 	static public int MAX_NUM_PLAYERS = 6; 
 	private ArrayList<User> m_userList; 
-	private ArrayList<Card> m_secretEnvelope(3); 
+	private ArrayList<Card> m_secretEnvelope = new ArrayList<Card>(3); 
 	private User m_currentUser; 
 	// Shuffled Card List 
-	private ArrayList<Card> m_cardList(TOTAL_CARDS); 
+	private ArrayList<Card> m_cardList = new ArrayList<Card>(Card.TOTAL_CARDS);  
 	
 	public void addUser(User user) 
 	{ 
@@ -48,26 +49,27 @@ public class Game
 	{ 
 		// Create the Deck 
 		// 21 cards- because there is 6 weapons, 6 people and 9 Rooms
-		ArrayList<Card> deck = new ArrayList<Card>(TOTAL_CARDS)
+
+		ArrayList<Card> deck = new ArrayList<Card>(Card.TOTAL_CARDS); 
 		
-		for (int i = 0; i<NUM_ROOMS; i++) 
+		for (int i = 0; i<Card.NUM_ROOMS; i++) 
 		{ 
-			deck.add(new Card(ROOM, i));  
+			deck.add(new Card(Card.ROOM, i));  
 		} 
 		
-		for (int i = 0; i<NUM_SUSPECTS; i++) 
+		for (int i = 0; i<Card.NUM_SUSPECTS; i++) 
 		{ 
-			deck.add(new Card(SUSPECT, i)); 
+			deck.add(new Card(Card.SUSPECT, i)); 
 		} 
 		
-		for (int i = 0; i<NUM_WEAPONS; i++) 
+		for (int i = 0; i<Card.NUM_WEAPONS; i++) 
 		{ 
-			deck.add(new Card(WEAPON,i));
+			deck.add(new Card(Card.WEAPON,i));
 		} 
 		
 		// Shuffle Deck 
 		Random rand = new Random(); 
-		for (int i = 0; i < TOTAL_CARDS; i++) 
+		for (int i = 0; i < Card.TOTAL_CARDS; i++) 
 		{ 
 			int val = rand.nextInt(deck.size()); 
 			Card card = deck.remove(val); 
@@ -75,13 +77,13 @@ public class Game
 		} 
 		
 		// Create the Secret Envelope 
-		int weapon_id = rand.nextInt(NUM_WEAPONS); 
-		int room_id = rand.nextInt(NUM_ROOMS); 
-		int suspect_id = rand.nextInt(NUM_SUSPECTS); 
+		int weapon_id = rand.nextInt(Card.NUM_WEAPONS); 
+		int room_id = rand.nextInt(Card.NUM_ROOMS); 
+		int suspect_id = rand.nextInt(Card.NUM_SUSPECTS); 
 		
-		Card weapon = new Card(WEAPON, weapon_id); 
-		Card room = new Card(ROOM, room_id);  
-		Card suspect = new Card(SUSPECT, suspect_id); 
+		Card weapon = new Card(Card.WEAPON, weapon_id); 
+		Card room = new Card(Card.ROOM, room_id);  
+		Card suspect = new Card(Card.SUSPECT, suspect_id); 
 		
 		m_cardList.remove(weapon); 
 		m_cardList.remove(room); 
@@ -145,17 +147,17 @@ public class Game
 		
 		for (Card card : cards) 
 		{ 
-			if (card.getType() == WEAPON) 
+			if (card.getType() == Card.WEAPON) 
 			{ 
 				weapon = card; 
 			} 
 			
-			if (card.getType() == SUSPECT)			
+			if (card.getType() == Card.SUSPECT)			
 			{ 
 				suspect = card; 
 			} 
 			
-			if (card.getType() == ROOM) 
+			if (card.getType() == Card.ROOM) 
 			{ 
 				room = card; 
 			} 
@@ -183,17 +185,17 @@ public class Game
 		
 		for (Card card : cards) 
 		{ 
-			if (card.getType() == WEAPON) 
+			if (card.getType() == Card.WEAPON) 
 			{ 
 				weapon = card; 
 			} 
 			
-			if (card.getType() == SUSPECT)			
+			if (card.getType() == Card.SUSPECT)			
 			{ 
 				suspect = card; 
 			} 
 			
-			if (card.getType() == ROOM) 
+			if (card.getType() == Card.ROOM) 
 			{ 
 				room = card; 
 			} 

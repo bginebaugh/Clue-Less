@@ -4,7 +4,7 @@ import java.util.*;
 
 public class Hand
 { 
-	private ArrayList<Card> m_cardList; 
+	public ArrayList<Card> m_cardList; 
 	
 	public boolean hasCard(int cardId, int type)
 	{ 

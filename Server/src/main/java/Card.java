@@ -5,6 +5,9 @@ import java.util.*;
 
 public class Card
 {
+	public Card() 
+	{ 
+	} 
 	public int m_type = 0; 
 	public int m_cardId = 0; 
 	
@@ -20,7 +23,7 @@ public class Card
 	public Card(int type, int value) 
 	{ 
 		this.m_type = type; 
-		this.value = value; 
+		this.m_cardId = value; 
 	} 
 	
 	public int getType() 
