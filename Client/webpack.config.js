@@ -70,6 +70,7 @@ const config = {
   externals: ['ws'],
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
+    new webpack.SourceMapDevToolPlugin(),
     new webpack.ProvidePlugin({
       $: 'jquery',
       jQuery: 'jquery',

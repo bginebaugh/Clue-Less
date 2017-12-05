@@ -86,7 +86,7 @@ export class Lobby extends React.Component {
         if ( newRoomSelected !== null && newRoomSelected === true) {
             return <Form onSubmit={this.handleNewRoomSubmit.bind(this)}>
                 <FormGroup>
-                    <h3 for="new-room">Enter the name of your new game room</h3>
+                    <h3>Enter the name of your new game room</h3>
                     <Input type="text" name="new-room" id="new-room" innerRef={node => this.newRoomName = node} />
                     <hr/>
                     <Button className="btn btn-block pointer-cursor">Submit and Join Game</Button>
@@ -94,7 +94,7 @@ export class Lobby extends React.Component {
             </Form>
         } else if ( newRoomSelected !== null && newRoomSelected === false ) {
             return <div><ListGroup>
-                <h3 for="new-room">Select one of the existing games below</h3>
+                <h3>Select one of the existing games below</h3>
                 {this.dummyRoomOptions.map((a, i) => {
                     return <ListGroupItem key={i} className="pointer-cursor" onClick={this.selectDropdownItem}>{a}</ListGroupItem>
                 })}

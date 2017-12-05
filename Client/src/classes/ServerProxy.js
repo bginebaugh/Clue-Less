@@ -1,5 +1,5 @@
 import { store } from '../../renderer';
-import { updateLoginStatus } from "../redux_app-state/actions/actions";
+import { updateLoginStatus, updateUserId, updateUsername } from "../redux_app-state/actions/actions";
 import Messages from "./Messages";
 import net from "net";
 
@@ -107,6 +107,8 @@ export default {
         //successful login
         if (jsonResponse && jsonResponse.content && jsonResponse.content.valid) {
             store.dispatch(updateLoginStatus(true));
+            store.dispatch(updateUsername(jsonResponse.content.username));
+            store.dispatch(updateUserId(jsonResponse.userId));
         }
 
         //unsuccessful login

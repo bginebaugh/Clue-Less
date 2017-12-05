@@ -5,6 +5,8 @@ import { Jumbotron, Button } from 'reactstrap';
 import { connect } from 'react-redux';
 import { } from "../../redux_app-state/actions/actions";
 
+import { GameBoard } from "../../classes/gameBoard";
+
 import Cell from "./Cell";
 
 const mapStateToProps = (state = {}) => {
@@ -26,23 +28,29 @@ export class Game extends React.Component {
         super();
     }
 
+    componentDidMount() {
+        console.log("this is the game board :: ", GameBoard);
+    }
+
     login() {
         let path = '/login';
         this.props.history.push(path);
     }
 
     renderCells() {
-        const { board } = this.props;
+        // const { board } = this.props;
+        let board = GameBoard.board;
         let cells = [];
         for (let i = 0; i < 25; i++) {
-            let className=board[i] === "Nothing" 
+            console.log(board[i]);
+            let className=board[i] === null
                 ? " black-out " 
-                : board[i].substr(0,2) == "Rm"
+                : !board[i].m_isHallway
                     ? " room-fill " 
                     : " hallway-fill "
             cells.push(<Cell 
                 key={i} index={i} 
-                name={board[i]} 
+                cellPiece={board[i]} 
                 className={className}
             />);
         }

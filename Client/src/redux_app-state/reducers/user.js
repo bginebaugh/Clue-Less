@@ -1,7 +1,7 @@
 const initialState = { 
     userId: -1,
     gameId: -1,
-    userName: "",
+    username: "",
     isLoggedIn: false
 }
 
@@ -9,9 +9,12 @@ const initialState = {
 const User = (state = initialState, action) => {
   switch (action.type) {
     case 'UPDATE_USERID':
+    console.log("updating login status", action);
+    
         return {
-            // code
-        } 	
+            ...state,
+            userId: action.userId
+        }
 
     case 'UPDATE_GAMEID':
         return {
@@ -19,8 +22,11 @@ const User = (state = initialState, action) => {
         }
 
     case 'UPDATE_USERNAME':
+        console.log("updating login status", action);
+    
         return {
-            // code
+            ...state,
+            username: action.username
         }
 
     case 'UPDATE_LOGIN_STATUS':

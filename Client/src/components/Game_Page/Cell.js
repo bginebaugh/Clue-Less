@@ -28,10 +28,10 @@ export class Cell extends React.Component {
     }
 
     render() {
-        const { className, isLoggedIn } = this.props;
+        const { cellPiece, className, isLoggedIn } = this.props;
         return (<div className={"cell-piece" + (className ? className : "")}>
-            <div className="cell-name">Index:{this.props.index}</div>
-            <div className="cell-name">{this.props.name}</div>
+            <div className="cell-name">{cellPiece !== null ? cellPiece.m_name : ""}</div>
+            <div className="cell-name">{cellPiece !== null ? `[${cellPiece.m_x},${cellPiece.m_y}]` : null }</div>
         </div>);
 
     }

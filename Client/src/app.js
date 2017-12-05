@@ -20,7 +20,8 @@ import { updateLoginStatus } from "./redux_app-state/actions/actions";
 
 const mapStateToProps = (state = {}) => {
     return {
-        isLoggedIn: state.User.isLoggedIn
+        isLoggedIn: state.User.isLoggedIn,
+        state: state
     };
 };
 
@@ -75,7 +76,7 @@ export class App extends React.Component {
         return (<Router history={hashHistory}>
             <div>
                 <Navbar className="border-bottom" color="faded" light expand="md">
-                    <NavbarBrand href="/">clue-less by northraki</NavbarBrand>
+                    <NavbarBrand onClick={()=>console.log(this.props.state)}>clue-less by northraki</NavbarBrand>
                     <NavbarToggler onClick={this.toggle} />
                     <Collapse isOpen={this.state.isOpen} navbar>
                         <Nav className="ml-auto" navbar>

@@ -1,44 +1,46 @@
 //Constructor function cell
-function cell ( x, y, name, isHallway) {
-	var m_x = x;
-	var m_y = y;
-	var m_name = name;
-	var m_isHallway = isHallway;
-	var playerList = [];
+function cell( x, y, name, isHallway) {
+	return {
+		m_x: x,
+		m_y: y,
+		m_name: name,
+		m_isHallway: isHallway,
+		playerList: []
+	}
 };
 
 //cells for each of the rooms and hallways
-var Study = new cell ( 0,0, 'Study', False);
-var StudyHall = new cell (0,1, 'StudyHall' , True);
-var Hall = new cell (0,2, 'Hall', False);
-var HallLounge = new cell (0,3, 'HallLounge', True);
-var Lounge = new cell (0,4, 'Lounge', False);
-var StudyLib = new cell (1,0, 'StudyLib', True);
-var HallBr = new cell (1,2, 'HallBr' , True);
-var LoungeBr = new cell (1,4, 'LoungeBr', True);
-var Library = new cell (2,0, 'Library' , False);
-var LibBr = new cell (2,1, 'LibBr', True);
-var BillRoom = new cell (2,2, 'BillRoom', True);
-var BrDr = new cell (2,3, ' BrDr' , True);
-var DiningRoom = new cell (2,4, 'DiningRoom', False);
-var LibCons = new cell (3,0, 'LibCons' , True);
-var BrBr = new cell (3,2, 'BrBr' , True);
-var DrK = new cell (3,4, 'DrK', True);
-var Conservatory = new cell (4,0, 'Conservatory', False);
-var ConsBr = new cell (4,1, 'ConsBr' , True);
-var Ballroom = new cell (4,2, 'Ballroom', False);
-var BrK = new cell (4,3, 'BrK', True);
-var Kitchen = new cell (4,4, 'Kitchen', True);
+var Study = cell( 0, 0, 'Study', false);
+var StudyHall = cell( 0, 1, 'StudyHall' , true);
+var Hall = cell( 0, 2, 'Hall', false);
+var HallLounge = cell( 0, 3, 'HallLounge', true);
+var Lounge = cell( 0, 4, 'Lounge', false);
+var StudyLib = cell(1,0, 'StudyLib', true);
+var HallBr = cell(1,2, 'HallBr' , true);
+var LoungeBr = cell(1,4, 'LoungeBr', true);
+var Library = cell(2,0, 'Library' , false);
+var LibBr = cell(2,1, 'LibBr', true);
+var BillRoom = cell(2,2, 'BillRoom', false);
+var BrDr = cell(2,3, ' BrDr' , true);
+var DiningRoom = cell(2,4, 'DiningRoom', false);
+var LibCons = cell(3,0, 'LibCons' , true);
+var BrBr = cell(3,2, 'BrBr' , true);
+var DrK = cell(3,4, 'DrK', true);
+var Conservatory = cell(4,0, 'Conservatory', false);
+var ConsBr = cell(4,1, 'ConsBr' , true);
+var Ballroom = cell(4,2, 'Ballroom', false);
+var BrK = cell(4,3, 'BrK', true);
+var Kitchen = cell(4,4, 'Kitchen', false);
 
 
 
 //gameboard object
-var GameBoard = {
+export var GameBoard = {
 	
 	
 	//make the board cell array list
-	board : [Study,StudyHall, Hall, HallLounge, Lounge, StudyLib, HallBr, LoungeBr, Library,
-			LibBr, BillRoom, BrDr, DiningRoom, LibCons, BrBr, DrK,Conservatory, ConsBr, Ballroom,
+	board : [Study,StudyHall, Hall, HallLounge, Lounge, StudyLib, null, HallBr, null, LoungeBr, Library,
+			LibBr, BillRoom, BrDr, DiningRoom, LibCons, null, BrBr, null, DrK,Conservatory, ConsBr, Ballroom,
 			BrK, Kitchen],
 			
 			
@@ -69,7 +71,7 @@ var GameBoard = {
 		}
 		//check if a cell to right of current position exists
 		for ( var i = 0 ; i < board.length ; i++ ) {
-			if (board[i].m_x == x && board[i].m_y == (y+1){
+			if (board[i].m_x == x && board[i].m_y == (y+1)){
 				neighbors  [3][0] = x;
 				neighbors  [3][1] = y+1;	
 			}
