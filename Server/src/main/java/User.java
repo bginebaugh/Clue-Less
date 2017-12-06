@@ -9,8 +9,9 @@ class User extends Thread {
 	private UserSocket m_userSocket = null;
 	private String m_username = null;
 	private int m_userId = -1;
-	// private Game m_game = null;
-	// private Character m_character = null;
+	private Game m_game = null;
+	private Character m_character = null;
+	private Hand m_hand = null; 
 
 	public User(UserSocket userSocket) {
 		m_userSocket = userSocket;
@@ -41,6 +42,11 @@ class User extends Thread {
 	public void setUserId(int id) {
 		m_userId = id;
 	}
+	
+	public void addCard(Card card)
+	{ 
+		m_hand.m_cardList.add(card); 
+	} 
 
 	public <T> void sendMessage(Message<T> msg) {
 		Gson gson = m_gsonBuilder.create();
