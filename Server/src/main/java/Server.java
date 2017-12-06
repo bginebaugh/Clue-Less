@@ -4,6 +4,7 @@ import java.util.*;
 
 public class Server {
 	static private ArrayList<User> m_userList = null;
+
 	public static void main(String[] args) {
 		m_userList = new ArrayList<User>();
 		ServerSocket connListener;
@@ -25,7 +26,7 @@ public class Server {
 				System.out.println(e);
 				return;
 			}
-		
+
 			UserSocket myUserSocket;
 			try {
 				myUserSocket = new UserSocket(clientSocket);
@@ -42,7 +43,7 @@ public class Server {
 				return;
 			}
 		}
-		
+
 		try {
 			connListener.close();
 		} catch (IOException e) {
