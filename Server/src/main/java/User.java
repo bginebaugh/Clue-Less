@@ -21,10 +21,12 @@ class User extends Thread {
 
 	public void run() {
 		m_gsonBuilder.setPrettyPrinting();
-		Gson gson = m_gsonBuilder.registerTypeAdapter(MessageBase.class, new CluelessDeserializer()).create();
+		Gson gson = m_gsonBuilder.registerTypeAdapter(MessageContainer.class, new CluelessDeserializer()).create();
 
-		MessageBase mb = gson.fromJson(m_userSocket.waitOnMessage(), MessageBase.class);
-		m_handler.Handle(mb, this);
+		while (true) {
+			MessageContainer mc = gson.fromJson(m_userSocket.waitOnMessage(), MessageContainer.class);
+			m_handler.Handle(mc, this);
+		}
 	}
 
 	public String getUsername() {

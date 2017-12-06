@@ -4,24 +4,37 @@ import java.lang.reflect.Type;
 
 import com.google.gson.*;
 
-public class CluelessDeserializer implements JsonDeserializer<MessageBase> {
+public class CluelessDeserializer implements JsonDeserializer<MessageContainer> {
 	@Override
-	public MessageBase deserialize(JsonElement je, Type type, JsonDeserializationContext jdc) throws JsonParseException
-	{
-		String messageType = je.getAsJsonObject().get("messageType").getAsString();
+	public MessageContainer deserialize(JsonElement je, Type type, JsonDeserializationContext jdc)
+			throws JsonParseException {
+		MessageContainer output = new MessageContainer();
+		MessageHeader header = new MessageHeader();
+
+		// First, let's get the header info
+		header.setMessageType(je.getAsJsonObject().get("messageType").getAsString());
+		header.setUserId(je.getAsJsonObject().get("userId").getAsInt());
+		header.setGameId(je.getAsJsonObject().get("gameId").getAsInt());
+
+		output.setMessageHeader(header);
+
 		MessageBase obj = null;
 		Gson gson = new Gson();
 		JsonElement message = je.getAsJsonObject().get("content");
 
-		switch (messageType) {
-			case "loginMessage":
-				obj = gson.fromJson(message, LoginMessage.class);
-				break;
-			default:
-				System.out.println("This message sucks and isn't allows");
-				break;
+		switch (header.getMessageType()) {
+		case "loginMessage":
+			obj = gson.fromJson(message, LoginMessage.class);
+			break;
+		case "joinGame":
+			obj = gson.fromJson(message, JoinGameMessage.class);
+			break;
+		default:
+			System.out.println("This message sucks and isn't allowed" + header.getMessageType());
+			break;
 		}
-		
-		return obj;
+
+		output.setMessageBase(obj);
+		return output;
 	}
 }
