@@ -28,7 +28,7 @@ const config = {
         ],
         exclude: /node_modules/,
         query: {
-          presets: ['es2015', 'react', 'react-hmre']
+          presets: ['es2015', 'react', 'react-hmre','stage-2']
         }
       },
       { test: /\.scss$/, loader: 'style-loader!css-loader!sass-loader' },
@@ -55,12 +55,22 @@ const config = {
         }, {
           loader: 'sass-loader' // compiles SASS to CSS
         }]
-      }      
+      },
+      {
+        test: /\.(png|jpg|gif)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {}  
+          }
+        ]
+      }     
     ]
   },
   externals: ['ws'],
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
+    new webpack.SourceMapDevToolPlugin(),
     new webpack.ProvidePlugin({
       $: 'jquery',
       jQuery: 'jquery',

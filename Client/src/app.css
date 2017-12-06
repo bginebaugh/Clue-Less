@@ -1,0 +1,35 @@
+body {
+    font-size: 12px !important;
+    background-color: whitesmoke !important;
+}
+
+.image-logo {
+    max-height: 15%;
+    max-width: 15%;
+}
+
+img {
+    height: 100%;
+    width: 100%;
+}
+
+.text-white {
+    color: white;
+}
+
+.border-bottom {
+    border-bottom: 1px solid grey;
+    position: absolute;
+}
+
+.navbar {
+    position: fixed !important;
+    top: 0 !important;
+    width: 100% !important;
+    z-index: 1000 !important;
+    background-color: whitesmoke;
+}
+
+.container {
+    margin-top: 100px !important;
+}

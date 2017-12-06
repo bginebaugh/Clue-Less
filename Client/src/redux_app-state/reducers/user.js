@@ -1,27 +1,41 @@
-import { List } from 'immutable';
-
 const initialState = { 
     userId: -1,
     gameId: -1,
-    userName: ""
+    username: "",
+    isLoggedIn: false
 }
 
 
 const User = (state = initialState, action) => {
   switch (action.type) {
     case 'UPDATE_USERID':
+    console.log("updating login status", action);
+    
         return {
-            // code
-        } 	
+            ...state,
+            userId: action.userId
+        }
 
     case 'UPDATE_GAMEID':
-	  return {
+        return {
             // code
-      }
+        }
+
     case 'UPDATE_USERNAME':
-    return {
-            // code
-      }
+        console.log("updating login status", action);
+    
+        return {
+            ...state,
+            username: action.username
+        }
+
+    case 'UPDATE_LOGIN_STATUS':
+        console.log("updating login status", action);
+
+        return {
+            ...state,
+            isLoggedIn: action.loggedInBool
+        }
 
     default:
       return state

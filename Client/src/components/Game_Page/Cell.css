@@ -1,0 +1,27 @@
+.cell-piece {
+    width: 20%;
+    height: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid black;
+    flex-direction: column;
+    text-align: center;
+    color: black;
+}
+
+.cell-name {
+    width: 100%;
+}
+
+.black-out {
+    background-color: black;
+}
+
+.room-fill {
+    background-color: green;
+}
+
+.hallway-fill {
+    background-color: grey;
+}

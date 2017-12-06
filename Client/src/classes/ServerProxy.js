@@ -1,3 +1,5 @@
+import { store } from '../../renderer';
+import { updateLoginStatus, updateUserId, updateUsername } from "../redux_app-state/actions/actions";
 import Messages from "./Messages";
 import net from "net";
 
@@ -70,7 +72,14 @@ export default {
             });
 
             tcpConnection.on('data', (data) => {
+
                 console.log('Received: ' + data);
+                let jsonResponse = Messages.parseJsonResponseFromServer(data);
+                let messageType = jsonResponse && jsonResponse.messageType ? jsonResponse.messageType : "";
+                
+                // all listeners established here
+                Messages.incomingMessageHandler(jsonResponse, messageType);
+
             });
 
             tcpConnection.on('error', (error) => {
@@ -89,6 +98,36 @@ export default {
             alert("The connection is not available! ::", err);
 
         }
+    },
+
+    handleLoginSuccessOrError(jsonResponse) {
+
+        console.log("handling login")
+
+        //successful login
+        if (jsonResponse && jsonResponse.content && jsonResponse.content.valid) {
+            store.dispatch(updateLoginStatus(true));
+            store.dispatch(updateUsername(jsonResponse.content.username));
+            store.dispatch(updateUserId(jsonResponse.userId));
+        }
+
+        //unsuccessful login
+        if (jsonResponse && jsonResponse.content && !jsonResponse.content.valid) {
+            store.dispatch(updateLoginStatus(false));
+        }
+
+    },
+
+    /**
+     * 
+     * @param {*} game string
+     * @param {*} newGame boolean
+     */
+    joinGame(game, newGame) {
+
+        let gameMessage = Messages.generateJoinGameMessage(game, newGame);
+        tcpConnection.write(gameMessage);
+
     }
 
 }

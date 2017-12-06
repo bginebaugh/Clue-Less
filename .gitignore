@@ -4,6 +4,12 @@
 # Temporary swp files
 .*.swp
 
+# Eclipse Stuff
+Server/.classpath
+Server/.gitignore
+Server/.project
+Server/.settings/
+
 # Gradle Stuff
 .gradle/
 
