@@ -1,8 +1,13 @@
 const initialState = { 
     userId: -1,
-    gameId: -1,
+    game: {
+        id: -1,
+        name: "",
+        gameOwner: null
+    },
     username: "",
-    isLoggedIn: false
+    isLoggedIn: false,
+    inGameRoom: false
 }
 
 
@@ -16,9 +21,12 @@ const User = (state = initialState, action) => {
             userId: action.userId
         }
 
-    case 'UPDATE_GAMEID':
+    case 'UPDATE_GAME':
+        console.log("updating game session", action);
+    
         return {
-            // code
+            ...state,
+            game: action.game
         }
 
     case 'UPDATE_USERNAME':
@@ -35,6 +43,14 @@ const User = (state = initialState, action) => {
         return {
             ...state,
             isLoggedIn: action.loggedInBool
+        }
+
+    case 'UPDATE_GAMEROOM_STATUS':
+        console.log("updating gameroom status", action);
+
+        return {
+            ...state,
+            inGameRoom: action.inGameroomBool
         }
 
     default:

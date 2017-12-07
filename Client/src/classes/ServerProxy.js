@@ -1,5 +1,7 @@
 import { store } from '../../renderer';
-import { updateLoginStatus, updateUserId, updateUsername } from "../redux_app-state/actions/actions";
+import { updateGame, updateGameroomStatus, updateLoginStatus, 
+    updateUserId, updateUsername 
+} from "../redux_app-state/actions/actions";
 import Messages from "./Messages";
 import net from "net";
 
@@ -127,6 +129,38 @@ export default {
 
         let gameMessage = Messages.generateJoinGameMessage(game, newGame);
         tcpConnection.write(gameMessage);
+
+    },
+
+    handleJoinGameResponse(jsonResponse) {
+        
+        console.log("handling join game")
+
+        //successful login
+        if (jsonResponse && jsonResponse.content && jsonResponse.content.joinedSuccessful) {
+
+            let game = {
+                id: jsonResponse.gameId,
+                name: jsonResponse.content.gameRoomName,
+                gameOwner: jsonResponse.content.gameOwner
+            }
+            alert(jsonResponse.content.moreInfo);
+            store.dispatch(updateGame(game));
+            store.dispatch(updateGameroomStatus(true));
+        }
+
+        //unsuccessful login
+        if (jsonResponse && jsonResponse.content && !jsonResponse.content.joinedSuccessful) {
+            alert(jsonResponse.content.moreInfo);
+        }
+        
+    },
+
+    selectCharacter(character) {
+        
+        let selectCharacterMessage = Messages.generateSelectCharacterMessage(character);
+        console.log("sending message", selectCharacterMessage);
+        tcpConnection.write(selectCharacterMessage);
 
     }
 

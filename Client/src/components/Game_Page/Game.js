@@ -38,11 +38,9 @@ export class Game extends React.Component {
     }
 
     renderCells() {
-        // const { board } = this.props;
         let board = GameBoard.board;
         let cells = [];
         for (let i = 0; i < 25; i++) {
-            console.log(board[i]);
             let className=board[i] === null
                 ? " black-out " 
                 : !board[i].m_isHallway

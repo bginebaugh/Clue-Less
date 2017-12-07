@@ -15,7 +15,9 @@ import Game from "../Game_Page/Game";
 
 const mapStateToProps = (state = {}) => {
     return {
-        isLoggedIn: state.User.isLoggedIn
+        isLoggedIn: state.User.isLoggedIn,
+        inGameRoom: state.User.inGameRoom,
+        gameRoomList: state.Lobby.gameRoomList
     };
 };
 
@@ -36,8 +38,13 @@ export class Lobby extends React.Component {
             dropdownOpen: false,
             dropdownValue: ""
         }
-        this.dummyRoomOptions = ["Canhs Room", "Brians Room", "Christina's Room", "Simran's room", 
-            "Sam's room", "Canhs Room", "Brians Room", "Christina's Room", "Simran's room", "Sam's room", "Canhs Room", "Brians Room", "Christina's Room", "Simran's room", "Sam's room"]
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.inGameRoom) {
+            let path = '/waitingRoom';
+            this.props.history.push(path);
+        }
     }
 
     toggleExistingRoomDropdown() {
@@ -47,10 +54,14 @@ export class Lobby extends React.Component {
     }
 
     selectDropdownItem(event) {
-        console.log(event.target.innerText)
+        console.log(event.target.innerText);
+        let roomToAdd = "";
+        if (event.target.innerText) {
+            roomToAdd = event.target.innerText.split(":")[0];
+        }
         this.setState({
             dropdownOpen: !this.state.dropdownOpen,
-            dropdownValue: event.target.innerText
+            dropdownValue: roomToAdd
         });
     }
 
@@ -95,8 +106,8 @@ export class Lobby extends React.Component {
         } else if ( newRoomSelected !== null && newRoomSelected === false ) {
             return <div><ListGroup>
                 <h3>Select one of the existing games below</h3>
-                {this.dummyRoomOptions.map((a, i) => {
-                    return <ListGroupItem key={i} className="pointer-cursor" onClick={this.selectDropdownItem}>{a}</ListGroupItem>
+                {this.props.gameRoomList.map((a, i) => {
+                    return <ListGroupItem key={i} className="pointer-cursor" onClick={this.selectDropdownItem}>{a.gameRoomName}: <i>{a.playersInRoom} players waiting to start...</i></ListGroupItem>
                 })}
             </ListGroup>
             { this.state.dropdownValue ? `You want to join :: ${this.state.dropdownValue}` : null }
@@ -113,10 +124,6 @@ export class Lobby extends React.Component {
             console.log("This is the room typed in", this.newRoomName.value);
             ServerProxy.joinGame(this.newRoomName.value, true);
             this.newRoomName.value = "";
-
-            // todo: have this respond to join room successful or not
-            let path = '/game';
-            this.props.history.push(path);
             
         }
 
@@ -125,15 +132,14 @@ export class Lobby extends React.Component {
     }
 
     handleExistingRoomSubmit() {
+
         console.log("This is the room you wish to join", this.state.dropdownValue);
         if (this.state.dropdownValue && this.state.dropdownValue.length > 0) {
             ServerProxy.joinGame(this.state.dropdownValue, false);
         }
+
         this.setState({ dropdownValue: "" });
 
-        // todo: have this respond to join room successful or not
-        let path = '/game';
-        this.props.history.push(path);
     }
 
     render() {
