@@ -44,7 +44,14 @@ export var GameBoard = {
 			BrK, Kitchen],
 			
 			
-			
+	
+	// add character to cell		
+	addCharacter : function ( character, cell) {
+
+		board [cell].playerList.push (character);
+
+	}	,
+
 	getNeighbors : function (x,y) {
 		//storing  coordinates of neighboring cells, initialized to -1,-1
 		var neighbors = [ [-1,-1] ,[-1,-1], [-1,-1], [-1,-1] ];
@@ -76,8 +83,22 @@ export var GameBoard = {
 				neighbors  [3][1] = y+1;	
 			}
 		}
-		
-		return neighbors ;
+		//validate hallway cells are not full
+		for ( var i = 0; i < 4; i++){
+			if(neighbors [i][0] > 0 && neighbors [i][1] > 0){
+				if (board[(neighbors [i][0]*5+neighbors [i][1])].isHallway && !board[(neighbors [i][0]*5+neighbors [i][1])].playerList.Isempty()){
+					neighbors [i][0] = -1;
+					neighbors [i][1] = -1;
+				}
+			}
+		}
+
+		return neighbors;
+
+
 	}
+
 };
+	
+
 
