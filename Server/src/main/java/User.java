@@ -44,10 +44,24 @@ class User extends Thread {
 	public void setUserId(int id) {
 		m_userId = id;
 	}
-
+	
+	public Character getCharacter() { 
+		return m_character; 
+	} 
+	
 	public void addCard(Card card) {
 		m_hand.m_cardList.add(card);
 	}
+	
+	public ArrayList<Card> getCardsInHand() {
+		return m_hand.m_cardList; 
+	} 
+	
+	public boolean isCardInHand(Card card) { 
+		return m_hands.m_cardList.contains(card); 
+	} 
+	
+	
 
 	public <T> void sendMessage(Message<T> msg) {
 		Gson gson = m_gsonBuilder.create();
