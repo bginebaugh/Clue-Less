@@ -16,6 +16,7 @@ public class MessageHandler {
 			LoginResponse rsp = new LoginResponse();
 
 			rsp.setValid(true);
+			rsp.setUsername(user.getUsername());
 			out.setMessageType("loginResponse");
 			out.setUserId(user.getUserId());
 			out.setGameId(-1);

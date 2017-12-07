@@ -15,6 +15,7 @@ import Game from "./components/Game_Page/Game";
 import Home from "./components/Home_Page/Home";
 import Login from "./components/Login_Page/Login";
 import Lobby from "./components/Lobby_Page/Lobby";
+import WaitingRoom from "./components/WaitingRoom_Page/WaitingRoom";
 
 import { updateLoginStatus } from "./redux_app-state/actions/actions";
 
@@ -91,6 +92,7 @@ export class App extends React.Component {
                 <Route exact path="/login" component={Login}/>
                 <Route exact path="/lobby" component={Lobby}/>
                 <Route exact path="/game" component={Game}/>
+                <Route exact path="/waitingRoom" component={WaitingRoom}/>
             </div>
         </Router>);
     }
