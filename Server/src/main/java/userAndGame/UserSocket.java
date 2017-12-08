@@ -47,12 +47,13 @@ public class UserSocket {
 		}
 	}
 
-	public String waitOnMessage() {
+	public String waitOnMessage() throws IOException {
 		String message = null;
 		try {
 			message = m_inBuffer.readLine();
 		} catch (IOException e) {
 			System.out.println("UserSocket failed to waitOnMessage");
+			throw e;
 		}
 
 		return message;

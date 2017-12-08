@@ -4,12 +4,37 @@ import java.util.*;
 
 public class Game {
 	static public int MAX_NUM_PLAYERS = 6;
-	private ArrayList<User> m_userList;
+	private ArrayList<User> m_userList = new ArrayList<User>();
 	private ArrayList<Card> m_secretEnvelope = new ArrayList<Card>(3);
-	private User m_currentUser;
+	private User m_currentUser = null;
+	private String m_gameName = "";
+	private User m_owner = null;
+	private int m_gameId = -1;
 	// Shuffled Card List
 	private ArrayList<Card> m_cardList = new ArrayList<Card>(Card.TOTAL_CARDS);
 
+	public Game(String gameName, User owner) {
+		m_gameName = gameName;
+		m_owner = owner;
+		m_userList.add(owner);
+	}
+	
+	public String getGameName() {
+		return m_gameName;
+	}
+	
+	public User getGameOwner() {
+		return m_owner;
+	}
+	
+	public int getGameId() {
+		return m_gameId;
+	}
+	
+	public void setGameId(int id) {
+		m_gameId = id;
+	}
+	
 	public void addUser(User user) {
 		m_userList.add(user);
 	}
@@ -25,6 +50,10 @@ public class Game {
 	public int getNumUsers() {
 
 		return m_userList.size();
+	}
+	
+	public ArrayList<User> getUserList() {
+		return m_userList;
 	}
 
 	public boolean isFull() {

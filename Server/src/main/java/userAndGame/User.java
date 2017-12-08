@@ -7,7 +7,8 @@ import com.google.gson.GsonBuilder;
 
 import Messages.*;
 
-class User extends Thread {
+public class User extends Thread {
+	private boolean m_deleteMe = false;
 	private GsonBuilder m_gsonBuilder = null;
 	private MessageHandler m_handler = null;
 	private UserSocket m_userSocket = null;
@@ -27,10 +28,20 @@ class User extends Thread {
 		m_gsonBuilder.setPrettyPrinting();
 		Gson gson = m_gsonBuilder.registerTypeAdapter(MessageContainer.class, new CluelessDeserializer()).create();
 
-		while (true) {
-			MessageContainer mc = gson.fromJson(m_userSocket.waitOnMessage(), MessageContainer.class);
-			m_handler.Handle(mc, this);
+		while (!m_deleteMe) {
+			try {
+				MessageContainer mc = gson.fromJson(m_userSocket.waitOnMessage(), MessageContainer.class);
+				m_handler.Handle(mc, this);
+			} catch (IOException e) {
+				m_deleteMe = true;
+			}
 		}
+
+		System.out.println("User " + m_userId + ": " + m_username + " is going bye-bye");
+	}
+
+	public void setDeleted() {
+		m_deleteMe = true;
 	}
 
 	public String getUsername() {
