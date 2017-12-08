@@ -67,6 +67,14 @@ export default {
 
     },
 
+    generateMoveCharacterMessage(character) {
+        
+        // todo
+        
+        return JSON.stringify("hello");
+
+    },
+
     parseJsonResponseFromServer(incomingMessage) {
 
         return JSON.parse(incomingMessage);

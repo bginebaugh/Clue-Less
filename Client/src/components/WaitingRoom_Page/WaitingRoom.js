@@ -1,6 +1,6 @@
 import React from 'react';
 import "./WaitingRoom.css";
-import { withRouter } from 'react-router-dom';
+import { Redirect, withRouter } from 'react-router-dom';
 import { Jumbotron, Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { connect } from 'react-redux';
 import { } from "../../redux_app-state/actions/actions";
@@ -39,11 +39,11 @@ export class WaitingRoom extends React.Component {
         console.log("this is currentroom", this.props.gameId, this.currentGame, this.props.gameList)
     }
     
-      toggle() {
-        this.setState({
-          dropdownOpen: !this.state.dropdownOpen
-        });
-      }
+    toggle() {
+    this.setState({
+        dropdownOpen: !this.state.dropdownOpen
+    });
+    }
 
     componentDidMount() {
     }
@@ -95,18 +95,22 @@ export class WaitingRoom extends React.Component {
     render() {
         const { gameOwner, isLoggedIn, myId } = this.props;
         const text = `Choose ${this.state.dropdownValue}`;
-        return (<div className="waiting-room container">
-            <div>This page looks awful. Don't worry I'll format. You are in room {this.props.gameRoomName}</div>
-            <hr/>
-            <div>Waiting for { 6 - this.currentGame.playersInRoom} other players, or for the game owner to hit start. TBU. will work when messages work </div>
-            <hr/>
-            { gameOwner === myId ? this.gameOwnerStartGame() : null}
-            <hr/>
-            { this.characterList() }
-            <hr/>
-            { this.state.dropdownValue ? <Button onClick={this.handleCharacterSubmit.bind(this)}>{text}</Button> : null }
-        </div>);
-
+        
+        if (this.props.isLoggedIn) {
+            return (<div className="waiting-room container">
+                <div>This page looks awful. Don't worry I'll format. You are in room {this.props.gameRoomName}</div>
+                <hr/>
+                <div>Waiting for { 6 - this.currentGame.playersInRoom} other players, or for the game owner to hit start. TBU. will work when messages work </div>
+                <hr/>
+                { gameOwner === myId ? this.gameOwnerStartGame() : null}
+                <hr/>
+                { this.characterList() }
+                <hr/>
+                { this.state.dropdownValue ? <Button onClick={this.handleCharacterSubmit.bind(this)}>{text}</Button> : null }
+            </div>);
+        } else {
+            return <Redirect to='/login'/>;
+        }
     }
 
 }
