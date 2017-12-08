@@ -2,10 +2,10 @@ import java.io.*;
 import java.util.*;
 
 public class Cell {
-	public int m_x = -1;
-	public int m_y = -1;
+	public int m_x;
+	public int m_y;
 	private ArrayList<Character> m_characterList = null;
-	private boolean m_isHallway = null;
+	private boolean m_isHallway = false;
 	private String m_name = null;
 	private Weapon m_weapon = null;
 	
@@ -16,64 +16,84 @@ public class Cell {
 			this.m_isHallway = isHallway; 
 	} 
 	
-	Cell Study = new cell(0, 0, "Study", false); 
-	Cell StudyHall = new cell(0, 1, "StudyHall", true); 
-	Cell Hall = new cell(0, 2, "Hall", false); 
-	Cell HallLounge = new cell( 0, 3, "HallLounge", true);
-	Cell Lounge = new cell( 0, 4, "Lounge", false);
-	Cell StudyLib = new cell(1,0, "StudyLib", true);
-	Cell HallBr = new cell(1,2, "HallBr" , true);
-	Cell LoungeBr = new cell(1,4, "LoungeBr", true);
-	Cell Library = new cell(2,0, "Library" , false);
-	Cell LibBr = new cell(2,1, "LibBr", true);
-	Cell BillRoom = new cell(2,2, "BillRoom", false);
-	Cell BrDr = new cell(2,3, "BrDr" , true);
-	Cell DiningRoom = new cell(2,4, "DiningRoom", false);
-	Cell LibCons = new cell(3,0, "LibCons" , true);
-	Cell BrBr = new cell(3,2, "BrBr" , true);
-	Cell DrK = new cell(3,4, "DrK", true);
-	Cell Conservatory = new cell(4,0, "Conservatory", false);
-	Cell ConsBr = new cell(4,1, "ConsBr" , true);
-	Cell Ballroom = new cell(4,2, "Ballroom", false);
-	Cell BrK = new cell(4,3, "BrK", true);
-	Cell Kitchen = new cell(4,4, "Kitchen", false);
+	Cell Study = new Cell(0, 0, "Study", false); 
+	Cell StudyHall = new Cell(0, 1, "StudyHall", true); 
+	Cell Hall = new Cell(0, 2, "Hall", false); 
+	Cell HallLounge = new Cell( 0, 3, "HallLounge", true);
+	Cell Lounge = new Cell( 0, 4, "Lounge", false);
+	Cell StudyLib = new Cell(1,0, "StudyLib", true);
+	Cell HallBr = new Cell(1,2, "HallBr" , true);
+	Cell LoungeBr = new Cell(1,4, "LoungeBr", true);
+	Cell Library = new Cell(2,0, "Library" , false);
+	Cell LibBr = new Cell(2,1, "LibBr", true);
+	Cell BillRoom = new Cell(2,2, "BillRoom", false);
+	Cell BrDr = new Cell(2,3, "BrDr" , true);
+	Cell DiningRoom = new Cell(2,4, "DiningRoom", false);
+	Cell LibCons = new Cell(3,0, "LibCons" , true);
+	Cell BrBr = new Cell(3,2, "BrBr" , true);
+	Cell DrK = new Cell(3,4, "DrK", true);
+	Cell Conservatory = new Cell(4,0, "Conservatory", false);
+	Cell ConsBr = new Cell(4,1, "ConsBr" , true);
+	Cell Ballroom = new Cell(4,2, "Ballroom", false);
+	Cell BrK = new Cell(4,3, "BrK", true);
+	Cell Kitchen = new Cell(4,4, "Kitchen", false);
 	
-	private arrayList<Cell> board = new ArrayList<>(Arrays.asList(Study,StudyHall, Hall, HallLounge, Lounge, StudyLib, null, HallBr, null, LoungeBr, Library,
+	private ArrayList<Cell> board = new ArrayList<>(Arrays.asList(Study,StudyHall, Hall, HallLounge, Lounge, StudyLib, null, HallBr, null, LoungeBr, Library,
 			LibBr, BillRoom, BrDr, DiningRoom, LibCons, null, BrBr, null, DrK,Conservatory, ConsBr, Ballroom,
 			BrK, Kitchen)); 
 	
-	public int[][] getNeighbors(int x,int y){ 
-		//storing  coordinates of neighboring cells, initialized to -1,-1
-		 int neighbors [][] = { {-1,-1} ,{-1,-1}, {-1,-1}, {-1,-1} };
+	public ArrayList[][] getNeighbors(int x,int y){ 
+
+		ArrayList[][] neighbors = new ArrayList[4][4]; 
 		//check if a cell above current position exists
-		for ( var i = 0 ; i < board.length ; i++ ) {
-			if (board[i].m_x == (x-1) && board[i].m_y == y){
-				neighbors [0][0] = (x-1);
-				neighbors [0][1] = y;	
-			}
+		if (x>0 && x<=4 && y >= 0 && y<= 4){
+			neighbors [0][0].add(x-1);
+			neighbors [0][1].add(y);	
 		}
+			
 		//check if a cell below current position exists
-		for ( var i = 0 ; i < board.length ; i++ ) {
-			if (board[i].m_x == (x+1) && board[i].m_y == y){
-				neighbors [1][0] = (x-1);
-				neighbors [1][1] = y;	
-			}
+		if (x >=0 && x < 4 && y >= 0 && y<= 4){
+			neighbors [1][0].add(x+1);
+			neighbors [1][1].add(y);	
 		}
+			
 		//check if a cell to left of current position exists
-		for ( var i = 0 ; i < board.length ; i++ ) {
-			if (board[i].m_x == x && board[i].m_y == (y-1)){
-				neighbors  [2][0] = x;
-				neighbors  [2][1] = y -1;	
-			}
+		if (x >= 0 && x<= 4 && y>0 && y<=4){
+			neighbors  [2][0].add(x);
+			neighbors  [2][1].add(y -1);	
 		}
+
 		//check if a cell to right of current position exists
-		for ( var i = 0 ; i < board.length ; i++ ) {
-			if (board[i].m_x == x && board[i].m_y == (y+1)){
-				neighbors  [3][0] = x;
-				neighbors  [3][1] = y+1;	
-			}
+		if (x >= 0 && x<= 4 && y >=0 && y < 4 ){
+			neighbors  [3][0].add(x);
+			neighbors  [3][1].add(y+1);	
 		}
+			
+		//Check if it is a corner
+		if (x == 0 && y == 0) { 
+			neighbors [0][0].add(4); 
+			neighbors [0][1].add(4); 
+		} 
+		 
+		if (x == 4 && y == 0) { 
+			neighbors [0][0].add(0); 
+			neighbors [0][1].add(4); 
+		} 
 		
+		if (x == 0 && y == 4) { 
+			neighbors [1][0].add(4); 
+			neighbors [1][1].add(0); 
+		} 
+		
+		if (x == 4 && y == 4) { 
+			neighbors [1][0].add(0); 
+			neighbors [1][1].add(0); 
+		} 
+
+		// validate if the hallway cells are not full 
+		// How do you do this??
+		
+		 
 		return neighbors ;
 	}
 

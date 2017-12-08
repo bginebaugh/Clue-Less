@@ -3,9 +3,9 @@ import java.util.*;
 
 public class Game {
 	static public int MAX_NUM_PLAYERS = 6;
-	private ArrayList<User> m_userList = null;
+	private ArrayList<User> m_userList;
 	private ArrayList<Card> m_secretEnvelope = new ArrayList<Card>(3);
-	private User m_currentUser = null;
+	private User m_currentUser;
 	// Shuffled Card List
 	private ArrayList<Card> m_cardList = new ArrayList<Card>(Card.TOTAL_CARDS);
 
@@ -94,26 +94,6 @@ public class Game {
 		}
 	}
 
-	public boolean setCharacter(int userId, Character character) {
-		for (int i = 0; i < m_userList.size(); i++){
-			if (m_userList.getUserId() == userId){
-				m_userList.getCharacter() = character;
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public boolean moveCharacter(int userId, int posX, int posY) {
-		for (int i = 0; i < m_userList.size(); i++) {
-			if(m_userList.getUserId() == userId){
-				m_userList.getCharacter().getLocation().getX() = posX; 
-				m_userList.getCharacter().getLocation().GetY = posY;
-				return true;
-			}
-		}
-		return false;
-	}
 
 	public boolean makeSuggestion(int userId, ArrayList<Card> cards) {
 		// Check if this is a valid Suggestion

@@ -3,8 +3,8 @@ import java.util.*;
 
 public class Character
 {
-	public Cell m_location = null; 
-	public int m_id = -1; 
+	public Cell m_location; 
+	public int m_id; 
 	public String m_name = null;
 	
 	public Character(Cell location, int id, String name) { 

@@ -25,4 +25,8 @@ public class Hand {
 		m_cardList.add(card);
 		return true;
 	}
+	
+	public ArrayList<Card> getCardList() { 
+		return m_cardList; 
+	} 
 }

@@ -3,6 +3,9 @@ import com.google.gson.GsonBuilder;
 
 import Messages.*;
 
+import java.io.*;
+import java.util.*;
+
 class User extends Thread {
 	private GsonBuilder m_gsonBuilder = null;
 	private MessageHandler m_handler = null;
@@ -54,11 +57,11 @@ class User extends Thread {
 	}
 	
 	public ArrayList<Card> getCardsInHand() {
-		return m_hand.m_cardList; 
+		return m_hand.getCardList(); 
 	} 
 	
 	public boolean isCardInHand(Card card) { 
-		return m_hands.m_cardList.contains(card); 
+		return m_hand.m_cardList.contains(card); 
 	} 
 	
 	
