@@ -1,9 +1,12 @@
 package Messages;
 
+import java.util.ArrayList;
+
 public class JoinGameResponse extends MessageBase {
 	private boolean joinedSuccessful;
 	private String gameRoomName;
 	private int gameOwner;
+	private ArrayList<String> playersInRoom;
 	private String moreInfo;
 
 	public boolean isJoinedSuccessful() {
@@ -28,6 +31,14 @@ public class JoinGameResponse extends MessageBase {
 
 	public void setGameOwner(int gameOwner) {
 		this.gameOwner = gameOwner;
+	}
+	
+	public ArrayList<String> getPlayersInRoom() {
+		return playersInRoom;
+	}
+	
+	public void setPlayersInRoom(ArrayList<String> players) {
+		playersInRoom = players;
 	}
 
 	public String getMoreInfo() {
