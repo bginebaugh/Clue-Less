@@ -1,6 +1,7 @@
 import java.io.*;
 import java.net.*;
-import java.util.*;
+
+import userAndGame.*;
 
 public class Server {
 	static private ArrayList<User> m_userList = null;

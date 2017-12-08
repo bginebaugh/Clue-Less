@@ -1,3 +1,5 @@
+package userAndGame;
+
 import Messages.*;
 
 public class MessageHandler {

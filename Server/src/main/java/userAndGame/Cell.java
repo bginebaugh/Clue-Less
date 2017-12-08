@@ -1,3 +1,4 @@
+package userAndGame;
 import java.io.*;
 import java.util.*;
 
