@@ -16,6 +16,10 @@ public class MessageHandler {
 			JoinGameMessage joinGameMsg = (JoinGameMessage) mb;
 			new JoinGameMessageHandler().Handle(joinGameMsg, user);
 			break;
+		case "StartGameMessage":
+			StartGameMessage startGameMsg = (StartGameMessage) mb;
+			new StartGameMessageHandler().Handle(startGameMsg, user);
+			break;
 		default:
 			System.out.println("The message type " + mb.getClass().getSimpleName() + " is not yet supported");
 			break;

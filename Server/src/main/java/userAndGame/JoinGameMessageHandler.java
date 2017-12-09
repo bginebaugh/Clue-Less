@@ -44,7 +44,7 @@ public class JoinGameMessageHandler {
 
 				if (!game.isFull()) {
 					jgr.setJoinedSuccessful(true);
-					jgr.setMoreInfo("Game Created Successfully");
+					jgr.setMoreInfo("Successfully joined " + desiredName);
 				} else {
 					jgr.setJoinedSuccessful(false);
 					jgr.setMoreInfo("Game is full");

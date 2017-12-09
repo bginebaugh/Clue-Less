@@ -68,7 +68,7 @@ public class User extends Thread {
 		msg.setUserId(this.getUserId());
 		Gson gson = m_gsonBuilder.create();
 		String out = gson.toJson(msg);
-		System.out.println("Attempting to send " + out);
+		System.out.println("Sending this to " + this.getUsername() + ":\n" + out);
 		m_userSocket.sendMessage(out);
 	}
 }

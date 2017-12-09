@@ -28,20 +28,44 @@ public class ServerSystem {
 	}
 
 	public boolean addUser(User user) {
+		boolean foundUser = false;
+		
+		Message<LoginResponse> out = new Message<LoginResponse>();
+		LoginResponse rsp = new LoginResponse();
 		System.out.println("Attempting to add user with username " + user.getUsername());
+		
 		for (int i = 0; i < m_userList.size(); ++i) {
 			if (m_userList.get(i).getUsername().equals(user.getUsername())) {
-				return false;
+				rsp.setValid(false);
+				rsp.setMoreInfo("Username not available");
+				out.setUserId(-1);
+				user.setDeleted();
+				foundUser = true;
+				break;
 			}
 			System.out.println("User with username " + m_userList.get(i).getUsername() + " was not a match");
 		}
 
-		user.setUserId(m_nextUserId++);
-		m_userList.add(user);
-		m_userLobbyList.add(user);
+		if (!foundUser) {
+			user.setUserId(m_nextUserId++);
+			m_userList.add(user);
+			m_userLobbyList.add(user);
 
-		System.out.println("There are now " + m_userList.size() + " users in the system");
-		return true;
+			System.out.println("There are now " + m_userList.size() + " users in the system");
+			
+			rsp.setValid(true);
+			out.setUserId(user.getUserId());
+		}
+		
+		rsp.setUsername(user.getUsername());
+		out.setMessageType("loginResponse");
+		out.setGameId(-1);
+		out.setContent(rsp);
+		user.sendMessage(out);
+		
+		distributeGameList();
+		
+		return !foundUser;
 	}
 
 	public void removeUser(int userId) {
