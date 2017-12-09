@@ -22,3 +22,11 @@
 .nav-item {
     cursor: pointer;
 }
+
+.pull-right {
+    float: right;
+}
+
+.max-height {
+    height: 90%;
+}

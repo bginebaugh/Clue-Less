@@ -6,6 +6,7 @@ const initialState = {
     },
     hasGameStarted: false,
     myCharacter: null,
+    myCards: null,
     playersList: "aa"
 }
 
@@ -35,6 +36,14 @@ const GameSession = (state = initialState, action) => {
             return {
                 ...state,
                 myCharacter: action.myCharacter
+            }
+
+        case 'UPDATE_MYCARDS':
+            console.log("updating my cards", action);
+        
+            return {
+                ...state,
+                myCards: action.myCards
             }
 
         case 'UPDATE_PLAYERLIST':

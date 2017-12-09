@@ -62,6 +62,18 @@ export const updateMyCharacter = (myCharacter) => {
 	}
 };
 
+export const updateMyCards = (myCards) => {
+	
+	console.log("myCards action :: ", myCards);
+	
+	return {
+		type: "UPDATE_MYCARDS",
+		myCards
+	}
+};
+
+
+
 // Lobby
 
 export const updateGameRoomList = (gameRoomList) => {

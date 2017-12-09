@@ -3,7 +3,7 @@ import "./Game.css";
 import classnames from 'classnames';
 import { Redirect, withRouter } from 'react-router-dom';
 import { Jumbotron, Button, Col, Row, 
-    Nav, NavItem, NavLink, TabContent, TabPane, Card, CardTitle, CardText
+    Nav, NavItem, NavLink, TabContent, TabPane, Card, CardTitle, CardText, Modal, ModalBody, ModalFooter, ModalHeader
 } from 'reactstrap';
 import { connect } from 'react-redux';
 import { initiateGameBoard, updateMyPosition, updateMyNeighbors } from "../../redux_app-state/actions/actions";
@@ -20,7 +20,8 @@ const mapStateToProps = (state = {}) => {
         board: state.GameBoard.board,
         myPosition: state.GameBoard.myPosition,
         myNeighbors: state.GameBoard.myNeighbors,
-        myCharacter: state.GameSession.myCharacter
+        myCharacter: state.GameSession.myCharacter,
+        myCards: state.GameSession.myCards
     };
 };
 
@@ -38,9 +39,11 @@ export class Game extends React.Component {
         super(props);
     
         this.toggleTabs = this.toggleTabs.bind(this);
+        this.toggleModal = this.toggleModal.bind(this);
         this.state = {
           activeTab: null,
-          neighbors: null
+          neighbors: null,
+          modal: false
         };
         this.neighbors = null;
     }
@@ -52,6 +55,12 @@ export class Game extends React.Component {
             });
         }
     }
+
+    toggleModal() {
+        this.setState({
+          modal: !this.state.modal
+        });
+      }
 
     componentDidMount() {
         console.log("this is the game board :: ", GameBoard);
@@ -134,13 +143,15 @@ export class Game extends React.Component {
 
     renderMoveCharacterScreen() {
         let { board, myPosition, myNeighbors } = this.props;
-        console.log("updating neighbors");
-        let myCoordinates = [myPosition.m_x, myPosition.m_y];
-        let neighbors = GameBoard.getValidNeighbors(myPosition.m_x, myPosition.m_y, this.props.board);
-        if (!this.props.myNeighbors) {
-            this.props.updateMyNeighbors(neighbors);
+        if (this.state.activeTab === '1') {
+            console.log("updating neighbors");
+            let myCoordinates = [myPosition.m_x, myPosition.m_y];
+            let neighbors = GameBoard.getValidNeighbors(myPosition.m_x, myPosition.m_y, this.props.board);
+            if (!this.props.myNeighbors) {
+                this.props.updateMyNeighbors(neighbors);
+            }
+            console.log("neighbors", neighbors);
         }
-        console.log("neighbors", neighbors);
 
         return <TabPane tabId="1">
             <Row>
@@ -215,12 +226,49 @@ export class Game extends React.Component {
         return <h1>It is your turn</h1>;
     }
 
+    renderCardModel() {
+        return (
+            <div>
+              <Modal style={{ width: '600px' }} isOpen={this.state.modal} toggle={this.toggleModal} className={this.props.className}>
+                <ModalHeader toggle={this.toggleModal}>Your cards</ModalHeader>
+                <ModalBody>
+                    <Row>
+                    {this.props.myCards 
+                        ? this.props.myCards.map((card, i) => {
+                            return (
+                                <Col key={i} sm="4">
+                                    <Card className="max-height" inverse style={{ backgroundColor: '#333', borderColor: '#333' }} body outline>
+                                        <CardText>{card}</CardText>
+                                    </Card>
+                                </Col>
+                            )
+                        }) 
+                        : null }
+                    </Row>
+                </ModalBody>
+                <ModalFooter>
+                  <Button color="info" onClick={this.toggleModal}>Understood</Button>
+                </ModalFooter>
+              </Modal>
+            </div>
+          );
+    }
+
     render() {
         const { isLoggedIn, board, myPosition, myCharacter } = this.props;
 
         if (this.props.isLoggedIn) {
             return (<div className="container">
-                { myCharacter ? <h1 className="margin-bottom">Hello {myCharacter}</h1> : null}
+                <Row>
+                    <Col xs="7">{ myCharacter ? <h3 className="margin-bottom">Hello, {myCharacter}</h3> : null}</Col>
+                    <Col xs="5">
+                        <Row className="pull-right">
+                            <Button color="secondary" onClick={this.toggleModal}>View your cards</Button>
+                            {this.renderCardModel()}
+                        </Row>              
+                    </Col>
+                </Row>
+
                 <Row>
                     <Col xs="7">{this.renderCells()}</Col>
                     <Col className="stacked-rows" xs="5">

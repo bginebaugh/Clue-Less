@@ -1,6 +1,6 @@
 import { store } from '../../renderer';
 import { addToGameRoomList, deleteFromGameRoomList, updateCharacterList, updateGameRoomList, updateGameStarted, 
-    updateMyCharacter, updatePlayerList
+    updateMyCards, updateMyCharacter, updatePlayerList
 } from "../redux_app-state/actions/actions";
 import ServerProxy from "./ServerProxy";
 
@@ -145,6 +145,14 @@ export default {
                 }
                 break;
 
+            case "cardAssignments":
+                console.log("cardAssignments", jsonResponse);
+                if (jsonResponse && jsonResponse.content && jsonResponse.content.cards) {
+                    store.dispatch(updateMyCards(jsonResponse.content.cards));
+                }
+                break;
+
+                
                 
 
             default:
