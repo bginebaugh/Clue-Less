@@ -37,8 +37,6 @@ public class Server {
 				System.out.println(e);
 				return;
 			}
-			
-			
 		}
 
 		try {
