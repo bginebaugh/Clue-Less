@@ -24,5 +24,10 @@ public class SelectCharacterMessageHandler {
 		out.setGameId(game.getGameId());
 		out.setContent(scr);
 		user.sendMessage(out);
+
+		// If all the users have chosen, we should kick the game off
+		if (game.allUsersHaveCharacters()) {
+			game.setup();
+		}
 	}
 }

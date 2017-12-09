@@ -17,7 +17,7 @@ public class User extends Thread {
 	private int m_userId = -1;
 	private Game m_game = null;
 	private String m_character = "";
-	private Hand m_hand = null;
+	private Hand m_hand = new Hand();
 
 	public User(UserSocket userSocket) {
 		m_userSocket = userSocket;
@@ -68,7 +68,7 @@ public class User extends Thread {
 	public void setGame(Game game) {
 		m_game = game;
 	}
-	
+
 	public void clearGame() {
 		m_game = null;
 	}
@@ -82,7 +82,7 @@ public class User extends Thread {
 	}
 
 	public void addCard(Card card) {
-		m_hand.m_cardList.add(card);
+		m_hand.addCard(card);
 	}
 
 	public ArrayList<Card> getCardsInHand() {
@@ -90,7 +90,7 @@ public class User extends Thread {
 	}
 
 	public boolean isCardInHand(Card card) {
-		return m_hand.m_cardList.contains(card);
+		return m_hand.hasCard(card);
 	}
 
 	public <T> void sendMessage(Message<T> msg) {

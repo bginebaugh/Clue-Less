@@ -19,7 +19,7 @@ public class Game {
 
 	static public int MAX_NUM_PLAYERS = 6;
 	private ArrayList<User> m_userList = new ArrayList<User>();
-	private ArrayList<Card> m_secretEnvelope = new ArrayList<Card>(3);
+	private ArrayList<Card> m_secretEnvelope = new ArrayList<Card>();
 	private ArrayList<CharAvailable> m_charSelectionList = new ArrayList<CharAvailable>();
 	private User m_currentUser = null;
 	private String m_gameName = "";
@@ -87,47 +87,47 @@ public class Game {
 
 		ArrayList<Card> deck = new ArrayList<Card>(Card.TOTAL_CARDS);
 
-		for (int i = 0; i < Card.NUM_ROOMS; i++) {
-			deck.add(new Card(Card.ROOM, i));
-		}
-
-		for (int i = 0; i < Card.NUM_SUSPECTS; i++) {
-			deck.add(new Card(Card.SUSPECT, i));
-		}
-
-		for (int i = 0; i < Card.NUM_WEAPONS; i++) {
-			deck.add(new Card(Card.WEAPON, i));
-		}
-
 		// Shuffle Deck
 		Random rand = new Random();
-		for (int i = 0; i < Card.TOTAL_CARDS; i++) {
-			int val = rand.nextInt(deck.size());
-			Card card = deck.remove(val);
-			m_cardList.add(card);
-		}
 
 		// Create the Secret Envelope
 		int weapon_id = rand.nextInt(Card.NUM_WEAPONS);
 		int room_id = rand.nextInt(Card.NUM_ROOMS);
 		int suspect_id = rand.nextInt(Card.NUM_SUSPECTS);
 
-		Card weapon = new Card(Card.WEAPON, weapon_id);
-		Card room = new Card(Card.ROOM, room_id);
-		Card suspect = new Card(Card.SUSPECT, suspect_id);
+		for (int i = 0; i < Card.NUM_SUSPECTS; i++) {
+			if (i == suspect_id) {
+				m_secretEnvelope.add(new Card(Card.SUSPECT, i));
+			} else {
+				deck.add(new Card(Card.SUSPECT, i));
+			}
+		}
 
-		m_cardList.remove(weapon);
-		m_cardList.remove(room);
-		m_cardList.remove(suspect);
+		for (int i = 0; i < Card.NUM_WEAPONS; i++) {
+			if (i == weapon_id) {
+				m_secretEnvelope.add(new Card(Card.WEAPON, i));
+			} else {
+				deck.add(new Card(Card.WEAPON, i));
+			}
+		}
+		for (int i = 0; i < Card.NUM_ROOMS; i++) {
+			if (i == room_id) {
+				m_secretEnvelope.add(new Card(Card.ROOM, i));
+			} else {
+				deck.add(new Card(Card.ROOM, i));
+			}
+		}
 
-		m_secretEnvelope.add(weapon);
-		m_secretEnvelope.add(room);
-		m_secretEnvelope.add(suspect);
+		// Subtract 3 for the cards in the secret envelope
+		for (int i = 0; i < Card.TOTAL_CARDS - 3; i++) {
+			int val = rand.nextInt(deck.size());
+			Card card = deck.remove(val);
+			m_cardList.add(card);
+		}
 
 		// Deal Cards
 		int user_index = 0;
-		for (int i = 0; i < m_cardList.size(); i++) {
-			Card card = m_cardList.get(i);
+		for (Card card : m_cardList) {
 			if (user_index == m_userList.size()) {
 				user_index = 0;
 			}
@@ -138,6 +138,31 @@ public class Game {
 
 			user_index++;
 		}
+
+		for (User user : m_userList) {
+			AssignCardsMessage acm = new AssignCardsMessage();
+			Message<AssignCardsMessage> out = new Message<AssignCardsMessage>();
+
+			for (Card card : user.getCardsInHand()) {
+				acm.addCard(Card.getCardName(card.getType(), card.getCardId()));
+			}
+
+			out.setMessageType("cardAssignments");
+			out.setGameId(this.getGameId());
+			out.setContent(acm);
+			user.sendMessage(out);
+		}
+
+		for (User user : m_userList) {
+			String output = "User " + user.getUsername() + " hand is: ";
+			for (Card card : user.getCardsInHand()) {
+				output += Card.getCardName(card.getType(), card.getCardId()) + ", ";
+			}
+			System.out.println(output);
+		}
+
+		System.out.println("Secret Envelope:\n\tWeapon: " + Card.getCardName(Card.WEAPON, weapon_id) + "\n\tRoom: "
+				+ Card.getCardName(Card.ROOM, room_id) + "\n\tSuspect: " + Card.getCardName(Card.SUSPECT, suspect_id));
 	}
 
 	public boolean makeSuggestion(int userId, ArrayList<Card> cards) {
@@ -203,7 +228,7 @@ public class Game {
 			}
 		}
 	}
-	
+
 	public boolean assignCharacterToUser(String charName, User user) {
 		boolean ret = false;
 		for (CharAvailable ch : m_charSelectionList) {
@@ -218,30 +243,40 @@ public class Game {
 		}
 		// Always redistribute the list, just in case a client is out of sync
 		this.distributeCharList();
+
 		return ret;
 	}
-	
-	private void populateCharSelectionList() {
-		m_charSelectionList.add(new CharAvailable("Miss Scarlet", true));
-		m_charSelectionList.add(new CharAvailable("Colonel Mustard", true));
-		m_charSelectionList.add(new CharAvailable("Mrs. White", true));
-		m_charSelectionList.add(new CharAvailable("Mr. Green", true));
-		m_charSelectionList.add(new CharAvailable("Mrs. Peacock", true));
-		m_charSelectionList.add(new CharAvailable("Professor Plum", true));
+
+	public boolean allUsersHaveCharacters() {
+		boolean allChosen = true;
+		for (User user : m_userList) {
+			if (user.getCharacter().equals("")) {
+				allChosen = false;
+				break;
+			}
+		}
+
+		return allChosen;
 	}
-	
+
+	private void populateCharSelectionList() {
+		for (String suspect : Card.SUSPECT_CARDS) {
+			m_charSelectionList.add(new CharAvailable(suspect, true));
+		}
+	}
+
 	private void distributeCharList() {
 		CharacterListUpdateMessage clum = new CharacterListUpdateMessage();
 		Message<CharacterListUpdateMessage> out = new Message<CharacterListUpdateMessage>();
-		
+
 		for (CharAvailable ch : m_charSelectionList) {
 			clum.addCharacter(ch.characterName, ch.available);
 		}
-		
+
 		out.setMessageType("characterListUpdate");
 		out.setGameId(this.getGameId());
 		out.setContent(clum);
-		
+
 		for (User user : m_userList) {
 			user.sendMessage(out);
 		}
@@ -267,7 +302,7 @@ public class Game {
 			User tmp = m_userList.get(i);
 			tmp.sendMessage(out);
 		}
-		
+
 		populateCharSelectionList();
 		distributeCharList();
 	}
