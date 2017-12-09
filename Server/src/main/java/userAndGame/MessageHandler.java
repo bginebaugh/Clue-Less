@@ -20,6 +20,10 @@ public class MessageHandler {
 			StartGameMessage startGameMsg = (StartGameMessage) mb;
 			new StartGameMessageHandler().Handle(startGameMsg, user);
 			break;
+		case "SelectCharacterMessage":
+			SelectCharacterMessage selectCharacterMsg = (SelectCharacterMessage) mb;
+			new SelectCharacterMessageHandler().Handle(selectCharacterMsg, user);
+			break;
 		default:
 			System.out.println("The message type " + mb.getClass().getSimpleName() + " is not yet supported");
 			break;
