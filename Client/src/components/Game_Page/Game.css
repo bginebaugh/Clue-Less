@@ -30,3 +30,8 @@
 .max-height {
     height: 90%;
 }
+
+.highlight {
+    transition: 0.3s ease-in-out;
+    background-color:#f1c40f !important;
+}

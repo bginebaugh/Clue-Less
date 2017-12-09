@@ -75,7 +75,7 @@ export class Game extends React.Component {
         twoDBoard = [[...firstRow], [...secondRow], [...thirdRow], [...fourthRow], [...fifthRow]];
 
         this.props.initiateGameBoard(twoDBoard);
-        this.props.updateMyPosition(GameBoard.board[2]);
+        this.props.updateMyPosition(GameBoard.board[0]);
         this.props.updateMyNeighbors();
         
     }
@@ -96,7 +96,22 @@ export class Game extends React.Component {
     renderCells() {
         let board = GameBoard.board;
         let cells = [];
+        let { myNeighbors } = this.props;
         for (let i = 0; i < board.length; i++) {
+
+            let isNeighbor = false;
+            
+            myNeighbors ? myNeighbors.forEach((neighbor) => {
+                if(board[i] && board[i].m_x === neighbor[0] && board[i].m_y === neighbor[1]) {
+                    isNeighbor = true;
+                    console.log("isNeighbor")
+                }
+            }) : null;
+
+            let highlightClassName = this.state.activeTab === '1' && isNeighbor
+                ? " highlight "
+                : "";
+
             let className=board[i] === null
                 ? " black-out " 
                 : !board[i].m_isHallway
@@ -107,6 +122,7 @@ export class Game extends React.Component {
                 : board[i] && board[i].m_isHallway
                     ? " hallway-wide "
                     : "";
+            className += highlightClassName;
             cells.push(<Cell 
                 key={i} index={i} 
                 cellPiece={board[i]} 
@@ -157,10 +173,10 @@ export class Game extends React.Component {
             <Row>
                 <Col sm="12">
                     <Card body>
-                        <CardTitle>Um, where do you want to go?</CardTitle>
-                        { board && myNeighbors ? myNeighbors.map((position) => {
+                        <CardTitle>Where do you want to go?</CardTitle>
+                        { board && myNeighbors ? myNeighbors.map((position, i) => {
                             let onClick = this.moveCharacter.bind(this,position);
-                            return <Button onClick={onClick} className="margin-bottom">{board[position[0]][position[1]].m_name}</Button>
+                            return <Button key={i} onClick={onClick} className="margin-bottom">{board[position[0]][position[1]].m_name}</Button>
                         }) : null }
                     </Card>
                 </Col>
@@ -168,8 +184,11 @@ export class Game extends React.Component {
         </TabPane>        
     }
 
-    moveCharacter(origin, destination) {
-        GameClass.move(origin, destination);
+    moveCharacter(destination) {
+        GameClass.move(destination);
+        let message = `Moving you to coordinates ${destination}`; // TBU
+        alert(message);
+        this.setState({ activeTab: null });
     }
 
     renderMakeSuggestionScreen() {
@@ -177,13 +196,13 @@ export class Game extends React.Component {
             <Row>
                 <Col sm="6">
                     <Card body>
-                        <CardTitle>Suggest A Character</CardTitle>
+                        <CardTitle>Character</CardTitle>
                         <CardText>Choose wisely.</CardText>
                     </Card>
                 </Col>
                 <Col sm="6">
                     <Card body>
-                        <CardTitle>Suggest A Weapon</CardTitle>
+                        <CardTitle>Weapon</CardTitle>
                         <CardText>Do you have evidence?</CardText>
                     </Card>
                 </Col>
