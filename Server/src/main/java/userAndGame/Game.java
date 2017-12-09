@@ -213,18 +213,19 @@ public class Game {
 	// lobby, as well as notifying all players that the game is starting
 	public void start() {
 		ServerSystem ss = ServerSystem.getInstance();
-		
+
 		// Remove the game from the lobby, which will update all client's lobbies
 		ss.removeGameFromLobby(this.getGameOwner().getUserId());
-		
+
 		// distribute the start message to all players
 		StartGameResponse sgr = new StartGameResponse();
 		Message<StartGameResponse> out = new Message<StartGameResponse>();
-		
+
 		sgr.setGameRoomName(this.getGameName());
-		out.setContent(sgr);
+		out.setMessageType("startGameResponse");
 		out.setGameId(this.getGameId());
-		
+		out.setContent(sgr);
+
 		for (int i = 0; i < m_userList.size(); ++i) {
 			User tmp = m_userList.get(i);
 			tmp.sendMessage(out);
