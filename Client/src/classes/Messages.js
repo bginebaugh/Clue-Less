@@ -1,5 +1,5 @@
 import { store } from '../../renderer';
-import { addToGameRoomList, deleteFromGameRoomList, updateGameRoomList, updatePlayerList
+import { addToGameRoomList, deleteFromGameRoomList, updateGameRoomList, updateGameStarted, updatePlayerList
 } from "../redux_app-state/actions/actions";
 import ServerProxy from "./ServerProxy";
 
