@@ -148,22 +148,17 @@ public class Game {
 		return compareToEnvelope(weapon, suspect, room);
 	}
 
-	public void showCardToUser(int userId, int cardId) {
-		if (m_userList == null) {
-			return; 
-		} 
+	public void showCardToUser(ArrayList<Card> cards) {
 		
+		// Loop through the cards 
+		for (Card card : cards) { 
+		// Check to see if the card is in the card hand
+			if (m_cardList.contains(card)) { 
+				
+			} 
+		} 
 	}
 
-	// What should this function have in it??
-	public void start() {
-		// ToDo: Implement
-	}
-
-	// Is this a message?
-	public void notifyPlayers(int notice) {
-		// ToDo:Implement
-	}
 
 	private boolean compareToEnvelope(Card weapon, Card suspect, Card room) {
 		if (m_secretEnvelope.contains(weapon) && m_secretEnvelope.contains(suspect)
