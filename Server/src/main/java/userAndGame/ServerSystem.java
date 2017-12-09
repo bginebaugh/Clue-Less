@@ -1,5 +1,7 @@
 package userAndGame;
+
 import java.util.ArrayList;
+import Messages.*;
 
 public class ServerSystem {
 	private ArrayList<User> m_userList;
@@ -37,7 +39,7 @@ public class ServerSystem {
 		user.setUserId(m_nextUserId++);
 		m_userList.add(user);
 		m_userLobbyList.add(user);
-		
+
 		System.out.println("There are now " + m_userList.size() + " users in the system");
 		return true;
 	}
@@ -53,36 +55,39 @@ public class ServerSystem {
 			}
 		}
 	}
-	
+
 	public Game getGame(String gameName) throws IndexOutOfBoundsException {
 		for (int i = 0; i < m_gameList.size(); ++i) {
 			if (m_gameList.get(i).getGameName().equals(gameName)) {
 				return m_gameList.get(i);
 			}
 		}
-		
+
 		throw new IndexOutOfBoundsException("Could not find game called " + gameName);
 	}
 
-	public boolean createGame(String gameName, User owner) {
+	public boolean createGame(String gameName) {
 		for (int i = 0; i < m_gameList.size(); ++i) {
 			if (m_gameList.get(i).getGameName().equals(gameName)) {
 				return false;
 			}
 		}
-		Game game = new Game(gameName, owner);
+		Game game = new Game(gameName);
 		game.setGameId(m_nextGameId++);
 		m_gameList.add(game);
 		m_gameLobbyList.add(game);
+
+		// We created a game, so now we need to tell everybody currently in the lobby
+		// about it
+		this.distributeGameList();
+
 		return true;
 	}
 
 	public void deleteGame(int userId) {
 		for (int i = 0; i < m_gameList.size(); ++i) {
 			if (m_gameList.get(i).getGameOwner().getUserId() == userId) {
-				if (m_gameLobbyList.contains(m_gameList.get(i))) {
-					m_gameLobbyList.remove(m_gameList.get(i));
-				}
+				this.removeGameFromLobby(userId);
 				m_gameList.remove(i);
 				break;
 			}
@@ -93,8 +98,28 @@ public class ServerSystem {
 		for (int i = 0; i < m_gameLobbyList.size(); ++i) {
 			if (m_gameLobbyList.get(i).getGameOwner().getUserId() == userId) {
 				m_gameLobbyList.remove(i);
+				this.distributeGameList();
 				break;
 			}
+		}
+	}
+
+	private void distributeGameList() {
+		GameListForLobbyMessage glflm = new GameListForLobbyMessage();
+		Message<GameListForLobbyMessage> outMsg = new Message<GameListForLobbyMessage>();
+
+		// Populate the list with all the lobby games
+		for (int i = 0; i < m_gameLobbyList.size(); ++i) {
+			Game tmpGame = m_gameLobbyList.get(i);
+			glflm.addGame(tmpGame.getGameName(), tmpGame.getGameId(), tmpGame.getNumUsers());
+		}
+
+		outMsg.setMessageType("gameListForLobby");
+		outMsg.setContent(glflm);
+
+		// Send the message to all the lobby users
+		for (int i = 0; i < m_userLobbyList.size(); ++i) {
+			m_userLobbyList.get(i).sendMessage(outMsg);
 		}
 	}
 }

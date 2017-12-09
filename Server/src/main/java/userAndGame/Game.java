@@ -1,6 +1,10 @@
 package userAndGame;
+
 import java.io.*;
 import java.util.*;
+
+import Messages.Message;
+import Messages.PlayerListForGameMessage;
 
 public class Game {
 	static public int MAX_NUM_PLAYERS = 6;
@@ -8,39 +12,38 @@ public class Game {
 	private ArrayList<Card> m_secretEnvelope = new ArrayList<Card>(3);
 	private User m_currentUser = null;
 	private String m_gameName = "";
-	private User m_owner = null;
 	private int m_gameId = -1;
 	// Shuffled Card List
 	private ArrayList<Card> m_cardList = new ArrayList<Card>(Card.TOTAL_CARDS);
 
-	public Game(String gameName, User owner) {
+	public Game(String gameName) {
 		m_gameName = gameName;
-		m_owner = owner;
-		m_userList.add(owner);
 	}
-	
+
 	public String getGameName() {
 		return m_gameName;
 	}
-	
+
 	public User getGameOwner() {
-		return m_owner;
+		return m_userList.get(0);
 	}
-	
+
 	public int getGameId() {
 		return m_gameId;
 	}
-	
+
 	public void setGameId(int id) {
 		m_gameId = id;
 	}
-	
+
 	public void addUser(User user) {
 		m_userList.add(user);
+		this.distributePlayerList();
 	}
 
 	public void removeUser(User user) {
 		m_userList.remove(user);
+		this.distributePlayerList();
 	}
 
 	public void removeAllUsers() {
@@ -51,7 +54,7 @@ public class Game {
 
 		return m_userList.size();
 	}
-	
+
 	public ArrayList<User> getUserList() {
 		return m_userList;
 	}
@@ -228,6 +231,22 @@ public class Game {
 	// Should this be like a list?
 	public void removeUserFromTurn(int userId) {
 		// ToDo: Implement
+	}
+
+	private void distributePlayerList() {
+		PlayerListForGameMessage plfgm = new PlayerListForGameMessage();
+		Message<PlayerListForGameMessage> plfgmOut = new Message<PlayerListForGameMessage>();
+
+		for (int i = 0; i < m_userList.size(); ++i) {
+			User tmpUser = m_userList.get(i);
+			plfgm.addPlayer(tmpUser.getUsername(), tmpUser.getUserId());
+		}
+		plfgmOut.setMessageType("playerListForGame");
+		plfgmOut.setGameId(this.getGameId());
+		plfgmOut.setContent(plfgm);
+		for (int i = 0; i < m_userList.size(); ++i) {
+			m_userList.get(i).sendMessage(plfgmOut);
+		}
 	}
 
 }
