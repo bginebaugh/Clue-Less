@@ -114,15 +114,10 @@ export default {
                 store.dispatch(updateGameRoomList(gameRoomList));
                 break;
 
-            // message updating gamelist
-            case "gameListUpdateOnGameAdded":
-                let newGameRoom = jsonResponse.content;
-                store.dispatch(addToGameRoomList(newGameRoom));
-                break;
-
-            case "gameListUpdateOnGameDeleted":
-                let gameRoomThatWasDeleted = jsonResponse.content;
-                store.dispatch(deleteFromGameRoomList(gameRoomThatWasDeleted));
+            case "playerListForGame":
+                console.log(jsonResponse);
+                // let gameRoomThatWasDeleted = jsonResponse.content;
+                // store.dispatch(deleteFromGameRoomList(gameRoomThatWasDeleted));
                 break;
 
             default:
