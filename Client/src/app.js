@@ -77,14 +77,14 @@ export class App extends React.Component {
         return (<Router history={hashHistory}>
             <div>
                 <Navbar className="border-bottom" color="faded" light expand="md">
-                    <NavbarBrand onClick={()=>console.log(this.props.state)}>clue-less by northraki</NavbarBrand>
+                    <NavbarBrand className="brand-title" onClick={()=>console.log(this.props.state)}><strong>clue-less by northraki</strong></NavbarBrand>
                     <NavbarToggler onClick={this.toggle} />
                     <Collapse isOpen={this.state.isOpen} navbar>
                         <Nav className="ml-auto" navbar>
                             {this.navItem("/", "Home")}
                             { !isLoggedIn ? this.navItem("/login", "Login") : null }
                             { !isLoggedIn ? null : this.navItem("/lobby", "Lobby") }
-                            { !isLoggedIn ? null : <NavItem><NavLink className='cursor-pointer' onClick={this.logout.bind(this)}>Log out</NavLink></NavItem> }
+                            { !isLoggedIn ? null : <NavItem><NavLink className='cursor-pointer link' onClick={this.logout.bind(this)}>Log out</NavLink></NavItem> }
                         </Nav>
                     </Collapse>
                 </Navbar>                

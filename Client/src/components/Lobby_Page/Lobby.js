@@ -80,12 +80,12 @@ export class Lobby extends React.Component {
 
         return <Row>
             <Col sm="6">
-                <Card body>
+                <Card className="card-background" body>
                     <Button disabled={newButtonDisabled} onClick={() => this.setState({newRoomSelected: true})}>New Game</Button>
                 </Card>
             </Col>
             <Col sm="6">
-                <Card body>
+                <Card className="card-background" body>
                     <Button disabled={existingButtonDisabled} onClick={() => this.setState({newRoomSelected: false})}>Existing Game</Button>
                 </Card>
             </Col>

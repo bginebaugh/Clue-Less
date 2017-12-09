@@ -5,7 +5,7 @@ import { Jumbotron, Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem
     Modal, ModalBody, ModalFooter, ModalHeader
 } from 'reactstrap';
 import { connect } from 'react-redux';
-import { updateGameStarted } from "../../redux_app-state/actions/actions";
+import { } from "../../redux_app-state/actions/actions";
 import ServerProxy from '../../classes/ServerProxy';
 
 const mapStateToProps = (state = {}) => {
@@ -25,7 +25,6 @@ const mapStateToProps = (state = {}) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        updateGameStarted: (bool) => dispatch(updateGameStarted(bool))
     };
 };
 
@@ -47,7 +46,6 @@ export class WaitingRoom extends React.Component {
     }
 
     toggle() {
-        console.log("toggle called")
         this.setState({
             dropdownOpen: !this.state.dropdownOpen
         });
@@ -61,7 +59,6 @@ export class WaitingRoom extends React.Component {
     }
 
     selectDropdownItem(event) {
-        console.log("this is dropdown item", event.target.innerText);
         this.setState({
             dropdownOpen: !this.state.dropdownOpen,
             dropdownValue: event.target.innerText
@@ -95,15 +92,16 @@ export class WaitingRoom extends React.Component {
 
         this.setState({ dropdownValue: "" });
 
+        // todo: this doesn't really happen here
+        let path = '/game';
+        this.props.history.push(path);
+
         e.preventDefault();
     
     }
 
     startGame() {
         ServerProxy.startGameAsOwner();
-        // this.props.dispatch();
-        // let path = '/game';
-        // this.props.history.push(path);
     }
 
     renderCharacterSelectionModal() {
@@ -123,7 +121,6 @@ export class WaitingRoom extends React.Component {
 
     render() {
         const { gameOwner, isLoggedIn, myId } = this.props;
-        console.log("playersList", this.props.playersList)
         
         if (this.props.isLoggedIn) {
             return (<div className="waiting-room container">

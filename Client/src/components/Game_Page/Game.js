@@ -57,7 +57,12 @@ export class Game extends React.Component {
                 ? " black-out " 
                 : !board[i].m_isHallway
                     ? " room-fill " 
-                    : " hallway-fill "
+                    : " hallway-fill ";
+            className += board[i] && board[i].m_isHallway && board[i].m_x % 2 > 0 
+                ? " hallway-tall " 
+                : board[i] && board[i].m_isHallway
+                    ? " hallway-wide "
+                    : "";
             cells.push(<Cell 
                 key={i} index={i} 
                 cellPiece={board[i]} 
