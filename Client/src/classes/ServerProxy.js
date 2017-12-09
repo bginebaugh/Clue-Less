@@ -162,6 +162,14 @@ export default {
         console.log("sending message", selectCharacterMessage);
         tcpConnection.write(selectCharacterMessage);
 
+    },
+
+    moveCharacter(character) {
+        
+        let moveCharacterMessage = Messages.generateMoveCharacterMessage(character);
+        console.log("sending message", moveCharacterMessage);
+        tcpConnection.write(moveCharacterMessage);
+
     }
 
 }
