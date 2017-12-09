@@ -8,7 +8,7 @@ export default {
     generateMessageHeader(messageType) {
 
         let userId = store.getState().User.userId;
-        let gameId = store.getState().User.game.id;
+        let gameId = store.getState().GameSession.game.id;
 
         let obj = {
             messageType: messageType,
@@ -59,6 +59,21 @@ export default {
         
         let obj = Object.assign({}, messageHeader, { content: { 
             characterSelection: character
+        }});
+
+        let messageEnd = this.generateMessageEnder();
+        
+        return JSON.stringify(obj) + messageEnd;
+
+    },
+
+    generateStartGameMessage() {
+        
+        let messageHeader = this.generateMessageHeader("startGame");
+        
+        let obj = Object.assign({}, messageHeader, { content: { 
+            gameRoomName: store.getState().GameSession.game.name,
+            gameId: store.getState().GameSession.game.id
         }});
 
         let messageEnd = this.generateMessageEnder();

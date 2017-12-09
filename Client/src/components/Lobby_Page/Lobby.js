@@ -146,6 +146,7 @@ export class Lobby extends React.Component {
 
         if (this.props.isLoggedIn) {
             return (<div className="container">
+                <h1 className="margin-bottom">Lobby</h1>
                 { this.renderRoomOptions() }
                 <div className="mt-5">
                     <div className="card-header">New or Existing Game</div>

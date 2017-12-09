@@ -1,5 +1,5 @@
 import { store } from '../../renderer';
-import { updateGame, updateGameroomStatus, updateLoginStatus, 
+import { updateGame, updateGameroomStatus, updateGameStarted, updateLoginStatus, 
     updateUserId, updateUsername 
 } from "../redux_app-state/actions/actions";
 import Messages from "./Messages";
@@ -154,6 +154,16 @@ export default {
             alert(jsonResponse.content.moreInfo);
         }
         
+    },
+
+    startGameAsOwner() {
+        
+        let startGameAsOwnerMessage = Messages.generateStartGameMessage();
+        console.log("attempting to start game", startGameAsOwnerMessage);
+        tcpConnection.write(startGameAsOwnerMessage);
+        //todo: temporarily here
+        store.dispatch(updateGameStarted(true));
+
     },
 
     selectCharacter(character) {

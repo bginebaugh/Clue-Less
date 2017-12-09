@@ -93,3 +93,13 @@ export const updateCharacterList = (characterList) => {
 		characterList
 	}
 };
+
+export const updateGameStarted = (gameStarted) => {
+	
+	console.log("started game :: ", gameStarted);
+	
+	return {
+		type: "UPDATE_GAMESTARTED",
+		gameStarted
+	}
+};

@@ -1,26 +1,30 @@
 import React from 'react';
 import "./WaitingRoom.css";
 import { Redirect, withRouter } from 'react-router-dom';
-import { Jumbotron, Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { Jumbotron, Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem,
+    Modal, ModalBody, ModalFooter, ModalHeader
+} from 'reactstrap';
 import { connect } from 'react-redux';
-import { } from "../../redux_app-state/actions/actions";
+import { updateGameStarted } from "../../redux_app-state/actions/actions";
 import ServerProxy from '../../classes/ServerProxy';
 
 const mapStateToProps = (state = {}) => {
     return {
         isLoggedIn: state.User.isLoggedIn,
         myId: state.User.userId,
-        gameOwner: state.User.game.gameOwner,
+        gameOwner: state.GameSession.game.gameOwner,
         characterList: state.WaitingRoom.characterList,
-        gameId: state.User.game.id,
-        gameRoomName: state.User.game.name,
-        gameList: state.Lobby.gameRoomList
+        gameId: state.GameSession.game.id,
+        gameRoomName: state.GameSession.game.name,
+        gameList: state.Lobby.gameRoomList,
+        hasGameStarted: state.GameSession.hasGameStarted
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-     };
+        updateGameStarted: (bool) => dispatch(updateGameStarted(bool))
+    };
 };
 
 export class WaitingRoom extends React.Component {
@@ -31,21 +35,27 @@ export class WaitingRoom extends React.Component {
         this.toggle = this.toggle.bind(this);
         this.state = {
           dropdownOpen: false,
-          dropdownValue: ""
+          dropdownValue: "",
+          modal: this.props.hasGameStarted
         };
         this.currentGame = this.props.gameList.filter((room) => {
             return room.gameId === this.props.gameId
         });
         console.log("this is currentroom", this.props.gameId, this.currentGame, this.props.gameList)
     }
-    
+
     toggle() {
-    this.setState({
-        dropdownOpen: !this.state.dropdownOpen
-    });
+        console.log("toggle called")
+        this.setState({
+            dropdownOpen: !this.state.dropdownOpen
+        });
     }
 
     componentDidMount() {
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({ modal: nextProps.hasGameStarted });
     }
 
     selectDropdownItem(event) {
@@ -88,25 +98,39 @@ export class WaitingRoom extends React.Component {
     }
 
     startGame() {
-        let path = '/game';
-        this.props.history.push(path);
+        ServerProxy.startGameAsOwner();
+        // this.props.dispatch();
+        // let path = '/game';
+        // this.props.history.push(path);
+    }
+
+    renderCharacterSelectionModal() {
+        const that = this;
+        const { dropdownValue } = this.state;
+        const text = `Choose ${this.state.dropdownValue}!!`;        
+        return <Modal isOpen={this.state.modal}>
+            <ModalHeader>Game has started... Choose your character</ModalHeader>
+            <ModalBody>
+            { that.characterList() }
+            </ModalBody>
+            <ModalFooter>
+                { this.state.dropdownValue ? <Button color="primary" onClick={this.handleCharacterSubmit.bind(this)}>{text}</Button> : null }
+            </ModalFooter>
+        </Modal>;
     }
 
     render() {
         const { gameOwner, isLoggedIn, myId } = this.props;
-        const text = `Choose ${this.state.dropdownValue}`;
         
         if (this.props.isLoggedIn) {
             return (<div className="waiting-room container">
-                <div>This page looks awful. Don't worry I'll format. You are in room {this.props.gameRoomName}</div>
+                <h1 className="margin-bottom">You're in <strong>{this.props.gameRoomName}</strong>. Waiting for other players...</h1>
                 <hr/>
                 <div>Waiting for { 6 - this.currentGame.playersInRoom} other players, or for the game owner to hit start. TBU. will work when messages work </div>
                 <hr/>
                 { gameOwner === myId ? this.gameOwnerStartGame() : null}
                 <hr/>
-                { this.characterList() }
-                <hr/>
-                { this.state.dropdownValue ? <Button onClick={this.handleCharacterSubmit.bind(this)}>{text}</Button> : null }
+                { this.renderCharacterSelectionModal() }
             </div>);
         } else {
             return <Redirect to='/login'/>;
