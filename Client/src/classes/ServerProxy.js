@@ -184,9 +184,9 @@ export default {
 
     },
 
-    moveCharacter(character) {
+    moveCharacter(destinationCoordinates) {
         
-        let moveCharacterMessage = Messages.generateMoveCharacterMessage(character);
+        let moveCharacterMessage = Messages.generateMoveCharacterMessage(destinationCoordinates);
         console.log("sending message", moveCharacterMessage);
         tcpConnection.write(moveCharacterMessage);
 

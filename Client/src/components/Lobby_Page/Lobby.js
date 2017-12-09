@@ -109,7 +109,8 @@ export class Lobby extends React.Component {
             return <div><ListGroup>
                 <h3 className="margin-top-big">Select one of the existing games below</h3>
                 {this.props.gameRoomList.map((a, i) => {
-                    return <ListGroupItem key={i} className="pointer-cursor" onClick={this.selectDropdownItem}>{a.gameRoomName}: <i>{a.playersInRoom} players waiting to start...</i></ListGroupItem>
+                    let text = `${a.gameRoomName}:  ...${a.playersInRoom} players waiting to start`;
+                    return <ListGroupItem key={i} className="pointer-cursor" onClick={this.selectDropdownItem}>{text}</ListGroupItem>
                 })}
             </ListGroup>
             { this.state.dropdownValue ? `You want to join :: ${this.state.dropdownValue}` : null }

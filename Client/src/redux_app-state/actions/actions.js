@@ -113,3 +113,35 @@ export const updatePlayerList = (playersList) => {
 		playersList
 	}
 };
+
+// Game Board
+
+export const initiateGameBoard = (gameBoard) => {
+	
+	console.log("new game board action :: ", gameBoard);
+	
+	return {
+		type: "UPDATE_GAMEBOARD",
+		gameBoard
+	}
+};
+
+export const updateMyPosition = (myPosition) => {
+	
+	console.log("my new position action :: ", myPosition);
+	
+	return {
+		type: "UPDATE_MY_POSITION",
+		myPosition
+	}
+};
+
+export const updateMyNeighbors = (myNeighbors) => {
+	
+	console.log("neighbors action :: ", myNeighbors);
+	
+	return {
+		type: "UPDATE_MY_NEIGHBORS",
+		myNeighbors
+	}
+};

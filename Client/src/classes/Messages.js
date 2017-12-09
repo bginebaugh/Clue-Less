@@ -82,11 +82,17 @@ export default {
 
     },
 
-    generateMoveCharacterMessage(character) {
+    generateMoveCharacterMessage(destinationCoordinates) {
         
-        // todo
+        let messageHeader = this.generateMessageHeader("moveCharacter");
         
-        return JSON.stringify("hello");
+        let obj = Object.assign({}, messageHeader, { content: { 
+            destinationCoordinates: destinationCoordinates
+        }});
+
+        let messageEnd = this.generateMessageEnder();
+        
+        return JSON.stringify(obj) + messageEnd;
 
     },
 

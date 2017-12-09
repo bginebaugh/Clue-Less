@@ -54,15 +54,15 @@ export var Game = {
 		}
 	},
 	
-	move (origin,destination) {
+	move (destinationCoordinates) {
 
-		console.log(origin, destination);
+		console.log(destinationCoordinates);
 		
 		//verify selection of x,y on server 
 		//message return on validation
 		//update map rendering
 
-		ServerProxy.moveCharacter();
+		ServerProxy.moveCharacter(destinationCoordinates);
 	
 	},
 	
