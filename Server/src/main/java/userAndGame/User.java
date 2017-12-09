@@ -1,6 +1,7 @@
 package userAndGame;
 
-import java.io.IOException;
+import java.io.*;
+import java.util.*;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -59,10 +60,24 @@ public class User extends Thread {
 	public void setUserId(int id) {
 		m_userId = id;
 	}
-
+	
+	public Character getCharacter() { 
+		return m_character; 
+	} 
+	
 	public void addCard(Card card) {
 		m_hand.m_cardList.add(card);
 	}
+	
+	public ArrayList<Card> getCardsInHand() {
+		return m_hand.getCardList(); 
+	} 
+	
+	public boolean isCardInHand(Card card) { 
+		return m_hand.m_cardList.contains(card); 
+	} 
+	
+	
 
 	public <T> void sendMessage(Message<T> msg) {
 		msg.setUserId(this.getUserId());

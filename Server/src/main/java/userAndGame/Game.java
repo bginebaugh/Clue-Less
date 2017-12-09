@@ -126,30 +126,6 @@ public class Game {
 		}
 	}
 
-	public boolean setCharacter(int userId, Character character) {
-		// for (int i=0; i<m_userList.size(); i++)
-		// {
-		// if(m_userList.get(i).m_userId == userId)
-		// {
-		// m_userList.get(i).m_character = character;
-		// return true;
-		// }
-		// }
-		return false;
-	}
-
-	public boolean moveCharacter(int userId, int posX, int posY) {
-		// for (int i=0; i<m_userList.size(); i++)
-		// {
-		// if(m_userList.get(i).m_userId == userId)
-		// {
-		// m_userList.get(i).m_character.m_location.m_x = posX;
-		// m_userList.get(i).m_character.m_location.m_y = posY;
-		// return true;
-		// }
-		// }
-		return false;
-	}
 
 	public boolean makeSuggestion(int userId, ArrayList<Card> cards) {
 		// Check if this is a valid Suggestion
@@ -204,9 +180,15 @@ public class Game {
 		return compareToEnvelope(weapon, suspect, room);
 	}
 
-	// Is this going to just form a message and send it??
-	public void showCardToUser(int userId, int cardId) {
-		// ToDo: Implement
+	public void showCardToUser(ArrayList<Card> cards) {
+		
+		// Loop through the cards 
+		for (Card card : cards) { 
+		// Check to see if the card is in the card hand
+			if (m_cardList.contains(card)) { 
+				
+			} 
+		} 
 	}
 
 	// This function's purpose is to lock the userlist and remove the game from the
