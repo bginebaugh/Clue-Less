@@ -26,6 +26,7 @@ public class Game {
 	private int m_gameId = -1;
 	// Shuffled Card List
 	private ArrayList<Card> m_cardList = new ArrayList<Card>(Card.TOTAL_CARDS);
+	private Board m_board = null;
 
 	public Game(String gameName) {
 		m_gameName = gameName;
@@ -163,6 +164,10 @@ public class Game {
 
 		System.out.println("Secret Envelope:\n\tWeapon: " + Card.getCardName(Card.WEAPON, weapon_id) + "\n\tRoom: "
 				+ Card.getCardName(Card.ROOM, room_id) + "\n\tSuspect: " + Card.getCardName(Card.SUSPECT, suspect_id));
+
+		// Set up the board and distribute the board state
+		m_board = new Board();
+		this.distributeBoardState();
 	}
 
 	public boolean makeSuggestion(int userId, ArrayList<Card> cards) {
@@ -342,5 +347,16 @@ public class Game {
 
 		ServerSystem ss = ServerSystem.getInstance();
 		ss.refreshGameList();
+	}
+
+	private void distributeBoardState() {
+		Message<GameBoardStateMessage> gbsmOut = new Message<GameBoardStateMessage>();
+		gbsmOut.setMessageType("gameBoardState");
+		gbsmOut.setGameId(this.getGameId());
+		gbsmOut.setContent(m_board.getBoardState());
+
+		for (User user : m_userList) {
+			user.sendMessage(gbsmOut);
+		}
 	}
 }
