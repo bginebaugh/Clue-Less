@@ -2,7 +2,7 @@ import { GameBoard } from "./gameBoard";
 import ServerProxy from "./ServerProxy";
 
 export var m_cardList = [];
-export var m_currentPosition = []; //get from UI
+export var m_players = [];
 export var m_hand = [];
 
 export var Hand = {
@@ -27,19 +27,30 @@ export var Game = {
 	selectAction (string) {
 	 
 		if (string  = move) {
-			move (x,y);
+			let neighbors = GameBoard.getNeighbors (Player.m_Xpos, Player.m_Ypos);
+			// highlight the positions in neighbors and prompt for input in UI
+			move (origin, destination) ; //message to server to move
+
 		}
 		
 		if (string = makeSuggestion){
 			//check current position is not hallway
-			if ( !GameBoard.board [m_currentPosition].m_isHallway){
-				makeSuggestion (character, weapon);
+			if ( !GameBoard.board [(Player.m_Xpos*5 + Player.m_Ypos)].m_isHallway){
+				//prompt for cards in UI for making selection
+				makeSuggestion (character, weapon, GameBoard.board [(Player.m_Xpos*5 + Player.m_Ypos)].m_name); 
+				//prompt for make accusation
+				if (response == yes){
+					makeAccusation (character, weapon, GameBoard.board [(Player.m_Xpos*5 + Player.m_Ypos)].m_name);
+				}
 			}
 			
 		}
 		
 		if (string = makeAccusation){
-			makeAccusation (character, weapon);
+			if ( !GameBoard.board [(Player.m_Xpos*5 + Player.m_Ypos)].m_isHallway){
+				//prompt for cards in UI for making selection
+			makeAccusation (character, weapon, GameBoard.board [(Player.m_Xpos*5 + Player.m_Ypos)].m_name );
+			}
 		}
 	},
 	
@@ -71,8 +82,8 @@ export var Game = {
 	},
 	
 	addPlayer (userId) {
+		players.push (userId);
 		
-	
 	}
 
 }
