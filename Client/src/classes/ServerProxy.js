@@ -174,9 +174,7 @@ export default {
         let startGameAsOwnerMessage = Messages.generateStartGameMessage();
         console.log("attempting to start game", startGameAsOwnerMessage);
         tcpConnection.write(startGameAsOwnerMessage);
-        //todo: temporarily here
         store.dispatch(updateGameStarted(true));
-
     },
 
     selectCharacter(character) {

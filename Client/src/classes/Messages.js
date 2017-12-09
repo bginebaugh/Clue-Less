@@ -121,6 +121,11 @@ export default {
                 store.dispatch(updatePlayerList(playerList));
                 break;
 
+            case "startGameResponse":
+                console.log("startGameResponse", jsonResponse);
+                store.dispatch(updateGameStarted(true));
+                break;
+
             default:
                 console.log("Response error :: not a proper messageType ::", messageType);
                 break;
