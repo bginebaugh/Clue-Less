@@ -29,25 +29,6 @@ public class UserSocket {
 		}
 	}
 
-	public void sendWarningMessage() {
-		JSONObject obj = new JSONObject();
-		StringWriter out = new StringWriter();
-
-		obj.put("warning", "two weeks left");
-		obj.write(out);
-
-		System.out.println("Sending warning to user");
-		String jsonText = out.toString();
-		try {
-			m_output.write(jsonText, 0, jsonText.length());
-			m_output.flush();
-			System.out.println("Successfully sent to User: " + jsonText);
-		} catch (IOException e) {
-			System.out.println(e);
-			System.out.println("Failed to send warning to user");
-		}
-	}
-
 	public String waitOnMessage() throws IOException {
 		String message = null;
 		try {
