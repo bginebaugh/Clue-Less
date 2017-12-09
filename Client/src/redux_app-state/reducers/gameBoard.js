@@ -14,6 +14,22 @@ const GameBoard = (state = initialState, action) => {
                 ...state,
                 board: action.gameBoard
             }
+            
+        case 'POPULATE_CHARACTER_LIST':
+            console.log("populate characters on board", action);
+            let characterList = action.characterList;
+            let newBoard = state.board;
+            console.log("this is the board list", characterList);
+            characterList.forEach((boardPiece, i) => {
+                let x = boardPiece.posX;
+                let y = boardPiece.posY;
+                newBoard[x][y].playerList = boardPiece.characters;
+            });
+            console.log("this is the new board", newBoard)
+            return {
+                ...state,
+                board: newBoard
+            }
 
         case 'UPDATE_MY_POSITION':
             console.log("updating my position", action);
@@ -37,4 +53,3 @@ const GameBoard = (state = initialState, action) => {
 }
 
 export default GameBoard
-

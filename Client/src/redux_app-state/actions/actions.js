@@ -160,6 +160,16 @@ export const updateMyPosition = (myPosition) => {
 	}
 };
 
+export const populateCharactersOnBoard = (characterList) => {
+	
+	console.log("updating characters on board :: ", characterList);
+	
+	return {
+		type: "POPULATE_CHARACTER_LIST",
+		characterList
+	}
+};
+
 export const updateMyNeighbors = (myNeighbors) => {
 	
 	console.log("neighbors action :: ", myNeighbors);

@@ -1,6 +1,6 @@
 import { store } from '../../renderer';
-import { addToGameRoomList, deleteFromGameRoomList, updateCharacterList, updateGameRoomList, updateGameStarted, 
-    updateMyCards, updateMyCharacter, updatePlayerList
+import { addToGameRoomList, deleteFromGameRoomList, populateCharactersOnBoard, updateCharacterList, updateGameRoomList, updateGameStarted, 
+    updateMyCards, updateMyCharacter, updateMyPosition, updatePlayerList
 } from "../redux_app-state/actions/actions";
 import ServerProxy from "./ServerProxy";
 
@@ -152,9 +152,32 @@ export default {
                 }
                 break;
 
-                
-                
+            case "gameBoardState":
+                console.log("gameBoardState", jsonResponse);
+                if (jsonResponse && jsonResponse.content && jsonResponse.content.board) {
+                    store.dispatch(populateCharactersOnBoard(jsonResponse.content.board));
 
+                    //also need to update my position
+                    let board = store.getState().GameBoard.board;
+                    console.log("gameBoardState :: board", board)
+                    let myCharacter = store.getState().GameSession.myCharacter;
+                    console.log("gameBoardState :: myCharacter", myCharacter)
+                    let boardPieces = jsonResponse.content.board;
+                    console.log("gameBoardState :: boardPieces", boardPieces)
+                    let myPiece = boardPieces.filter((piece) => { return piece.characters.indexOf(myCharacter) > -1 });
+                    console.log("gameBoardState :: myPiece", myPiece)
+                    if (myPiece && myPiece.length > 0) {
+                        let x = myPiece[0].posX;
+                        let y = myPiece[0].posY;
+    
+                        console.log("my board piece", board[x][y]);
+                        store.dispatch(updateMyPosition(board[x][y]));
+                    }
+                }
+                break;
+                
+                
+                
             default:
                 console.log("Response error :: not a proper messageType ::", messageType);
                 break;

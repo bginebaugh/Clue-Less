@@ -89,45 +89,49 @@ export class Game extends React.Component {
             let myCoordinates = [myPosition.m_x, myPosition.m_y];
             let neighbors = GameBoard.getValidNeighbors(myPosition.m_x, myPosition.m_y, this.props.board);
             this.props.updateMyNeighbors(neighbors);
-            console.log("neighbors", getNeighbors);
+            console.log("neighbors", neighbors);
         }
     }
 
     renderCells() {
-        let board = GameBoard.board;
+        let board = this.props.board;
         let cells = [];
         let { myNeighbors } = this.props;
         for (let i = 0; i < board.length; i++) {
-
-            let isNeighbor = false;
-            
-            myNeighbors ? myNeighbors.forEach((neighbor) => {
-                if(board[i] && board[i].m_x === neighbor[0] && board[i].m_y === neighbor[1]) {
-                    isNeighbor = true;
-                    console.log("isNeighbor")
+            let row = board[i];
+            if (row) {
+                for (let j = 0; j < row.length; j++) {
+                    let key = i + "_" + j;
+                    let isNeighbor = false;
+                    
+                    myNeighbors ? myNeighbors.forEach((neighbor) => {
+                        if(board[i][j] && board[i][j].m_x === neighbor[0] && board[i][j].m_y === neighbor[1]) {
+                            isNeighbor = true;
+                        }
+                    }) : null;
+        
+                    let highlightClassName = this.state.activeTab === '1' && isNeighbor
+                        ? " highlight "
+                        : "";
+        
+                    let className= board[i][j] === null
+                        ? " black-out " 
+                        : !board[i][j].m_isHallway
+                            ? " room-fill " 
+                            : " hallway-fill ";
+                    className += board[i][j] && board[i][j].m_isHallway && board[i][j].m_x % 2 > 0 
+                        ? " hallway-tall " 
+                        : board[i][j] && board[i][j].m_isHallway
+                            ? " hallway-wide "
+                            : "";
+                    className += highlightClassName;
+                    cells.push(<Cell 
+                        key={key} 
+                        cellPiece={board[i][j]} 
+                        className={className}
+                    />);
                 }
-            }) : null;
-
-            let highlightClassName = this.state.activeTab === '1' && isNeighbor
-                ? " highlight "
-                : "";
-
-            let className=board[i] === null
-                ? " black-out " 
-                : !board[i].m_isHallway
-                    ? " room-fill " 
-                    : " hallway-fill ";
-            className += board[i] && board[i].m_isHallway && board[i].m_x % 2 > 0 
-                ? " hallway-tall " 
-                : board[i] && board[i].m_isHallway
-                    ? " hallway-wide "
-                    : "";
-            className += highlightClassName;
-            cells.push(<Cell 
-                key={i} index={i} 
-                cellPiece={board[i]} 
-                className={className}
-            />);
+            }
         }
         return <div className="game-board">{cells}</div>;
     }
@@ -289,7 +293,7 @@ export class Game extends React.Component {
                 </Row>
 
                 <Row>
-                    <Col xs="7">{this.renderCells()}</Col>
+                    <Col xs="7">{this.props.board ? this.renderCells() : null}</Col>
                     <Col className="stacked-rows" xs="5">
                         <Row className="right-top">{this.renderTurnIndicator()}</Row>              
                         { board && myPosition ? <Row className="right-bottom">{this.renderSelectionAction()}</Row> : null }
