@@ -75,12 +75,25 @@ export default {
 
             tcpConnection.on('data', (data) => {
 
-                console.log('Received: ' + data);
-                let jsonResponse = Messages.parseJsonResponseFromServer(data);
-                let messageType = jsonResponse && jsonResponse.messageType ? jsonResponse.messageType : "";
+                let stringified = data.toString();
+
+                let splitData = [];
                 
-                // all listeners established here
-                Messages.incomingMessageHandler(jsonResponse, messageType);
+                if (stringified) {
+                    splitData = stringified.split("@@@");
+                }
+                
+                splitData.forEach((stringData) => {
+                    if(stringData && stringData.length > 0){
+                        console.log('Received: ' + stringData);
+                        let jsonResponse = Messages.parseJsonResponseFromServer(stringData);
+                        let messageType = jsonResponse && jsonResponse.messageType ? jsonResponse.messageType : "";
+                        
+                        // all listeners established here
+                        Messages.incomingMessageHandler(jsonResponse, messageType);
+                    }
+                });
+
 
             });
 

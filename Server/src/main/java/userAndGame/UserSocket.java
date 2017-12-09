@@ -22,7 +22,7 @@ public class UserSocket {
 
 	public void sendMessage(String msg) {
 		try {
-			m_output.write(msg);
+			m_output.write(msg + "@@@");
 			m_output.flush();
 		} catch (IOException e) {
 			e.printStackTrace();

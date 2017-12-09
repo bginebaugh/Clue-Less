@@ -9,6 +9,7 @@ import { updateGameStarted } from "../../redux_app-state/actions/actions";
 import ServerProxy from '../../classes/ServerProxy';
 
 const mapStateToProps = (state = {}) => {
+    console.log(state, state.GameSession, state.GameSession.playersList)
     return {
         isLoggedIn: state.User.isLoggedIn,
         myId: state.User.userId,
@@ -17,7 +18,8 @@ const mapStateToProps = (state = {}) => {
         gameId: state.GameSession.game.id,
         gameRoomName: state.GameSession.game.name,
         gameList: state.Lobby.gameRoomList,
-        hasGameStarted: state.GameSession.hasGameStarted
+        hasGameStarted: state.GameSession.hasGameStarted,
+        playersList: state.GameSession.playersList
     };
 };
 
@@ -121,12 +123,13 @@ export class WaitingRoom extends React.Component {
 
     render() {
         const { gameOwner, isLoggedIn, myId } = this.props;
+        console.log("playersList", this.props.playersList)
         
         if (this.props.isLoggedIn) {
             return (<div className="waiting-room container">
                 <h1 className="margin-bottom">You're in <strong>{this.props.gameRoomName}</strong>. Waiting for other players...</h1>
                 <hr/>
-                <div>Waiting for { 6 - this.currentGame.playersInRoom} other players, or for the game owner to hit start. TBU. will work when messages work </div>
+                <div>{this.props.playersList ? `There are ${this.props.playersList.length} other players in the room.` : ""} Waiting for others to join until the game owner to hit start. </div>
                 <hr/>
                 { gameOwner === myId ? this.gameOwnerStartGame() : null}
                 <hr/>

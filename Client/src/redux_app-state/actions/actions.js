@@ -103,3 +103,13 @@ export const updateGameStarted = (gameStarted) => {
 		gameStarted
 	}
 };
+
+export const updatePlayerList = (playersList) => {
+	
+	console.log("new player list :: ", playersList);
+	
+	return {
+		type: "UPDATE_PLAYERLIST",
+		playersList
+	}
+};

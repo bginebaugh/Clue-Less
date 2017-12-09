@@ -1,5 +1,5 @@
 import { store } from '../../renderer';
-import { addToGameRoomList, deleteFromGameRoomList, updateGameRoomList
+import { addToGameRoomList, deleteFromGameRoomList, updateGameRoomList, updatePlayerList
 } from "../redux_app-state/actions/actions";
 import ServerProxy from "./ServerProxy";
 
@@ -110,14 +110,15 @@ export default {
 
             // message updating gamelist
             case "gameListForLobby":
+                console.log("gameListForLobby")
                 let gameRoomList = jsonResponse.content.gameRoomList;
                 store.dispatch(updateGameRoomList(gameRoomList));
                 break;
 
             case "playerListForGame":
-                console.log(jsonResponse);
-                // let gameRoomThatWasDeleted = jsonResponse.content;
-                // store.dispatch(deleteFromGameRoomList(gameRoomThatWasDeleted));
+                console.log("playerListForGame",jsonResponse.content.playerList);
+                let playerList = jsonResponse.content.playerList;
+                store.dispatch(updatePlayerList(playerList));
                 break;
 
             default:
