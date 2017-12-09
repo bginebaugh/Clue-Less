@@ -21,7 +21,8 @@ public class Game {
 	private ArrayList<User> m_userList = new ArrayList<User>();
 	private ArrayList<Card> m_secretEnvelope = new ArrayList<Card>();
 	private ArrayList<CharAvailable> m_charSelectionList = new ArrayList<CharAvailable>();
-	private User m_currentUser = null;
+	private int m_currentTurnIndex = 0;
+	private User m_gameOwner = null;
 	private String m_gameName = "";
 	private int m_gameId = -1;
 	// Shuffled Card List
@@ -49,12 +50,18 @@ public class Game {
 	}
 
 	public void addUser(User user) {
+		if (m_userList.size() == 0) {
+			m_gameOwner = user;
+		}
 		m_userList.add(user);
 		user.setGame(this);
 		this.distributePlayerList();
 	}
 
 	public void removeUser(User user) {
+		if (m_gameOwner.equals(user)) {
+			// TODO delete the game
+		}
 		m_userList.remove(user);
 		user.clearGame();
 		this.distributePlayerList();
@@ -168,6 +175,19 @@ public class Game {
 		// Set up the board and distribute the board state
 		m_board = new Board();
 		this.distributeBoardState();
+
+		// Finally, figure out who the first player is and tell them
+		User firstPlayer = this.getFirstPlayer();
+		CharacterTurnMessage ctm = new CharacterTurnMessage();
+		Message<CharacterTurnMessage> ctmOut = new Message<CharacterTurnMessage>();
+		ctm.setTurn(firstPlayer.getCharacter());
+		ctmOut.setMessageType("characterTurn");
+		ctmOut.setGameId(this.getGameId());
+		ctmOut.setContent(ctm);
+
+		for (User user : m_userList) {
+			user.sendMessage(ctmOut);
+		}
 	}
 
 	public boolean makeSuggestion(int userId, ArrayList<Card> cards) {
@@ -358,5 +378,22 @@ public class Game {
 		for (User user : m_userList) {
 			user.sendMessage(gbsmOut);
 		}
+	}
+
+	private User getFirstPlayer() {
+		for (User user : m_userList) {
+			if (user.getCharacter().equals("Miss Scarlet")) {
+				// We found Miss Scarlet, so this user will go first
+				break;
+			}
+			++m_currentTurnIndex;
+		}
+
+		if (m_currentTurnIndex == m_userList.size()) {
+			// We didn't find Miss Scarlet, so just start at 0
+			m_currentTurnIndex = 0;
+		}
+
+		return m_userList.get(m_currentTurnIndex);
 	}
 }
