@@ -6,9 +6,21 @@ import java.util.*;
 import Messages.*;
 
 public class Game {
+
+	private class CharAvailable {
+		public CharAvailable(String name, boolean avail) {
+			characterName = name;
+			available = avail;
+		}
+
+		public String characterName = "";
+		public boolean available = false;
+	}
+
 	static public int MAX_NUM_PLAYERS = 6;
 	private ArrayList<User> m_userList = new ArrayList<User>();
 	private ArrayList<Card> m_secretEnvelope = new ArrayList<Card>(3);
+	private ArrayList<CharAvailable> m_charSelectionList = new ArrayList<CharAvailable>();
 	private User m_currentUser = null;
 	private String m_gameName = "";
 	private int m_gameId = -1;
@@ -37,11 +49,13 @@ public class Game {
 
 	public void addUser(User user) {
 		m_userList.add(user);
+		user.setGame(this);
 		this.distributePlayerList();
 	}
 
 	public void removeUser(User user) {
 		m_userList.remove(user);
+		user.clearGame();
 		this.distributePlayerList();
 	}
 
@@ -126,31 +140,6 @@ public class Game {
 		}
 	}
 
-	public boolean setCharacter(int userId, Character character) {
-		// for (int i=0; i<m_userList.size(); i++)
-		// {
-		// if(m_userList.get(i).m_userId == userId)
-		// {
-		// m_userList.get(i).m_character = character;
-		// return true;
-		// }
-		// }
-		return false;
-	}
-
-	public boolean moveCharacter(int userId, int posX, int posY) {
-		// for (int i=0; i<m_userList.size(); i++)
-		// {
-		// if(m_userList.get(i).m_userId == userId)
-		// {
-		// m_userList.get(i).m_character.m_location.m_x = posX;
-		// m_userList.get(i).m_character.m_location.m_y = posY;
-		// return true;
-		// }
-		// }
-		return false;
-	}
-
 	public boolean makeSuggestion(int userId, ArrayList<Card> cards) {
 		// Check if this is a valid Suggestion
 		Card weapon = null;
@@ -204,16 +193,64 @@ public class Game {
 		return compareToEnvelope(weapon, suspect, room);
 	}
 
-	// Is this going to just form a message and send it??
-	public void showCardToUser(int userId, int cardId) {
-		// ToDo: Implement
+	public void showCardToUser(ArrayList<Card> cards) {
+
+		// Loop through the cards
+		for (Card card : cards) {
+			// Check to see if the card is in the card hand
+			if (m_cardList.contains(card)) {
+
+			}
+		}
+	}
+	
+	public boolean assignCharacterToUser(String charName, User user) {
+		boolean ret = false;
+		for (CharAvailable ch : m_charSelectionList) {
+			if (ch.characterName.equals(charName)) {
+				if (ch.available) {
+					user.setCharacter(ch.characterName);
+					ch.available = false;
+					ret = true;
+					break;
+				}
+			}
+		}
+		// Always redistribute the list, just in case a client is out of sync
+		this.distributeCharList();
+		return ret;
+	}
+	
+	private void populateCharSelectionList() {
+		m_charSelectionList.add(new CharAvailable("Miss Scarlet", true));
+		m_charSelectionList.add(new CharAvailable("Colonel Mustard", true));
+		m_charSelectionList.add(new CharAvailable("Mrs. White", true));
+		m_charSelectionList.add(new CharAvailable("Mr. Green", true));
+		m_charSelectionList.add(new CharAvailable("Mrs. Peacock", true));
+		m_charSelectionList.add(new CharAvailable("Professor Plum", true));
+	}
+	
+	private void distributeCharList() {
+		CharacterListUpdateMessage clum = new CharacterListUpdateMessage();
+		Message<CharacterListUpdateMessage> out = new Message<CharacterListUpdateMessage>();
+		
+		for (CharAvailable ch : m_charSelectionList) {
+			clum.addCharacter(ch.characterName, ch.available);
+		}
+		
+		out.setMessageType("characterListUpdate");
+		out.setGameId(this.getGameId());
+		out.setContent(clum);
+		
+		for (User user : m_userList) {
+			user.sendMessage(out);
+		}
 	}
 
 	// This function's purpose is to lock the userlist and remove the game from the
 	// lobby, as well as notifying all players that the game is starting
 	public void start() {
 		ServerSystem ss = ServerSystem.getInstance();
-
 		// Remove the game from the lobby, which will update all client's lobbies
 		ss.removeGameFromLobby(this.getGameOwner().getUserId());
 
@@ -230,6 +267,9 @@ public class Game {
 			User tmp = m_userList.get(i);
 			tmp.sendMessage(out);
 		}
+		
+		populateCharSelectionList();
+		distributeCharList();
 	}
 
 	// Is this a message?
@@ -264,6 +304,8 @@ public class Game {
 		for (int i = 0; i < m_userList.size(); ++i) {
 			m_userList.get(i).sendMessage(plfgmOut);
 		}
-	}
 
+		ServerSystem ss = ServerSystem.getInstance();
+		ss.refreshGameList();
+	}
 }

@@ -32,6 +32,9 @@ public class CluelessDeserializer implements JsonDeserializer<MessageContainer> 
 		case "startGame":
 			obj = gson.fromJson(message,  StartGameMessage.class);
 			break;
+		case "selectCharacter":
+			obj = gson.fromJson(message, SelectCharacterMessage.class);
+			break;
 		default:
 			System.out.println("This message sucks and isn't allowed" + header.getMessageType());
 			break;

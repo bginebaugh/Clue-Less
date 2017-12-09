@@ -1,6 +1,7 @@
 package userAndGame;
 
-import java.io.IOException;
+import java.io.*;
+import java.util.*;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -15,7 +16,7 @@ public class User extends Thread {
 	private String m_username = null;
 	private int m_userId = -1;
 	private Game m_game = null;
-	private Character m_character = null;
+	private String m_character = "";
 	private Hand m_hand = null;
 
 	public User(UserSocket userSocket) {
@@ -60,8 +61,36 @@ public class User extends Thread {
 		m_userId = id;
 	}
 
+	public Game getGame() {
+		return m_game;
+	}
+
+	public void setGame(Game game) {
+		m_game = game;
+	}
+	
+	public void clearGame() {
+		m_game = null;
+	}
+
+	public String getCharacter() {
+		return m_character;
+	}
+
+	public void setCharacter(String character) {
+		m_character = character;
+	}
+
 	public void addCard(Card card) {
 		m_hand.m_cardList.add(card);
+	}
+
+	public ArrayList<Card> getCardsInHand() {
+		return m_hand.getCardList();
+	}
+
+	public boolean isCardInHand(Card card) {
+		return m_hand.m_cardList.contains(card);
 	}
 
 	public <T> void sendMessage(Message<T> msg) {

@@ -127,6 +127,10 @@ public class ServerSystem {
 			}
 		}
 	}
+	
+	public void refreshGameList() {
+		this.distributeGameList();
+	}
 
 	private void distributeGameList() {
 		GameListForLobbyMessage glflm = new GameListForLobbyMessage();
