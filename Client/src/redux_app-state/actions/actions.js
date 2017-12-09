@@ -40,6 +40,8 @@ export const updateUserId = (userId) => {
 	}
 };
 
+// GameSession
+
 export const updateGame = (game) => {
 	
 	console.log("game :: ", game);
@@ -47,6 +49,16 @@ export const updateGame = (game) => {
 	return {
 		type: "UPDATE_GAME",
 		game
+	}
+};
+
+export const updateMyCharacter = (myCharacter) => {
+	
+	console.log("myCharacter action :: ", myCharacter);
+	
+	return {
+		type: "UPDATE_MYCHARACTER",
+		myCharacter
 	}
 };
 
@@ -145,3 +157,4 @@ export const updateMyNeighbors = (myNeighbors) => {
 		myNeighbors
 	}
 };
+

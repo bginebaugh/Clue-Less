@@ -1,5 +1,6 @@
 import { store } from '../../renderer';
-import { addToGameRoomList, deleteFromGameRoomList, updateGameRoomList, updateGameStarted, updatePlayerList
+import { addToGameRoomList, deleteFromGameRoomList, updateCharacterList, updateGameRoomList, updateGameStarted, 
+    updateMyCharacter, updatePlayerList
 } from "../redux_app-state/actions/actions";
 import ServerProxy from "./ServerProxy";
 
@@ -131,6 +132,20 @@ export default {
                 console.log("startGameResponse", jsonResponse);
                 store.dispatch(updateGameStarted(true));
                 break;
+            
+            case "characterListUpdate":
+                console.log("characterListUpdate", jsonResponse);
+                store.dispatch(updateCharacterList(jsonResponse.content.fullCharacterList));
+                break;
+
+            case "selectCharacterResponse":
+                console.log("selectCharacterResponse", jsonResponse);
+                if (jsonResponse && jsonResponse.content && jsonResponse.content.successfulSelection) {
+                    store.dispatch(updateMyCharacter(jsonResponse.content.characterName));
+                }
+                break;
+
+                
 
             default:
                 console.log("Response error :: not a proper messageType ::", messageType);

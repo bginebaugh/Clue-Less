@@ -5,6 +5,7 @@ const initialState = {
         gameOwner: null
     },
     hasGameStarted: false,
+    myCharacter: null,
     playersList: "aa"
 }
 
@@ -26,6 +27,14 @@ const GameSession = (state = initialState, action) => {
             return {
                 ...state,
                 hasGameStarted: action.gameStarted
+            }
+
+        case 'UPDATE_MYCHARACTER':
+            console.log("updating my character", action);
+        
+            return {
+                ...state,
+                myCharacter: action.myCharacter
             }
 
         case 'UPDATE_PLAYERLIST':

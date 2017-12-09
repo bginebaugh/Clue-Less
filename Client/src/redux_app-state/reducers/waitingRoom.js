@@ -1,12 +1,14 @@
 const initialState = { 
-    characterList: [
-        { characterName: 'Col. Mustard', available: true},
-        { characterName: 'Mrs. White', available: true},
-        { characterName: 'Miss. Scarlet', available: false},
-        { characterName: 'Mr. Green', available: true},
-    ]
+    characterList: []
 }
-
+// const initialState = { 
+//     characterList: [
+//         { characterName: 'Col. Mustard', available: true},
+//         { characterName: 'Mrs. White', available: true},
+//         { characterName: 'Miss. Scarlet', available: false},
+//         { characterName: 'Mr. Green', available: true},
+//     ]
+// }
 
 const WaitingRoom = (state = initialState, action) => {
 

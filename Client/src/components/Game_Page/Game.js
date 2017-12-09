@@ -19,7 +19,8 @@ const mapStateToProps = (state = {}) => {
         isLoggedIn: state.User.isLoggedIn,
         board: state.GameBoard.board,
         myPosition: state.GameBoard.myPosition,
-        myNeighbors: state.GameBoard.myNeighbors
+        myNeighbors: state.GameBoard.myNeighbors,
+        myCharacter: state.GameSession.myCharacter
     };
 };
 
@@ -215,10 +216,11 @@ export class Game extends React.Component {
     }
 
     render() {
-        const { isLoggedIn, board, myPosition } = this.props;
+        const { isLoggedIn, board, myPosition, myCharacter } = this.props;
 
         if (this.props.isLoggedIn) {
             return (<div className="container">
+                { myCharacter ? <h1 className="margin-bottom">Hello {myCharacter}</h1> : null}
                 <Row>
                     <Col xs="7">{this.renderCells()}</Col>
                     <Col className="stacked-rows" xs="5">
