@@ -91,8 +91,13 @@ public class Cell {
 		} 
 
 		// validate if the hallway cells are not full 
-		// How do you do this??
-		
+		for (int i = 0; i < 4; i++) 
+		{ 
+			if (board.get(neighbors[0][0].get(0)*5 +neighbors[0][1].get(0)).m_isHallway && board.get(neighbors[0][0].get(0)*5 +neighbors[0][1].get(0)).m_characterList.isEmpty()) {
+				neighbors [i][0].add(-1); 
+				neighbors [i][1].add(-1); 
+			} 
+		} 
 		 
 		return neighbors ;
 	}
