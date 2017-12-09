@@ -65,6 +65,7 @@ public class User extends Thread {
 	}
 
 	public <T> void sendMessage(Message<T> msg) {
+		msg.setUserId(this.getUserId());
 		Gson gson = m_gsonBuilder.create();
 		String out = gson.toJson(msg);
 		System.out.println("Attempting to send " + out);
