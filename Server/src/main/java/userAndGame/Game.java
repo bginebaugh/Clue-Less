@@ -510,4 +510,14 @@ public class Game {
 		m_currentTurnIndex = 0;
 		return m_userTurnList.get(0);
 	}
+
+	public User getUserForNextTurn() {
+		++m_currentTurnIndex;
+
+		if (m_currentTurnIndex == m_userTurnList.size()) {
+			m_currentTurnIndex = 0;
+		}
+
+		return m_userTurnList.get(m_currentTurnIndex);
+	}
 }

@@ -47,6 +47,9 @@ public class CluelessDeserializer implements JsonDeserializer<MessageContainer> 
 		case "accuse":
 			obj = gson.fromJson(message, AccusationMessage.class);
 			break;
+		case "endTurn":
+			obj = gson.fromJson(message, EndTurnMessage.class);
+			break;
 		default:
 			System.out.println("This message sucks and isn't allowed" + header.getMessageType());
 			break;

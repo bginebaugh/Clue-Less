@@ -40,6 +40,10 @@ public class MessageHandler {
 			AccusationMessage accusationMsg = (AccusationMessage) mb;
 			new AccusationHandler().Handle(accusationMsg, user);
 			break;
+		case "EndTurnMessage":
+			EndTurnMessage endTurnMsg = (EndTurnMessage) mb;
+			new EndTurnMessageHandler().Handle(endTurnMsg, user);
+			break;
 		default:
 			System.out.println("The message type " + mb.getClass().getSimpleName() + " is not yet supported");
 			break;
