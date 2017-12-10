@@ -2,7 +2,7 @@ import React from 'react';
 import "./WaitingRoom.css";
 import { Redirect, withRouter } from 'react-router-dom';
 import { Jumbotron, Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem,
-    Modal, ModalBody, ModalFooter, ModalHeader
+    Modal, ModalBody, ModalFooter, ModalHeader, ListGroup, ListGroupItem
 } from 'reactstrap';
 import { connect } from 'react-redux';
 import { } from "../../redux_app-state/actions/actions";
@@ -134,8 +134,16 @@ export class WaitingRoom extends React.Component {
             return (<div className="waiting-room container">
                 <h1 className="margin-bottom-big">You're in <strong>{this.props.gameRoomName}</strong>. Waiting for other players...</h1>
                 <h5 className="margin-bottom-big">
-                    {this.props.playersList ? `There are/is ${this.props.playersList.length} player(s) (including yourself) in the room.  ` : ""} 
-                    Waiting for the leader to hit start. 
+                    {this.props.playersList ? `There are/is ${this.props.playersList.length} player(s) (including yourself) in the room.  Players in room: ` : null } 
+                    {this.props.playersList 
+                        ? <ListGroup className="margin-top">
+                            {this.props.playersList.map((a, i) => {
+                                let text = `${a.username}`;
+                                return <ListGroupItem key={i}>{text}</ListGroupItem>
+                            })}
+                        </ListGroup> 
+                        : null 
+                    } 
                 </h5>
                 { gameOwner === myId ? this.gameOwnerStartGame() : null}
                 { this.renderCharacterSelectionModal() }

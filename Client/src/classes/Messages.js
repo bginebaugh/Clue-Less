@@ -285,8 +285,10 @@ export default {
 
                 if (valid2) {
                     setTimeout(() => {
-                        store.dispatch(updateAlertText(`The accusation was right! Game over. ${characterName2} wins!`));
-                    }, 2000);
+                        let message15 = `The accusation was right! Game over. ${characterName2} wins!`;
+                        store.dispatch(updateAlertText(message15));
+                        alert(message15);
+                    }, 5000);
                 }
                 console.log(message2);                
                 break;
@@ -308,7 +310,8 @@ export default {
                 console.log(`${characterName} and ${cardChoices}`);
                 let message4 = `${characterName4} is showing you this card :: ${card4}`;
                 if (characterName4 && card4) {
-                    store.dispatch(updateAlertText(message4));
+                    // store.dispatch(updateAlertText(message4));
+                    alert(message4);
                 }
                 break;
 

@@ -88,8 +88,6 @@ export class App extends React.Component {
                         <Nav className="ml-auto" navbar>
                             {this.navItem("/", "Home")}
                             { !isLoggedIn ? this.navItem("/login", "Login") : null }
-                            { !isLoggedIn ? null : this.navItem("/lobby", "Lobby") }
-                            { !isLoggedIn ? null : <NavItem><NavLink className='cursor-pointer link' onClick={this.logout.bind(this)}>Log out</NavLink></NavItem> }
                         </Nav>
                     </Collapse>
                 </Navbar>                
@@ -104,12 +102,7 @@ export class App extends React.Component {
   
 }
 
-// const PrivateRoute = ({ component: Component, ...rest }) => {
-//     return <Route {...rest} render={props => (
-//       loggedIn() ? (
-//         <Component {...props}/>
-//       ) : null
-//     )}/>
-// }
+// { !isLoggedIn ? null : this.navItem("/lobby", "Lobby") }
+// { !isLoggedIn ? null : <NavItem><NavLink className='cursor-pointer link' onClick={this.logout.bind(this)}>Log out</NavLink></NavItem> }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

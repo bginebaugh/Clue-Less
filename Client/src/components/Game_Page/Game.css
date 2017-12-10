@@ -62,3 +62,7 @@
 .show-text-briefly {
     display: inline;
 }
+
+.highlight-accuse {
+    opacity: 0.5 !important;
+}

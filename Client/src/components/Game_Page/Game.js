@@ -145,7 +145,7 @@ export class Game extends React.Component {
                     let path = '/lobby';
                     this.props.history.push(path);
                 }
-            }, 2000);
+            }, 5000);
         }
     }
 
@@ -361,10 +361,6 @@ export class Game extends React.Component {
         let { m_name } = this.props.myPosition;
         let message = `${accuseCharacterChoice || "[Character]"} w/a ${accuseWeaponChoice || "[Weapon]"} in the ${m_name}!`;
             
-        // {/* { this.dropDownForSuggestionOrAccusation(characters, "dropDownCharacterWindowOpen", 
-        //     this.toggleCharacterWindowDropdown, this.accuseCharacter.bind(this), "accuseCharacterChoice")} */}
-        // {/* { this.dropDownForSuggestionOrAccusation(weapons, "dropDownWeaponWindowOpen", 
-        //     this.toggleWeaponWindowDropdown, this.accuseWeapon.bind(this), "accuseWeaponChoice")} */}
         return <TabPane tabId="3">
             <Row>
                 <Col sm="6">
@@ -372,7 +368,8 @@ export class Game extends React.Component {
                     <CardTitle className="no-border">Character</CardTitle>
                     { characters.map((character, i) => {
                         let onClick = this.accuseCharacter.bind(this, character);
-                        return <Button key={i} onClick={onClick} className="margin-bottom-slim">{character}</Button>
+                        let highlightSelected = character === this.state.accuseCharacterChoice ? " highlight-accuse " : "";
+                        return <Button key={i} onClick={onClick} className={"margin-bottom-slim" + highlightSelected}>{character}</Button>
                     }) }
                     </Card>
                 </Col>
@@ -381,13 +378,14 @@ export class Game extends React.Component {
                     <CardTitle className="no-border">Weapon</CardTitle>
                         { weapons.map((character, i) => {
                                 let onClick = this.accuseWeapon.bind(this, character);
-                                return <Button key={i} onClick={onClick} className="margin-bottom-slim">{character}</Button>
+                                let highlightSelected = character === this.state.accuseWeaponChoice ? " highlight-accuse " : "";
+                                return <Button key={i} onClick={onClick} className={"margin-bottom-slim" + highlightSelected}>{character}</Button>
                             }) }
                     </Card>
                 </Col>
             </Row>
             <div className="margin-top"></div>
-            <Card><Button disabled={!enabled} onClick={this.makeAccusation.bind(this, this.state.accuseCharacterChoice, this.state.accuseWeaponChoice)}>{message}</Button></Card>
+            <Card><Button disabled={!enabled} color="danger" onClick={this.makeAccusation.bind(this, this.state.accuseCharacterChoice, this.state.accuseWeaponChoice)}>{message}</Button></Card>
         </TabPane>        
     }
 
