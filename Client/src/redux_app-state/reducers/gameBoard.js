@@ -87,6 +87,18 @@ const GameBoard = (state = initialState, action) => {
             }
 
             characterList.forEach((boardPiece, i) => {
+
+                // first need to wipe out character's existing position
+                boardPiece.characters.forEach((characterString) => {
+                    for (let i = 0; i < newBoard.length; i++) {
+                        for (let j = 0; j < newBoard[i].length; j++) {
+                            if (newBoard[i][j] && newBoard[i][j].playerList.indexOf(characterString) > -1) {
+                                let index = newBoard[i][j].playerList.indexOf(characterString);
+                                newBoard[i][j].playerList.splice(index, 1);
+                            }
+                        }
+                    }
+                });
                 let x = boardPiece.row;
                 let y = boardPiece.col;
                 console.log("x and y", x, y);

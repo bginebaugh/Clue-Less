@@ -304,6 +304,17 @@ export default {
                 }
                 break;
 
+            case "showCardToUser":
+                console.log("showCardToUser", jsonResponse);
+                let characterName4 = jsonResponse.content.characterName;
+                let card4 = jsonResponse.content.card;
+                console.log(`${characterName} and ${cardChoices}`);
+                let message4 = `${characterName3} is showing you this card :: ${card3}`;
+                if (characterName4 && card4) {
+                    alert(message4);
+                }
+                break;
+
             default:
                 console.log("Response error :: not a proper messageType ::", messageType);
                 break;

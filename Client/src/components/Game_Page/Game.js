@@ -57,7 +57,7 @@ export class Game extends React.Component {
           activeTab: null,
           neighbors: null,
           modal: false,
-          suggestionCardChoicesModal: true,
+          suggestionCardChoicesModal: false,
           dropDownCharacterWindowOpen: false,
           dropDownWeaponWindowOpen: false,
           suggestCharacterChoice: null,
@@ -119,8 +119,8 @@ export class Game extends React.Component {
             this.props.updateMyNeighbors(neighbors);
             console.log("neighbors", neighbors);
         }
-        if(nextProps.suggestionCardChoices && suggestionCardChoices.length > 0) {
-            console.log("you need to show your cards");
+        if(nextProps.suggestionCardChoices && nextProps.suggestionCardChoices.length > 0) {
+            console.log("you need to show your cards", nextProps.suggestionCardChoices);
             this.setState({ suggestionCardChoicesModal: true });
         }
     }

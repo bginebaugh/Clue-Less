@@ -153,7 +153,7 @@ export var GameBoard = {
 			neighbors.push([0,4]);
 		}
 			//if current position is kitchen, add study to neighbor
-		if (x == 0 && y == 4 ){
+		if (x == 4 && y == 4 ){
 			neighbors.push([0,0]);
 		}
 

@@ -100,7 +100,7 @@ export class Lobby extends React.Component {
             return <Form onSubmit={this.handleNewRoomSubmit.bind(this)}>
                 <FormGroup>
                     <h3 className="margin-top-big">Enter the name of your new game room</h3>
-                    <Input type="text" name="new-room" id="new-room" innerRef={node => this.newRoomName = node} />
+                    <Input type="text" name="new-room" id="new-room" innerRef={node => this.newRoomName = node} placeholder="Name your game" />
                     <hr/>
                     <Button className="btn btn-block pointer-cursor">Submit and Join Game</Button>
                 </FormGroup>

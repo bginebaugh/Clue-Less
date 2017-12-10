@@ -10,7 +10,7 @@ const initialState = {
     playersList: null,
     readyToStartGamePlay: false,
     playerTurn: null,
-    suggestionCardChoices: ["a","b"]
+    suggestionCardChoices: null
 }
 
 const GameSession = (state = initialState, action) => {

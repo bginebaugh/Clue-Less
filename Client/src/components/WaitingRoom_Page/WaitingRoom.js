@@ -91,7 +91,7 @@ export class WaitingRoom extends React.Component {
     }
 
     gameOwnerStartGame() {
-        return <Button className="margin-top-big" onClick={this.startGame.bind(this)}>Start Game Because You Own This Piece</Button>
+        return <Button className="margin-top-big" onClick={this.startGame.bind(this)}>Start This Game That You Own</Button>
     }
 
     handleCharacterSubmit(e) {
@@ -129,10 +129,10 @@ export class WaitingRoom extends React.Component {
         if (this.props.isLoggedIn) {
             return (<div className="waiting-room container">
                 <h1 className="margin-bottom-big">You're in <strong>{this.props.gameRoomName}</strong>. Waiting for other players...</h1>
-                <h6 className="margin-bottom-big">
-                    {this.props.playersList ? `There are/is ${this.props.playersList.length} player(s) in the room.` : ""} 
-                    Waiting for others to join until the game owner to hit start. 
-                </h6>
+                <h5 className="margin-bottom-big">
+                    {this.props.playersList ? `There are/is ${this.props.playersList.length} player(s) (including yourself) in the room.  ` : ""} 
+                    Waiting for the leader to hit start. 
+                </h5>
                 { gameOwner === myId ? this.gameOwnerStartGame() : null}
                 { this.renderCharacterSelectionModal() }
             </div>);
