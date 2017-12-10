@@ -324,14 +324,14 @@ export class Game extends React.Component {
             <Row>
                 <Col sm="6">
                     <Card body>
-                        <CardTitle className="no-border">Character</CardTitle>
+                        <h4 className="no-border">Character</h4>
                         { this.dropDownForSuggestionOrAccusation(characters, "dropDownCharacterWindowOpen", 
                             this.toggleCharacterWindowDropdown, this.suggestCharacter.bind(this), "suggestCharacterChoice")}
                     </Card>
                 </Col>
                 <Col sm="6">
                     <Card body>
-                    <CardTitle className="no-border">Weapon</CardTitle>
+                    <h4 className="no-border">Weapon</h4>
                         { this.dropDownForSuggestionOrAccusation(weapons, "dropDownWeaponWindowOpen", 
                             this.toggleWeaponWindowDropdown, this.suggestWeapon.bind(this), "suggestWeaponChoice")}
                     </Card>
@@ -365,7 +365,7 @@ export class Game extends React.Component {
             <Row>
                 <Col sm="6">
                     <Card body>
-                    <CardTitle className="no-border">Character</CardTitle>
+                    <h4 className="no-border">Character</h4>
                     { characters.map((character, i) => {
                         let onClick = this.accuseCharacter.bind(this, character);
                         let highlightSelected = character === this.state.accuseCharacterChoice ? " highlight-accuse " : "";
@@ -375,7 +375,7 @@ export class Game extends React.Component {
                 </Col>
                 <Col sm="6">
                     <Card body>
-                    <CardTitle className="no-border">Weapon</CardTitle>
+                    <h4 className="no-border">Weapon</h4>
                         { weapons.map((character, i) => {
                                 let onClick = this.accuseWeapon.bind(this, character);
                                 let highlightSelected = character === this.state.accuseWeaponChoice ? " highlight-accuse " : "";
