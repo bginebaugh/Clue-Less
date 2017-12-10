@@ -66,3 +66,7 @@
 .highlight-accuse {
     opacity: 0.5 !important;
 }
+
+.min-width {
+    min-width: 145px;
+}
