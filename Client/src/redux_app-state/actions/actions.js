@@ -72,6 +72,18 @@ export const updateMyCharacter = (myCharacter) => {
 	}
 };
 
+export const updateAlertText = (alertText) => {
+	
+	console.log("updateAlertText action :: ", alertText);
+	
+	return {
+		type: "UPDATE_ALERT_TEXT",
+		alertText
+	}
+};
+
+
+
 export const updateMyCards = (myCards) => {
 	
 	console.log("myCards action :: ", myCards);

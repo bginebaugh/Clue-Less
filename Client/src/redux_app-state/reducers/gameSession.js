@@ -10,7 +10,8 @@ const initialState = {
     playersList: null,
     readyToStartGamePlay: false,
     playerTurn: null,
-    suggestionCardChoices: null
+    suggestionCardChoices: null,
+    alertText: null
 }
 
 const GameSession = (state = initialState, action) => {
@@ -47,6 +48,14 @@ const GameSession = (state = initialState, action) => {
             return {
                 ...state,
                 myCharacter: action.myCharacter
+            }
+
+            case 'UPDATE_ALERT_TEXT':
+            console.log("UPDATE_ALERT_TEXT", action);
+        
+            return {
+                ...state,
+                alertText: action.alertText
             }
 
         case 'UPDATE_MYCARDS':

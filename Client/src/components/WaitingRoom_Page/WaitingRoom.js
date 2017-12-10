@@ -20,7 +20,8 @@ const mapStateToProps = (state = {}) => {
         gameList: state.Lobby.gameRoomList,
         hasGameStarted: state.GameSession.hasGameStarted,
         playersList: state.GameSession.playersList,
-        readyToStartGamePlay: state.GameSession.readyToStartGamePlay
+        readyToStartGamePlay: state.GameSession.readyToStartGamePlay,
+        myCharacter: state.GameSession.myCharacter
     };
 };
 
@@ -111,15 +112,18 @@ export class WaitingRoom extends React.Component {
     renderCharacterSelectionModal() {
         const that = this;
         const { dropdownValue } = this.state;
-        const text = `Choose ${this.state.dropdownValue}!!`;        
+        const text = `Choose ${this.state.dropdownValue}!!`;      
+        const message = this.props.myCharacter ? `${this.props.myCharacter} selected. Waiting on others...` : `Game has started... Choose your character`;
         return <Modal isOpen={this.state.modal}>
-            <ModalHeader>Game has started... Choose your character</ModalHeader>
-            <ModalBody>
-            { that.characterList() }
-            </ModalBody>
-            <ModalFooter>
-                { this.state.dropdownValue ? <Button color="primary" onClick={this.handleCharacterSubmit.bind(this)}>{text}</Button> : null }
-            </ModalFooter>
+            <ModalHeader>{message}</ModalHeader>
+            { this.props.myCharacter ? null :
+                <div><ModalBody>
+                { that.characterList() }
+                </ModalBody>
+                <ModalFooter>
+                    { this.state.dropdownValue ? <Button color="primary" onClick={this.handleCharacterSubmit.bind(this)}>{text}</Button> : null }
+                </ModalFooter></div>
+            }
         </Modal>;
     }
 

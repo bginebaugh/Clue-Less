@@ -1,6 +1,6 @@
 import { store } from '../../renderer';
 import { addToGameRoomList, deleteFromGameRoomList, populateCharactersOnBoard, updateCharacterList, updateGameRoomList, updateGameStarted, 
-    updateMyCards, updateMyCharacter, updateMyPosition, updatePlayerTurn, updateReadyToStartGamePlay, updatePlayerList, updateSuggestionCardChoices
+    updateMyCards, updateMyCharacter, updateMyPosition, updatePlayerTurn, updateReadyToStartGamePlay, updatePlayerList, updateSuggestionCardChoices, updateAlertText
 } from "../redux_app-state/actions/actions";
 import ServerProxy from "./ServerProxy";
 
@@ -256,7 +256,7 @@ export default {
                 console.log("moveResponse", jsonResponse);
                 if (jsonResponse && jsonResponse.content && jsonResponse.content.valid && jsonResponse.content.characterName) {
                     let message = `Moving ${jsonResponse.content.characterName} to ${jsonResponse.content.row}, ${jsonResponse.content.col}`;
-                    alert(message);
+                    store.dispatch(updateAlertText(message));
                     console.log(message);
                 }
                 break;  
@@ -268,7 +268,8 @@ export default {
                 let weapon1 = jsonResponse.content.weapon;
                 let room1 = jsonResponse.content.room;
                 let message1 = `${characterName1} suggested ${character1} obliterated the victim with a ${weapon1} in the ${room1}`;
-                alert(message1);
+                
+                store.dispatch(updateAlertText(message1));
                 console.log(message1);
                 break;
 
@@ -278,8 +279,15 @@ export default {
                 let character2 = jsonResponse.content.character;
                 let weapon2 = jsonResponse.content.weapon;
                 let room2 = jsonResponse.content.room;
+                let valid2 = jsonResponse.content.valid;
                 let message2 = `${characterName2} ACCUSED ${character2} OF destroying the victim with a ${weapon2} in the ${room2}`;
-                alert(message2);
+                store.dispatch(updateAlertText(message2));
+
+                if (valid2) {
+                    setTimeout(() => {
+                        store.dispatch(updateAlertText("Your Accusation was right. You won the game!"));
+                    }, 2000);
+                }
                 console.log(message2);                
                 break;
 
@@ -300,7 +308,7 @@ export default {
                 console.log(`${characterName} and ${cardChoices}`);
                 let message4 = `${characterName4} is showing you this card :: ${card4}`;
                 if (characterName4 && card4) {
-                    alert(message4);
+                    store.dispatch(updateAlertText(message4));
                 }
                 break;
 

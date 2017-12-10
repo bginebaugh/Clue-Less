@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import { Redirect, withRouter } from 'react-router-dom';
 import { Jumbotron, Button, Col, Row, 
     Nav, NavItem, NavLink, TabContent, TabPane, Card, CardTitle, CardText, Modal, 
-    ModalBody, ModalFooter, ModalHeader, Dropdown, DropdownItem, DropdownMenu, DropdownToggle
+    ModalBody, ModalFooter, ModalHeader, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Alert
 } from 'reactstrap';
 import { connect } from 'react-redux';
 import { initiateGameBoard, updateMyPosition, updateMyNeighbors, updateSuggestionCardChoices } from "../../redux_app-state/actions/actions";
@@ -25,7 +25,8 @@ const mapStateToProps = (state = {}) => {
         myCharacter: state.GameSession.myCharacter,
         myCards: state.GameSession.myCards,
         playerTurn: state.GameSession.playerTurn,
-        suggestionCardChoices: state.GameSession.suggestionCardChoices
+        suggestionCardChoices: state.GameSession.suggestionCardChoices,
+        alertText: state.GameSession.alertText
     };
 };
 
@@ -67,7 +68,8 @@ export class Game extends React.Component {
           suggestedCardToSend: null,
           enableMoveOption: true,
           enableSuggestionOption: true,
-          enableAccuseOption: true
+          enableAccuseOption: true,
+          alertTextShow: "dont-show"
         };
         this.neighbors = null;
     }
@@ -132,6 +134,14 @@ export class Game extends React.Component {
                 enableSuggestionOption: true,
                 enableAccuseOption: true
              });
+        }
+
+        if(this.props.alertText !== nextProps.alertText) {
+            console.log("updating alert text", nextProps.alertText)
+            this.setState({ alertTextShow: "show-text-briefly"});
+            setTimeout(() => {
+                this.setState({ alertTextShow: "dont-show"});
+            }, 2000);
         }
     }
 
@@ -200,13 +210,21 @@ export class Game extends React.Component {
 
     renderSelectionAction() {
         const { enableAccuseOption, enableMoveOption, enableSuggestionOption } = this.state;
-        let message = enableAccuseOption && enableSuggestionOption && enableMoveOption ? "Select An Action" : "You are out of options. End your turn";
+
+        let isInHallway = false;
+
+        if (this.props.myPosition && this.props.myPosition.m_isHallway === true) {
+            isInHallway = true;
+
+        }
+
+        let message = enableAccuseOption || enableSuggestionOption || enableMoveOption ? "Select An Action" : "You are out of options. End your turn";
         return <div>
             <h4>{message}</h4>
             <Nav tabs>
                 {this.state.enableMoveOption ? this.generateNavItem('1','Move Character') : null}
-                {this.state.enableSuggestionOption ? this.generateNavItem('2','Make Suggestion') : null}
-                {this.state.enableAccuseOption ? this.generateNavItem('3','Make Accusation') : null}
+                {this.state.enableSuggestionOption && !isInHallway ? this.generateNavItem('2','Make Suggestion') : null}
+                {this.state.enableAccuseOption && !isInHallway ? this.generateNavItem('3','Make Accusation') : null}
             </Nav>
             <TabContent activeTab={this.state.activeTab}>
                 <div className="margin-top"></div>
@@ -459,7 +477,7 @@ export class Game extends React.Component {
         if (this.props.isLoggedIn) {
             return (<div className="container">
                 <Row>
-                    <Col xs="7">{ myCharacter ? <h3 className="margin-bottom">Hello, {myCharacter}</h3> : null}</Col>
+                    <Col xs="7">{ myCharacter ? <h3>Hello, {myCharacter}</h3> : null}</Col>
                     <Col xs="5">
                         <Row className="pull-right">
                             <Button color="secondary" onClick={this.toggleModal}>View your cards</Button>
@@ -471,7 +489,10 @@ export class Game extends React.Component {
                 </Row>
 
                 <Row>
-                    <Col xs="7">{this.props.board ? this.renderCells() : null}</Col>
+                    <Col xs="7">
+                        <Row>{this.props.board ? this.renderCells() : null}</Row>
+                        <Row className={this.state.alertTextShow + " margin-top "}><Alert color="danger">Update: {this.props.alertText} </Alert></Row>
+                    </Col>
                     <Col className="stacked-rows" xs="5">
                         <Row className="right-top">{this.renderTurnIndicator()}</Row>              
                         { board && myPosition && myTurn ? <Row className="right-bottom">{this.renderSelectionAction()}</Row> : null }
