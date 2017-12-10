@@ -278,7 +278,7 @@ export default {
                 let character2 = jsonResponse.content.character;
                 let weapon2 = jsonResponse.content.weapon;
                 let room2 = jsonResponse.content.room;
-                let message2 = `${characterName2} suggested ${character2} obliterated the victim with a ${weapon2} in the ${room2}`;
+                let message2 = `${characterName2} ACCUSED ${character2} OF destroying the victim with a ${weapon2} in the ${room2}`;
                 alert(message2);
                 console.log(message2);                
                 break;
