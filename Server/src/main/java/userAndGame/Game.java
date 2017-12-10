@@ -407,7 +407,7 @@ public class Game {
 
 	public User getFirstUserWithCard(User startAfterMe, ArrayList<String> cards) {
 		int startingIndex = m_userList.indexOf(startAfterMe);
-		int index = startingIndex;
+		int index = startingIndex + 1;
 		User userOut = null;
 		boolean found = false;
 
