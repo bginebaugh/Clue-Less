@@ -52,13 +52,13 @@ export const updateGame = (game) => {
 	}
 };
 
-export const updateSuggestionCardChoices = (cards) => {
+export const updateSuggestionCardChoices = (suggestionCardChoices) => {
 	
-	console.log("updateSuggestionCardChoices :: ", cards);
+	console.log("updateSuggestionCardChoices :: ", suggestionCardChoices);
 	
 	return {
 		type: "UPDATE_SUGGESTION_CARD_CHOICES",
-		cards
+		suggestionCardChoices
 	}
 };
 

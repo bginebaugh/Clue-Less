@@ -392,7 +392,7 @@ export class Game extends React.Component {
     renderSuggestionCardModel() {
         return (
             <div>
-              <Modal style={{ width: '600px' }} isOpen={this.state.suggestionCardChoicesModal} toggle={this.toggleSuggestionCardChoicesModal.bind(this)} className={this.props.className}>
+              <Modal style={{ width: '600px' }} isOpen={this.state.suggestionCardChoicesModal} className={this.props.className}>
                 <ModalHeader>Your card choices to show the suggestor</ModalHeader>
                 <ModalBody>
                     <Row>
