@@ -11,8 +11,8 @@ public class Cell {
 	private ArrayList<String> m_characterList = new ArrayList<String>();
 	private String m_name = "";
 	private CellType m_cellType = null;
-	private int m_x;
-	private int m_y;
+	private int m_row;
+	private int m_col;
 
 	public boolean addCharacter(String character) {
 		boolean ret = false;
@@ -68,16 +68,16 @@ public class Cell {
 		m_cellType = type;
 	}
 
-	public int getX() {
-		return m_x;
+	public int getRow() {
+		return m_row;
 	}
 
-	public int getY() {
-		return m_y;
+	public int getCol() {
+		return m_col;
 	}
 
-	public void setPosition(int x, int y) {
-		m_x = x;
-		m_y = y;
+	public void setPosition(int row, int col) {
+		m_row = row;
+		m_col = col;
 	}
 }

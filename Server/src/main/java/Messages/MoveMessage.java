@@ -1,19 +1,19 @@
 package Messages;
 
 public class MoveMessage extends MessageBase {
-	private int posX = -1;
-	private int posY = -1;
+	private int row = -1;
+	private int col = -1;
 
-	public int getPosX() {
-		return posX;
+	public int getRow() {
+		return row;
 	}
 
-	public int getPosY() {
-		return posY;
+	public int getCol() {
+		return col;
 	}
 
-	public void setPosition(int x, int y) {
-		posX = x;
-		posY = y;
+	public void setPosition(int newRow, int newCol) {
+		row = newRow;
+		col = newCol;
 	}
 }

@@ -4,21 +4,21 @@ import java.util.ArrayList;
 
 public class GameBoardStateMessage extends MessageBase {
 	private class BoardCell {
-		private int posX = -1;
-		private int posY = -1;
+		private int row = -1;
+		private int col = -1;
 		private ArrayList<String> characters = new ArrayList<String>();
 
-		public int getPosX() {
-			return posX;
+		public int getRow() {
+			return row;
 		}
 
-		public int getPosY() {
-			return posY;
+		public int getCol() {
+			return col;
 		}
 
-		public void setPosition(int x, int y) {
-			posX = x;
-			posY = y;
+		public void setPosition(int newRow, int newCol) {
+			row = newRow;
+			col = newCol;
 		}
 
 		public ArrayList<String> getCharacters() {
@@ -32,9 +32,9 @@ public class GameBoardStateMessage extends MessageBase {
 
 	private ArrayList<BoardCell> board = new ArrayList<BoardCell>();
 
-	public void addEntry(int x, int y, ArrayList<String> characters) {
+	public void addEntry(int row, int col, ArrayList<String> characters) {
 		BoardCell cell = new BoardCell();
-		cell.setPosition(x, y);
+		cell.setPosition(row, col);
 		cell.setCharacters(characters);
 		board.add(cell);
 	}

@@ -190,18 +190,18 @@ public class Game {
 		}
 	}
 
-	public boolean moveUser(User user, int x, int y) {
+	public boolean moveUser(User user, int row, int col) {
 		boolean ret = false;
 		MoveResponse mr = new MoveResponse();
 		Message<MoveResponse> out = new Message<MoveResponse>();
 
 		mr.setCharacterName(user.getCharacter());
-		mr.setPosition(x, y);
+		mr.setPosition(row, col);
 		out.setMessageType("moveResponse");
 		out.setGameId(this.getGameId());
 		out.setContent(mr);
 
-		if (m_board.moveCharacter(user.getCharacter(), x, y)) {
+		if (m_board.moveCharacter(user.getCharacter(), row, col)) {
 			ret = true;
 			mr.setValid(true);
 			for (User tmp : m_userList) {
@@ -213,6 +213,8 @@ public class Game {
 			mr.setValid(false);
 			user.sendMessage(out);
 		}
+		
+		this.distributeBoardState();
 		return ret;
 	}
 

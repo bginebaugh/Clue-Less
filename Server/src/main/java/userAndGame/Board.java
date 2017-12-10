@@ -13,13 +13,13 @@ public class Board {
 	private final int m_height = 5;
 
 	public class Position {
-		public Position(int x_, int y_) {
-			x = x_;
-			y = y_;
+		public Position(int row_, int col_) {
+			row = row_;
+			col = col_;
 		}
 
-		public int x = -1;
-		public int y = -1;
+		public int row = -1;
+		public int col = -1;
 	}
 
 	public Board() {
@@ -30,12 +30,12 @@ public class Board {
 		}
 
 		int index = 0;
-		for (int y = 0; y < m_height; ++y) {
-			for (int x = 0; x < m_width; ++x) {
-				Cell cell = this.getCell(x, y);
-				if (y % 2 == 0) {
+		for (int row = 0; row < m_height; ++row) {
+			for (int col = 0; col < m_width; ++col) {
+				Cell cell = this.getCell(row, col);
+				if (row % 2 == 0) {
 					// Even rows
-					if (x % 2 == 0) {
+					if (col % 2 == 0) {
 						// Even columns are rooms
 						cell.setName(Card.getCardName(Card.ROOM, index));
 						cell.setType(Cell.CellType.CELL_TYPE_ROOM);
@@ -46,7 +46,7 @@ public class Board {
 					}
 				} else {
 					// Odd rows
-					if (x % 2 == 0) {
+					if (col % 2 == 0) {
 						// Even columns are halls
 						cell.setType(Cell.CellType.CELL_TYPE_HALLWAY);
 					} else {
@@ -54,30 +54,30 @@ public class Board {
 						cell.setType(Cell.CellType.CELL_TYPE_EMPTY);
 					}
 				}
-				cell.setPosition(x, y);
+				cell.setPosition(row, col);
 				System.out.println(
-						"Cell at (" + x + ", " + y + ") is type " + cell.getType() + ", called " + cell.getName());
+						"Cell at (" + row + ", " + col + ") is type " + cell.getType() + ", called " + cell.getName());
 			}
 		}
 
 		// Finally, set the initial positions
-		this.getCell(3, 0).addCharacter("Miss Scarlet");
-		this.getCell(0, 1).addCharacter("Professor Plum");
-		this.getCell(4, 1).addCharacter("Colonel Mustard");
-		this.getCell(0, 3).addCharacter("Mrs. Peacock");
-		this.getCell(1, 4).addCharacter("Mr. Green");
-		this.getCell(3, 4).addCharacter("Mrs. White");
+		this.getCell(0, 3).addCharacter("Miss Scarlet");
+		this.getCell(1, 0).addCharacter("Professor Plum");
+		this.getCell(1, 4).addCharacter("Colonel Mustard");
+		this.getCell(3, 0).addCharacter("Mrs. Peacock");
+		this.getCell(4, 1).addCharacter("Mr. Green");
+		this.getCell(4, 3).addCharacter("Mrs. White");
 	}
 
-	public Cell getCell(int x, int y) {
-		return m_cells.get(y * m_width + x);
+	public Cell getCell(int row, int col) {
+		return m_cells.get(row * m_width + col);
 	}
 
 	public GameBoardStateMessage getBoardState() {
 		GameBoardStateMessage gbsm = new GameBoardStateMessage();
 		for (Cell cell : m_cells) {
 			if (cell.hasCharacters()) {
-				gbsm.addEntry(cell.getX(), cell.getY(), cell.getCharacters());
+				gbsm.addEntry(cell.getRow(), cell.getCol(), cell.getCharacters());
 			}
 		}
 
@@ -88,64 +88,64 @@ public class Board {
 		Position p = new Position(-1, -1);
 		for (Cell cell : m_cells) {
 			if (cell.hasCharacter(name)) {
-				p.x = cell.getX();
-				p.y = cell.getY();
+				p.row = cell.getRow();
+				p.col = cell.getCol();
 				break;
 			}
 		}
 		return p;
 	}
 
-	public ArrayList<Cell> getNeighbors(int x, int y) {
-		return getNeighbors(this.getCell(x, y));
+	public ArrayList<Cell> getNeighbors(int row, int col) {
+		return getNeighbors(this.getCell(row, col));
 	}
 
 	public ArrayList<Cell> getNeighbors(Cell cell) {
 		ArrayList<Cell> neighbors = new ArrayList<Cell>();
 
-		if (cell.getX() > 0) {
-			neighbors.add(this.getCell(cell.getX() - 1, cell.getY()));
+		if (cell.getRow() > 0) {
+			neighbors.add(this.getCell(cell.getRow() - 1, cell.getCol()));
 		}
 
-		if (cell.getX() < m_width - 1) {
-			neighbors.add(this.getCell(cell.getX() + 1, cell.getY()));
+		if (cell.getRow() < m_height - 1) {
+			neighbors.add(this.getCell(cell.getRow() + 1, cell.getCol()));
 		}
 
-		if (cell.getY() > 0) {
-			neighbors.add(this.getCell(cell.getX(), cell.getY() - 1));
+		if (cell.getCol() > 0) {
+			neighbors.add(this.getCell(cell.getRow(), cell.getCol() - 1));
 		}
 
-		if (cell.getY() < m_height - 1) {
-			neighbors.add(this.getCell(cell.getX(), cell.getY() + 1));
+		if (cell.getCol() < m_width - 1) {
+			neighbors.add(this.getCell(cell.getRow(), cell.getCol() + 1));
 		}
 
-		if (cell.getX() == 0 && cell.getY() == 0) {
-			neighbors.add(this.getCell(m_width - 1, m_height - 1));
+		if (cell.getRow() == 0 && cell.getCol() == 0) {
+			neighbors.add(this.getCell(m_height - 1, m_width - 1));
 		}
 
-		if (cell.getX() == 0 && cell.getY() == m_height - 1) {
-			neighbors.add(this.getCell(m_width - 1, 0));
+		if (cell.getRow() == 0 && cell.getCol() == m_width - 1) {
+			neighbors.add(this.getCell(m_height - 1, 0));
 		}
 
-		if (cell.getX() == m_width - 1 && cell.getY() == 0) {
-			neighbors.add(this.getCell(0, m_height - 1));
+		if (cell.getRow() == m_height - 1 && cell.getCol() == 0) {
+			neighbors.add(this.getCell(0, m_width - 1));
 		}
 
-		if (cell.getX() == m_width - 1 && cell.getY() == m_height - 1) {
+		if (cell.getRow() == m_height - 1 && cell.getCol() == m_width - 1) {
 			neighbors.add(this.getCell(0, 0));
 		}
 
 		return neighbors;
 	}
 
-	public boolean moveCharacter(String name, int destX, int destY) {
-		System.out.println("Trying to move " + name + " to " + destX + ", " + destY);
+	public boolean moveCharacter(String name, int destRow, int destCol) {
+		System.out.println("Trying to move " + name + " to " + destRow + ", " + destCol);
 		boolean ret = false;
 		Position p = this.getCharacterPosition(name);
-		Cell current = this.getCell(p.x, p.y);
+		Cell current = this.getCell(p.row, p.col);
 
 		ArrayList<Cell> neighbors = this.getNeighbors(current);
-		Cell desired = this.getCell(destX, destY);
+		Cell desired = this.getCell(destRow, destCol);
 		if (neighbors.contains(desired)) {
 			// Verify that the character can move there
 			if (desired.addCharacter(name)) {
