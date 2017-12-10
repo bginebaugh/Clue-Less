@@ -80,6 +80,10 @@ public class Game {
 		return m_userList;
 	}
 
+	public User getCurrentTurnUser() {
+		return m_userList.get(m_currentTurnIndex);
+	}
+
 	public boolean isFull() {
 		if (m_userList.size() >= MAX_NUM_PLAYERS) {
 			return true;
@@ -213,37 +217,49 @@ public class Game {
 			mr.setValid(false);
 			user.sendMessage(out);
 		}
-		
+
 		this.distributeBoardState();
 		return ret;
 	}
 
-	public boolean makeSuggestion(int userId, ArrayList<Card> cards) {
+	public boolean makeSuggestion(User user, ArrayList<String> cards) {
 		// Check if this is a valid Suggestion
-		Card weapon = null;
-		Card suspect = null;
-		Card room = null;
+		String weapon = "";
+		String suspect = "";
+		String room = "";
 
-		for (Card card : cards) {
-			if (card.getType() == Card.WEAPON) {
+		for (String card : cards) {
+			int type = Card.getCardType(card);
+			if (type == Card.WEAPON) {
 				weapon = card;
-			}
-
-			if (card.getType() == Card.SUSPECT) {
-				suspect = card;
-			}
-
-			if (card.getType() == Card.ROOM) {
+			} else if (type == Card.ROOM) {
 				room = card;
+			} else {
+				suspect = card;
 			}
 		}
 
-		if (weapon == null || suspect == null || room == null) {
+		if (weapon.equals("") || suspect.equals("") || room.equals("")) {
 			// This is not a valid suggestion
+			System.out.println("Invalid suggestion. Cry. Out of time to handle this properly");
 			return false;
 		} else {
+			// Broadcast the suggestion to everyone
+			SuggestionBroadcast sb = new SuggestionBroadcast();
+			Message<SuggestionBroadcast> out = new Message<SuggestionBroadcast>();
+
+			sb.setCharacterName(user.getCharacter());
+			sb.setCharacter(suspect);
+			sb.setWeapon(weapon);
+			sb.setRoom(room);
+
+			out.setMessageType("suggestionBroadcast");
+			out.setGameId(this.getGameId());
+			out.setContent(sb);
+			for (User tmp : m_userList) {
+				tmp.sendMessage(out);
+			}
 			return true;
-			// Send Message
 		}
 
 	}
@@ -358,6 +374,32 @@ public class Game {
 
 		populateCharSelectionList();
 		distributeCharList();
+	}
+
+	public User getFirstUserWithCard(User startAfterMe, ArrayList<String> cards) {
+		int startingIndex = m_userList.indexOf(startAfterMe);
+		int index = startingIndex;
+		User userOut = null;
+		boolean found = false;
+
+		for (int i = 0; i < m_userList.size() - 1; ++i) {
+			if (index == m_userList.size() - 1) {
+				index = 0;
+			}
+
+			User tmp = m_userList.get(index);
+			for (String card : cards) {
+				if (tmp.isCardInHand(card)) {
+					userOut = tmp;
+					found = true;
+					break;
+				}
+			}
+			if (found) {
+				break;
+			}
+		}
+		return userOut;
 	}
 
 	// Is this a message?
