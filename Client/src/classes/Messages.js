@@ -101,6 +101,51 @@ export default {
 
     },
 
+    generateMakeSuggestionMessage(character, weapon, room) {
+        
+        let messageHeader = this.generateMessageHeader("suggest");
+        
+        let obj = Object.assign({}, messageHeader, { content: { 
+            character: character,
+            weapon: weapon,
+            room: room
+        }});
+
+        let messageEnd = this.generateMessageEnder();
+        
+        return JSON.stringify(obj) + messageEnd;
+
+    },
+
+    generateEndTurnMessage() {
+        
+        let messageHeader = this.generateMessageHeader("endTurn");
+        
+        let obj = Object.assign({}, messageHeader, { content: { 
+        }});
+
+        let messageEnd = this.generateMessageEnder();
+        
+        return JSON.stringify(obj) + messageEnd;
+
+    },
+
+    generateMakeAccusationMessage(character, weapon, room) {
+        
+        let messageHeader = this.generateMessageHeader("accuse");
+        
+        let obj = Object.assign({}, messageHeader, { content: { 
+            character: character,
+            weapon: weapon,
+            room: room
+        }});
+
+        let messageEnd = this.generateMessageEnder();
+        
+        return JSON.stringify(obj) + messageEnd;
+
+    },
+
     parseJsonResponseFromServer(incomingMessage) {
 
         return JSON.parse(incomingMessage);

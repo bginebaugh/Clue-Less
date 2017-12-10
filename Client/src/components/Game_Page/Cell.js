@@ -41,17 +41,6 @@ export class Cell extends React.Component {
         this.setState({ rerender: !this.state.rerender });
     }
 
-    // compon
-
-    // componentDidReceiveProps(nextProps) {
-    //     console.log("componentDidReceiveProps Cell", this.props.board, nextProps.board)
-    //     if(this.props.board !== nextProps.board) {
-    //         console.log("forcing update in cell");
-    //         this.forceUpdate();
-    //     }
-    //     this.forceUpdate();
-    // }
-
     render() {
         const { board, className, isLoggedIn, xCoord, yCoord } = this.props;
         let cellPiece = board[xCoord][yCoord];

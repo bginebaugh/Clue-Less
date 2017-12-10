@@ -190,6 +190,28 @@ export default {
         console.log("sending message", moveCharacterMessage);
         tcpConnection.write(moveCharacterMessage);
 
-    }
+    },
 
+    makeSuggestion(character, weapon, room) {
+        
+        let makeSuggestionMessage = Messages.generateMakeSuggestionMessage(character, weapon, room);
+        console.log("sending message", makeSuggestionMessage);
+        tcpConnection.write(makeSuggestionMessage);
+
+    },
+
+    makeAccusation(character, weapon, room) {
+        
+        let makeAccusationMessage = Messages.generateMakeAccusationMessage(character, weapon, room);
+        console.log("sending message", makeAccusationMessage);
+        tcpConnection.write(makeAccusationMessage);
+
+    },
+
+    endTurn() {
+
+        let endTurnMessage = Messages.generateEndTurnMessage();
+        console.log("sending message", endTurnMessage);
+        tcpConnection.write(endTurnMessage);
+    }
 }

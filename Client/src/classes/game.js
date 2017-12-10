@@ -68,16 +68,13 @@ export var Game = {
 	
 	makeSuggestion (character, weapon, currentRoom) {
 		console.log(character, weapon, currentRoom);
-		//notify other clients with character and weapon and room in message
-		//The client moves the suspected character to the room
-		//prompt for accusation at the end
+		ServerProxy.makeSuggestion(character, weapon, currentRoom);
 		
 	},
 	
 	makeAccusation (character, weapon, currentRoom) {
 		console.log(character, weapon, currentRoom);
-		//notify server of the character, weapon, and room
-		//server returns boolean from matching with secret envelope
+		ServerProxy.makeAccusation(character, weapon, currentRoom);
 		
 	},
 	

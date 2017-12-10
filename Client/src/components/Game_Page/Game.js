@@ -3,13 +3,16 @@ import "./Game.css";
 import classnames from 'classnames';
 import { Redirect, withRouter } from 'react-router-dom';
 import { Jumbotron, Button, Col, Row, 
-    Nav, NavItem, NavLink, TabContent, TabPane, Card, CardTitle, CardText, Modal, ModalBody, ModalFooter, ModalHeader
+    Nav, NavItem, NavLink, TabContent, TabPane, Card, CardTitle, CardText, Modal, 
+    ModalBody, ModalFooter, ModalHeader, Dropdown, DropdownItem, DropdownMenu, DropdownToggle
 } from 'reactstrap';
 import { connect } from 'react-redux';
 import { initiateGameBoard, updateMyPosition, updateMyNeighbors } from "../../redux_app-state/actions/actions";
 
 import { GameBoard } from "../../classes/gameBoard";
 import { Game as GameClass } from "../../classes/game";
+
+import ServerProxy from '../../classes/ServerProxy';
 
 import Cell from "./Cell";
 
@@ -40,20 +43,29 @@ export class Game extends React.Component {
     
         this.toggleTabs = this.toggleTabs.bind(this);
         this.toggleModal = this.toggleModal.bind(this);
+        this.toggleCharacterWindowDropdown = this.toggleCharacterWindowDropdown.bind(this);
+        this.toggleWeaponWindowDropdown = this.toggleWeaponWindowDropdown.bind(this);
+        this.suggestCharacter = this.suggestCharacter.bind(this);
+        this.suggestWeapon = this.suggestWeapon.bind(this);
+        this.accuseCharacter = this.accuseCharacter.bind(this);
+        this.accuseWeapon = this.accuseWeapon.bind(this);
+        this.endTurn = this.endTurn.bind(this);
         this.state = {
           activeTab: null,
           neighbors: null,
           modal: false,
-          suggestion: {
-              character: null,
-              weapon: null
-          },
-          accusation: {
-              character: null,
-              weapon: null
-          }
+          dropDownCharacterWindowOpen: false,
+          dropDownWeaponWindowOpen: false,
+          suggestCharacterChoice: null,
+          suggestWeaponChoice: null,
+          accuseCharacterChoice: null,
+          accuseWeaponChoice: null
         };
         this.neighbors = null;
+    }
+
+    endTurn() {
+        ServerProxy.endTurn();
     }
     
     toggleTabs(tab) {
@@ -70,6 +82,18 @@ export class Game extends React.Component {
         });
       }
 
+    toggleCharacterWindowDropdown() {
+        this.setState({
+          dropDownCharacterWindowOpen: !this.state.dropDownCharacterWindowOpen
+        });
+    }
+
+    toggleWeaponWindowDropdown() {
+        this.setState({
+          dropDownWeaponWindowOpen: !this.state.dropDownWeaponWindowOpen
+        });
+    }
+
     componentDidMount() {        
     }
 
@@ -85,16 +109,14 @@ export class Game extends React.Component {
             console.log("neighbors", neighbors);
         }
         console.log("board in componentwillreceiveprops", this.props.board, nextProps.board)
-        if(this.props.board !== nextProps.board) {
-            console.log("forcing update in game");
-            this.forceUpdate();
-        }
-        this.forceUpdate();
+        // if(this.props.board !== nextProps.board) {
+        //     console.log("forcing update in game");
+        //     this.forceUpdate();
+        // }
     }
 
     renderCells() {
         let board = this.props.board;
-        console.log("hitting renderCells again", board);
         let cells = [];
         let { myNeighbors } = this.props;
         for (let i = 0; i < board.length; i++) {
@@ -126,7 +148,7 @@ export class Game extends React.Component {
                             : "";
                     className += highlightClassName;
                     let cellPiece = board[i][j];
-                    cells.push(<div className="cell-piece hover01">
+                    cells.push(<div key={key} className="cell-piece hover01">
                             <div className={(className ? className : "")}>
                                 <div className="cell-name">{cellPiece !== null && !cellPiece.m_isHallway ? cellPiece.m_name : ""}</div>
                                 <div className="cell-name display-none-till-hover">{cellPiece !== null 
@@ -158,7 +180,7 @@ export class Game extends React.Component {
 
     renderSelectionAction() {
         return <div>
-            <h4 className="margin-top">Select An Action</h4>
+            <h4>Select An Action</h4>
             <Nav tabs>
                 {this.generateNavItem('1','Move Character')}
                 {this.generateNavItem('2','Make Suggestion')}
@@ -205,67 +227,119 @@ export class Game extends React.Component {
         this.setState({ activeTab: null });
     }
 
-    dropDownForSuggestionOrAccusation(collection, callback) {    
-        return <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-            <DropdownToggle caret>
-                Select your character
+    dropDownForSuggestionOrAccusation(collection, dropdownType, toggleFunction, callback, stateItem) {    
+        return <Dropdown key={"dropdown"+stateItem} isOpen={this.state[dropdownType]} toggle={toggleFunction.bind(this)}>
+            <DropdownToggle key={"dropdownToggle"+stateItem} caret>
+                {this.state[stateItem] ? this.state[stateItem] : "Please select"}
             </DropdownToggle>
-            <DropdownMenu>
+            <DropdownMenu key={"dropdownMenu"+stateItem}>
                 {collection.map((character, i) => {
-                    return <DropdownItem key={i} onClick={callback}>{character}</DropdownItem>
+                    let key = stateItem + "_" + i;
+                    return <DropdownItem key={key} onClick={callback}>{character}</DropdownItem>
                 })}
             </DropdownMenu>
         </Dropdown>
                 
     }
 
+    suggestCharacter(event) {
+        this.setState({
+            suggestCharacterChoice: event.target.innerText
+        });        
+    }
+
+    suggestWeapon(event) {
+        this.setState({
+            suggestWeaponChoice: event.target.innerText
+        });                
+    }
+
+    accuseCharacter(event) {
+        console.log("accuseCharacter", event)
+        this.setState({
+            accuseCharacterChoice: event
+        });        
+    }
+
+    accuseWeapon(event) {
+        console.log("accuseWeapon", event)
+        this.setState({
+            accuseWeaponChoice: event
+        });   
+    }
+
     renderMakeSuggestionScreen() {
+        let characters = ["Miss Scarlet", "Professor Plum", "Mrs. Peacock", "Mr. Green", "Colonel Mustard", "Mrs. White"];
+        let weapons = ["Candlestick", "Knife", "Lead Pipe", "Revolver", "Rope", "Wrench"];
+        let enabled = this.state.suggestCharacterChoice && this.state.suggestWeaponChoice;
+            
         return <TabPane tabId="2">
             <Row>
                 <Col sm="6">
                     <Card body>
-                        <CardTitle>Character</CardTitle>
-                        <CardText>Choose wisely.</CardText>
+                        <CardTitle className="no-border">Character</CardTitle>
+                        { this.dropDownForSuggestionOrAccusation(characters, "dropDownCharacterWindowOpen", 
+                            this.toggleCharacterWindowDropdown, this.suggestCharacter.bind(this), "suggestCharacterChoice")}
                     </Card>
                 </Col>
                 <Col sm="6">
                     <Card body>
-                        <CardTitle>Weapon</CardTitle>
-                        <CardText>Do you have evidence?</CardText>
+                    <CardTitle className="no-border">Weapon</CardTitle>
+                        { this.dropDownForSuggestionOrAccusation(weapons, "dropDownWeaponWindowOpen", 
+                            this.toggleWeaponWindowDropdown, this.suggestWeapon.bind(this), "suggestWeaponChoice")}
                     </Card>
                 </Col>
             </Row>
             <div className="margin-top"></div>
-            <Card><Button onClick={this.makeSuggestion.bind(this,"Miss. Scarlet", "Axe", "Conservatory")}>Make your suggestion</Button></Card>
+            <Card><Button disabled={!enabled} onClick={this.makeSuggestion.bind(this, this.state.suggestCharacterChoice, this.state.suggestWeaponChoice)}>Make your suggestion</Button></Card>
         </TabPane>        
     }
 
-    makeSuggestion(character, weapon, currentRoom) {
+    makeSuggestion(character, weapon) {
+        let currentRoom = this.props.myPosition.m_name;
         GameClass.makeSuggestion(character, weapon, currentRoom);
     }
 
     renderMakeAccusationScreen() {
+        let characters = ["Miss Scarlet", "Professor Plum", "Mrs. Peacock", "Mr. Green", "Colonel Mustard", "Mrs. White"];
+        let weapons = ["Candlestick", "Knife", "Lead Pipe", "Revolver", "Rope", "Wrench"];
+        let enabled = this.state.accuseCharacterChoice && this.state.accuseWeaponChoice;
+        let { accuseCharacterChoice, accuseWeaponChoice } = this.state;
+        let { m_name } = this.props.myPosition;
+        let message = `${accuseCharacterChoice || "[Character]"} w/a ${accuseWeaponChoice || "[Weapon]"} in the ${m_name}!`;
+            
+        // {/* { this.dropDownForSuggestionOrAccusation(characters, "dropDownCharacterWindowOpen", 
+        //     this.toggleCharacterWindowDropdown, this.accuseCharacter.bind(this), "accuseCharacterChoice")} */}
+        // {/* { this.dropDownForSuggestionOrAccusation(weapons, "dropDownWeaponWindowOpen", 
+        //     this.toggleWeaponWindowDropdown, this.accuseWeapon.bind(this), "accuseWeaponChoice")} */}
         return <TabPane tabId="3">
             <Row>
-            <Col sm="6">
-                <Card body>
-                    <CardTitle>Accuse A Character</CardTitle>
-                    <CardText>Choose wisely.</CardText>
-                </Card>
-            </Col>
-            <Col sm="6">
-                <Card body>
-                    <CardTitle>Choose Your Weapon</CardTitle>
-                    <CardText>Are you sure?</CardText>
-                </Card>
-            </Col>
+                <Col sm="6">
+                    <Card body>
+                    <CardTitle className="no-border">Character</CardTitle>
+                    { characters.map((character, i) => {
+                        let onClick = this.accuseCharacter.bind(this, character);
+                        return <Button key={i} onClick={onClick} className="margin-bottom-slim">{character}</Button>
+                    }) }
+                    </Card>
+                </Col>
+                <Col sm="6">
+                    <Card body>
+                    <CardTitle className="no-border">Weapon</CardTitle>
+                        { weapons.map((character, i) => {
+                                let onClick = this.accuseWeapon.bind(this, character);
+                                return <Button key={i} onClick={onClick} className="margin-bottom-slim">{character}</Button>
+                            }) }
+                    </Card>
+                </Col>
             </Row>
             <div className="margin-top"></div>
-            <Card><Button onClick={this.makeAccusation.bind(this,"Miss. Scarlet", "Axe", "Conservatory")}>Make your accusation. Good luck.</Button></Card>
-        </TabPane>       
+            <Card><Button disabled={!enabled} onClick={this.makeAccusation.bind(this, this.state.accuseCharacterChoice, this.state.accuseWeaponChoice)}>{message}</Button></Card>
+        </TabPane>        
     }
 
-    makeAccusation(character, weapon, currentRoom) {
+    makeAccusation(character, weapon) {
+        let currentRoom = this.props.myPosition.m_name;
         GameClass.makeAccusation(character, weapon, currentRoom);
     }
 
@@ -317,6 +391,7 @@ export class Game extends React.Component {
                     <Col xs="5">
                         <Row className="pull-right">
                             <Button color="secondary" onClick={this.toggleModal}>View your cards</Button>
+                            { myTurn ? <Button className="margin-left" color="danger" onClick={this.endTurn}>End your turn</Button> : null }
                             {this.renderCardModel()}
                         </Row>              
                     </Col>

@@ -12,13 +12,16 @@
 }
 
 .right-top {
-    height: 20%;
+    height: 15%;
 }
 
 .margin-top {
     margin-top: 10px;
 }
 
+.margin-bottom-slim  {
+    margin-bottom: 5px;
+}
 .nav-item {
     cursor: pointer;
 }
@@ -34,4 +37,20 @@
 .highlight {
     transition: 0.3s ease-in-out;
     background-color:#f1c40f !important;
+}
+
+.tab-pane {
+    background-color: white !important;
+}
+
+.no-border {
+    border: none !important;
+}
+
+.card {
+    border: none !important;
+}
+
+.margin-left {
+    margin-left: 15px;
 }
