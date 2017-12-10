@@ -178,13 +178,15 @@ export const updateMyPosition = (myPosition) => {
 	}
 };
 
-export const populateCharactersOnBoard = (characterList) => {
+export const populateCharactersOnBoard = (characterList, me, existingPiece) => {
 	
-	console.log("action :: updating characters on board :: ", characterList);
+	console.log("action :: updating characters on board :: ", characterList, me, existingPiece);
 	
 	return {
 		type: "POPULATE_CHARACTER_LIST",
-		characterList
+		characterList,
+		me,
+		existingPiece
 	}
 };
 

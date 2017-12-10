@@ -91,8 +91,8 @@ export default {
         console.log("I want to go to ::", x, y);
         
         let obj = Object.assign({}, messageHeader, { content: { 
-            posX: x,
-            posY: y
+            row: x,
+            col: y
         }});
 
         let messageEnd = this.generateMessageEnder();
@@ -162,7 +162,10 @@ export default {
             case "gameBoardState":
                 console.log("gameBoardState", jsonResponse);
                 if (jsonResponse && jsonResponse.content && jsonResponse.content.board) {
-                    store.dispatch(populateCharactersOnBoard(jsonResponse.content.board));
+                    store.dispatch(populateCharactersOnBoard(jsonResponse.content.board, 
+                        store.getState().GameSession.myCharacter,
+                        store.getState().GameBoard.myPosition
+                    ));
 
                     //also need to update my position
                     let board = store.getState().GameBoard.board;
@@ -174,8 +177,8 @@ export default {
                     let myPiece = boardPieces.filter((piece) => { return piece.characters.indexOf(myCharacter) > -1 });
                     console.log("gameBoardState :: myPiece", myPiece)
                     if (myPiece && myPiece.length > 0) {
-                        let x = myPiece[0].posX;
-                        let y = myPiece[0].posY;
+                        let x = myPiece[0].row;
+                        let y = myPiece[0].col;
     
                         console.log("my board piece", board[x][y]);
                         store.dispatch(updateMyPosition(board[x][y]));
@@ -192,8 +195,8 @@ export default {
                 
             case "moveResponse":
                 console.log("moveResponse", jsonResponse);
-                if (jsonResponse && jsonResponse.content && jsonResponse.content.valid && json.content.characterName) {
-                    let message = `Moving ${characterName} to ${jsonResponse.content.posX}, ${jsonResponse.content.posY}`;
+                if (jsonResponse && jsonResponse.content && jsonResponse.content.valid && jsonResponse.content.characterName) {
+                    let message = `Moving ${jsonResponse.content.characterName} to ${jsonResponse.content.row}, ${jsonResponse.content.col}`;
                     alert(message);
                     // store.dispatch(updatePlayerTurn(jsonResponse.content.turn));
                 }

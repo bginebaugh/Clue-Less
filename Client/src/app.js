@@ -53,16 +53,16 @@ export class App extends React.Component {
     componentDidMount() {
         console.log("this is the game board :: ", GameBoard);
 
-        // transform board into 5x5
-        let twoDBoard = [];
-        let firstRow = GameBoard.board.slice(0,5);
-        let secondRow = GameBoard.board.slice(5,10);
-        let thirdRow = GameBoard.board.slice(10,15);
-        let fourthRow = GameBoard.board.slice(15,20);
-        let fifthRow = GameBoard.board.slice(20);
-        twoDBoard = [[...firstRow], [...secondRow], [...thirdRow], [...fourthRow], [...fifthRow]];
+        // // transform board into 5x5
+        // let twoDBoard = [];
+        // let firstRow = GameBoard.board.slice(0,5);
+        // let secondRow = GameBoard.board.slice(5,10);
+        // let thirdRow = GameBoard.board.slice(10,15);
+        // let fourthRow = GameBoard.board.slice(15,20);
+        // let fifthRow = GameBoard.board.slice(20);
+        // twoDBoard = [[...firstRow], [...secondRow], [...thirdRow], [...fourthRow], [...fifthRow]];
 
-        this.props.initiateGameBoard(twoDBoard);
+        // this.props.initiateGameBoard(twoDBoard);
                 
     }
     componentWillUnmount() {

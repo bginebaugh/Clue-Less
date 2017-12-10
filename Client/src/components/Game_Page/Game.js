@@ -43,7 +43,15 @@ export class Game extends React.Component {
         this.state = {
           activeTab: null,
           neighbors: null,
-          modal: false
+          modal: false,
+          suggestion: {
+              character: null,
+              weapon: null
+          },
+          accusation: {
+              character: null,
+              weapon: null
+          }
         };
         this.neighbors = null;
     }
@@ -76,10 +84,17 @@ export class Game extends React.Component {
             this.props.updateMyNeighbors(neighbors);
             console.log("neighbors", neighbors);
         }
+        console.log("board in componentwillreceiveprops", this.props.board, nextProps.board)
+        if(this.props.board !== nextProps.board) {
+            console.log("forcing update in game");
+            this.forceUpdate();
+        }
+        this.forceUpdate();
     }
 
     renderCells() {
         let board = this.props.board;
+        console.log("hitting renderCells again", board);
         let cells = [];
         let { myNeighbors } = this.props;
         for (let i = 0; i < board.length; i++) {
@@ -110,13 +125,23 @@ export class Game extends React.Component {
                             ? " hallway-wide "
                             : "";
                     className += highlightClassName;
-                    cells.push(<Cell 
-                        key={key} 
-                        cellPiece={board[i][j]} 
-                        className={className}
-                        xCoord={i}
-                        yCoord={j}
-                    />);
+                    let cellPiece = board[i][j];
+                    cells.push(<div className="cell-piece hover01">
+                            <div className={(className ? className : "")}>
+                                <div className="cell-name">{cellPiece !== null && !cellPiece.m_isHallway ? cellPiece.m_name : ""}</div>
+                                <div className="cell-name display-none-till-hover">{cellPiece !== null 
+                                    ? `[${cellPiece.m_x},${cellPiece.m_y}]` 
+                                    : null }</div>
+                                {cellPiece && cellPiece.playerList && cellPiece.playerList.length > 0 
+                                    ? cellPiece.playerList.map((player, j) => {
+                                        let key = "cell" + i + "_" + j;
+                                        return <div key={key}>{player}</div>
+                                    })
+                                    : null
+                                }
+                            </div>
+                        </div>
+                    );
                 }
             }
         }
@@ -178,6 +203,20 @@ export class Game extends React.Component {
     moveCharacter(destination) {
         GameClass.move(destination);
         this.setState({ activeTab: null });
+    }
+
+    dropDownForSuggestionOrAccusation(collection, callback) {    
+        return <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
+            <DropdownToggle caret>
+                Select your character
+            </DropdownToggle>
+            <DropdownMenu>
+                {collection.map((character, i) => {
+                    return <DropdownItem key={i} onClick={callback}>{character}</DropdownItem>
+                })}
+            </DropdownMenu>
+        </Dropdown>
+                
     }
 
     renderMakeSuggestionScreen() {
