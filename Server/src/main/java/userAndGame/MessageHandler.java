@@ -28,6 +28,18 @@ public class MessageHandler {
 			MoveMessage moveMsg = (MoveMessage) mb;
 			new MoveMessageHandler().Handle(moveMsg, user);
 			break;
+		case "SuggestionMessage":
+			SuggestionMessage suggestionMsg = (SuggestionMessage) mb;
+			new SuggestionHandler().Handle(suggestionMsg, user);
+			break;
+		case "ShowCardMessage":
+			ShowCardMessage showCardMsg = (ShowCardMessage) mb;
+			new ShowCardHandler().Handle(showCardMsg, user);
+			break;
+		case "AccusationMessage":
+			AccusationMessage accusationMsg = (AccusationMessage) mb;
+			new AccusationHandler().Handle(accusationMsg, user);
+			break;
 		default:
 			System.out.println("The message type " + mb.getClass().getSimpleName() + " is not yet supported");
 			break;

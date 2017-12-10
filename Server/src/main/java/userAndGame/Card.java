@@ -5,12 +5,12 @@ import java.util.*;
 
 public class Card {
 
-	public static ArrayList<String> ROOM_CARDS = new ArrayList<String>(Arrays.asList("Study", "Hall", "Lounge",
-			"Library", "Billiard Room", "Dining Room", "Conservatory", "Ballroom", "Kitchen"));
-	public static ArrayList<String> WEAPON_CARDS = new ArrayList<String>(
-			Arrays.asList("Candlestick", "Knife", "Lead Pipe", "Revolver", "Rope", "Wrench"));
 	public static ArrayList<String> SUSPECT_CARDS = new ArrayList<String>(Arrays.asList("Miss Scarlet",
 			"Professor Plum", "Mrs. Peacock", "Mr. Green", "Colonel Mustard", "Mrs. White"));
+	public static ArrayList<String> WEAPON_CARDS = new ArrayList<String>(
+			Arrays.asList("Candlestick", "Knife", "Lead Pipe", "Revolver", "Rope", "Wrench"));
+	public static ArrayList<String> ROOM_CARDS = new ArrayList<String>(Arrays.asList("Study", "Hall", "Lounge",
+			"Library", "Billiard Room", "Dining Room", "Conservatory", "Ballroom", "Kitchen"));
 
 	public static String getCardName(int cardType, int cardId) {
 		String out = "";
@@ -27,6 +27,18 @@ public class Card {
 		}
 
 		return out;
+	}
+
+	public static int getCardType(String name) {
+		int ret = -1;
+		if (SUSPECT_CARDS.contains(name)) {
+			ret = SUSPECT;
+		} else if (WEAPON_CARDS.contains(name)) {
+			ret = WEAPON;
+		} else {
+			ret = ROOM;
+		}
+		return ret;
 	}
 
 	public Card() {

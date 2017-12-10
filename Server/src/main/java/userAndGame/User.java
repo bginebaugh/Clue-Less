@@ -93,6 +93,20 @@ public class User extends Thread {
 		return m_hand.hasCard(card);
 	}
 
+	public boolean isCardInHand(String name) {
+		return m_hand.hasCard(name);
+	}
+
+	public ArrayList<String> getMatchingCards(ArrayList<String> cards) {
+		ArrayList<String> cardsOut = new ArrayList<String>();
+		for (String card : cards) {
+			if (m_hand.hasCard(card)) {
+				cardsOut.add(card);
+			}
+		}
+		return cardsOut;
+	}
+
 	public <T> void sendMessage(Message<T> msg) {
 		msg.setUserId(this.getUserId());
 		Gson gson = m_gsonBuilder.create();

@@ -10,6 +10,17 @@ public class Hand {
 		return m_cardList.contains(card);
 	}
 
+	public boolean hasCard(String name) {
+		boolean ret = false;
+		for (Card card : m_cardList) {
+			if (Card.getCardName(card.getType(), card.getCardId()).equals(name)) {
+				ret = true;
+				break;
+			}
+		}
+		return ret;
+	}
+
 	public boolean addCard(Card card) {
 		m_cardList.add(card);
 		return true;

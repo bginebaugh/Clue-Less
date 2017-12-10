@@ -19,6 +19,7 @@ public class Game {
 
 	static public int MAX_NUM_PLAYERS = 6;
 	private ArrayList<User> m_userList = new ArrayList<User>();
+	private ArrayList<User> m_userTurnList = new ArrayList<User>();
 	private ArrayList<Card> m_secretEnvelope = new ArrayList<Card>();
 	private ArrayList<CharAvailable> m_charSelectionList = new ArrayList<CharAvailable>();
 	private int m_currentTurnIndex = 0;
@@ -78,6 +79,20 @@ public class Game {
 
 	public ArrayList<User> getUserList() {
 		return m_userList;
+	}
+
+	public User getCurrentTurnUser() {
+		return m_userTurnList.get(m_currentTurnIndex);
+	}
+
+	public User getUserFromCharacter(String characterName) {
+		User user = null;
+		for (User tmp : m_userList) {
+			if (tmp.getCharacter().equals(characterName)) {
+				user = tmp;
+			}
+		}
+		return user;
 	}
 
 	public boolean isFull() {
@@ -213,73 +228,103 @@ public class Game {
 			mr.setValid(false);
 			user.sendMessage(out);
 		}
-		
+
 		this.distributeBoardState();
 		return ret;
 	}
 
-	public boolean makeSuggestion(int userId, ArrayList<Card> cards) {
+	public boolean makeSuggestion(User user, ArrayList<String> cards) {
 		// Check if this is a valid Suggestion
-		Card weapon = null;
-		Card suspect = null;
-		Card room = null;
+		String weapon = "";
+		String suspect = "";
+		String room = "";
 
-		for (Card card : cards) {
-			if (card.getType() == Card.WEAPON) {
+		for (String card : cards) {
+			int type = Card.getCardType(card);
+			if (type == Card.WEAPON) {
 				weapon = card;
-			}
-
-			if (card.getType() == Card.SUSPECT) {
-				suspect = card;
-			}
-
-			if (card.getType() == Card.ROOM) {
+			} else if (type == Card.ROOM) {
 				room = card;
+			} else {
+				suspect = card;
 			}
 		}
 
-		if (weapon == null || suspect == null || room == null) {
+		if (weapon.equals("") || suspect.equals("") || room.equals("")) {
 			// This is not a valid suggestion
+			System.out.println("Invalid suggestion. Cry. Out of time to handle this properly");
 			return false;
 		} else {
-			return true;
-			// Send Message
-		}
+			// Broadcast the suggestion to everyone
+			SuggestionBroadcast sb = new SuggestionBroadcast();
+			Message<SuggestionBroadcast> out = new Message<SuggestionBroadcast>();
 
-	}
+			sb.setCharacterName(user.getCharacter());
+			sb.setCharacter(suspect);
+			sb.setWeapon(weapon);
+			sb.setRoom(room);
 
-	public boolean makeAccusation(int userId, ArrayList<Card> cards) {
-		// Check if this is a valid Suggestion
-		Card weapon = null;
-		Card suspect = null;
-		Card room = null;
-
-		for (Card card : cards) {
-			if (card.getType() == Card.WEAPON) {
-				weapon = card;
+			out.setMessageType("suggestionBroadcast");
+			out.setGameId(this.getGameId());
+			out.setContent(sb);
+			for (User tmp : m_userList) {
+				tmp.sendMessage(out);
 			}
 
-			if (card.getType() == Card.SUSPECT) {
+			// Move the suggested user to the room
+			Board.Position p = m_board.getCellCoordinates(room);
+			m_board.warpCharacter(suspect, p.row, p.col);
+			this.distributeBoardState();
+			return true;
+		}
+	}
+
+	public boolean makeAccusation(User user, ArrayList<String> cards) {
+		// Check if this is a valid Suggestion
+		String weapon = "";
+		String suspect = "";
+		String room = "";
+
+		for (String card : cards) {
+			int type = Card.getCardType(card);
+			if (type == Card.WEAPON) {
+				weapon = card;
+			} else if (type == Card.ROOM) {
+				room = card;
+			} else {
 				suspect = card;
 			}
-
-			if (card.getType() == Card.ROOM) {
-				room = card;
-			}
 		}
 
-		return compareToEnvelope(weapon, suspect, room);
-	}
+		boolean result = compareToEnvelope(weapon, suspect, room);
 
-	public void showCardToUser(ArrayList<Card> cards) {
+		AccusationBroadcast ab = new AccusationBroadcast();
+		Message<AccusationBroadcast> abOut = new Message<AccusationBroadcast>();
 
-		// Loop through the cards
-		for (Card card : cards) {
-			// Check to see if the card is in the card hand
-			if (m_cardList.contains(card)) {
-
-			}
+		ab.setCharacterName(user.getCharacter());
+		ab.setValid(result);
+		ab.setCharacter(suspect);
+		ab.setWeapon(weapon);
+		ab.setRoom(room);
+		abOut.setMessageType("accusationBroadcast");
+		abOut.setGameId(this.getGameId());
+		abOut.setContent(ab);
+		for (User tmp : m_userList) {
+			tmp.sendMessage(abOut);
 		}
+
+		// Move the accused suspect
+		Board.Position p = m_board.getCellCoordinates(room);
+		m_board.warpCharacter(suspect, p.row, p.col);
+		this.distributeBoardState();
+
+		// If the accusation was bad, we remove the current user from the turn list
+		if (!result) {
+			m_userTurnList.remove(user);
+			--m_currentTurnIndex; // Now getting the next user will work properly
+		}
+
+		return result;
 	}
 
 	public boolean assignCharacterToUser(String charName, User user) {
@@ -360,22 +405,50 @@ public class Game {
 		distributeCharList();
 	}
 
-	// Is this a message?
-	public void notifyPlayers(int notice) {
-		// ToDo:Implement
-	}
+	public User getFirstUserWithCard(User startAfterMe, ArrayList<String> cards) {
+		int startingIndex = m_userList.indexOf(startAfterMe);
+		int index = startingIndex;
+		User userOut = null;
+		boolean found = false;
 
-	private boolean compareToEnvelope(Card weapon, Card suspect, Card room) {
-		if (m_secretEnvelope.contains(weapon) && m_secretEnvelope.contains(suspect)
-				&& m_secretEnvelope.contains(room)) {
-			return true;
+		for (int i = 0; i < m_userList.size() - 1; ++i) {
+			if (index == m_userList.size()) {
+				index = 0;
+			}
+
+			User tmp = m_userList.get(index);
+			for (String card : cards) {
+				if (tmp.isCardInHand(card)) {
+					userOut = tmp;
+					found = true;
+					break;
+				}
+			}
+			if (found) {
+				break;
+			}
+			++index;
 		}
-		return false;
+		return userOut;
 	}
 
-	// Should this be like a list?
-	public void removeUserFromTurn(int userId) {
-		// ToDo: Implement
+	private boolean compareToEnvelope(String weapon, String suspect, String room) {
+		boolean weaponFound = false;
+		boolean suspectFound = false;
+		boolean roomFound = false;
+		for (Card card : m_secretEnvelope) {
+			String cardName = Card.getCardName(card.getType(), card.getCardId());
+
+			if (cardName.equals(weapon)) {
+				weaponFound = true;
+			} else if (cardName.equals(suspect)) {
+				suspectFound = true;
+			} else if (cardName.equals(room)) {
+				roomFound = true;
+			}
+		}
+
+		return weaponFound && suspectFound && roomFound;
 	}
 
 	private void distributePlayerList() {
@@ -422,6 +495,19 @@ public class Game {
 			m_currentTurnIndex = 0;
 		}
 
-		return m_userList.get(m_currentTurnIndex);
+		// Set up the userTurnList
+		int index = m_currentTurnIndex;
+		;
+		for (int i = 0; i < m_userList.size(); ++i) {
+			if (index == m_userList.size()) {
+				index = 0;
+			}
+
+			m_userTurnList.add(m_userList.get(index));
+			++index;
+		}
+
+		m_currentTurnIndex = 0;
+		return m_userTurnList.get(0);
 	}
 }
