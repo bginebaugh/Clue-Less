@@ -1,12 +1,13 @@
 import java.io.*;
 import java.net.*;
-import java.util.*;
+
+import userAndGame.*;
 
 public class Server {
-	static private ArrayList<User> m_userList = null;
 
 	public static void main(String[] args) {
-		m_userList = new ArrayList<User>();
+
+		ServerSystem serverSystem = ServerSystem.getInstance();
 		ServerSocket connListener;
 		try {
 			connListener = new ServerSocket(11000);
@@ -31,13 +32,7 @@ public class Server {
 			try {
 				myUserSocket = new UserSocket(clientSocket);
 				User newUser = new User(myUserSocket);
-				newUser.setUserId(m_userList.size());
 				newUser.start();
-				int numCurrentUsers = m_userList.size();
-				m_userList.add(newUser);
-				if (m_userList.size() != numCurrentUsers) {
-					System.out.println("There are now " + m_userList.size() + " users in the system");
-				}
 			} catch (IOException e) {
 				System.out.println(e);
 				return;

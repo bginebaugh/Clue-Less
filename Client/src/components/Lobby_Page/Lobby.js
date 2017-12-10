@@ -80,13 +80,15 @@ export class Lobby extends React.Component {
 
         return <Row>
             <Col sm="6">
-                <Card body>
+                <Card className="card-background" body>
                     <Button disabled={newButtonDisabled} onClick={() => this.setState({newRoomSelected: true})}>New Game</Button>
                 </Card>
             </Col>
             <Col sm="6">
-                <Card body>
-                    <Button disabled={existingButtonDisabled} onClick={() => this.setState({newRoomSelected: false})}>Existing Game</Button>
+                <Card className="card-background" body>
+                    <Button disabled={existingButtonDisabled || this.props.gameRoomList.length === 0} onClick={() => this.setState({newRoomSelected: false})}>
+                        Existing Game
+                    </Button>
                 </Card>
             </Col>
         </Row>;
@@ -97,17 +99,18 @@ export class Lobby extends React.Component {
         if ( newRoomSelected !== null && newRoomSelected === true) {
             return <Form onSubmit={this.handleNewRoomSubmit.bind(this)}>
                 <FormGroup>
-                    <h3>Enter the name of your new game room</h3>
-                    <Input type="text" name="new-room" id="new-room" innerRef={node => this.newRoomName = node} />
+                    <h3 className="margin-top-big">Enter the name of your new game room</h3>
+                    <Input type="text" name="new-room" id="new-room" innerRef={node => this.newRoomName = node} placeholder="Name your game" />
                     <hr/>
                     <Button className="btn btn-block pointer-cursor">Submit and Join Game</Button>
                 </FormGroup>
             </Form>
         } else if ( newRoomSelected !== null && newRoomSelected === false ) {
             return <div><ListGroup>
-                <h3>Select one of the existing games below</h3>
+                <h3 className="margin-top-big">Select one of the existing games below</h3>
                 {this.props.gameRoomList.map((a, i) => {
-                    return <ListGroupItem key={i} className="pointer-cursor" onClick={this.selectDropdownItem}>{a.gameRoomName}: <i>{a.playersInRoom} players waiting to start...</i></ListGroupItem>
+                    let text = `${a.gameRoomName}:  ...${a.playersInRoom} players waiting to start`;
+                    return <ListGroupItem key={i} className="pointer-cursor" onClick={this.selectDropdownItem}>{text}</ListGroupItem>
                 })}
             </ListGroup>
             { this.state.dropdownValue ? `You want to join :: ${this.state.dropdownValue}` : null }
@@ -146,12 +149,12 @@ export class Lobby extends React.Component {
 
         if (this.props.isLoggedIn) {
             return (<div className="container">
-                { this.renderRoomOptions() }
-                <div className="mt-5">
-                    <div className="card-header">New or Existing Game</div>
+                <h1 className="margin-bottom">Lobby</h1>
+                <Card className="card-background">    
+                    <Card body className="text-center card-background"><CardTitle>New or Existing Game</CardTitle></Card>
                     {this.renderNewVsExistingGameButtons()}
-                </div>
-                <hr/>
+                </Card>
+                { this.renderRoomOptions() }
             </div>);
         } else {
             return <Redirect to='/login'/>;

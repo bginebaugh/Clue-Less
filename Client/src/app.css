@@ -1,6 +1,7 @@
 body {
     font-size: 12px !important;
-    background-color: whitesmoke !important;
+    background-color: #bdc3c7 !important;
+    color: whitesmoke;
 }
 
 .image-logo {
@@ -27,9 +28,23 @@ img {
     top: 0 !important;
     width: 100% !important;
     z-index: 1000 !important;
-    background-color: whitesmoke;
+    background-color: #2c3e50;
 }
 
 .container {
     margin-top: 100px !important;
+}
+
+.brand-title {
+    color: white !important;
+}
+
+.link {
+    color: #007bff !important;
+}
+
+.link:hover {
+    color: #0056b3 !important;
+    cursor: pointer;
+    text-decoration: underline;
 }

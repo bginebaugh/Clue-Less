@@ -1,10 +1,5 @@
 const initialState = { 
     userId: -1,
-    game: {
-        id: -1,
-        name: "",
-        gameOwner: null
-    },
     username: "",
     isLoggedIn: false,
     inGameRoom: false
@@ -19,14 +14,6 @@ const User = (state = initialState, action) => {
         return {
             ...state,
             userId: action.userId
-        }
-
-    case 'UPDATE_GAME':
-        console.log("updating game session", action);
-    
-        return {
-            ...state,
-            game: action.game
         }
 
     case 'UPDATE_USERNAME':

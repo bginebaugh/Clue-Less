@@ -16,8 +16,9 @@ import Home from "./components/Home_Page/Home";
 import Login from "./components/Login_Page/Login";
 import Lobby from "./components/Lobby_Page/Lobby";
 import WaitingRoom from "./components/WaitingRoom_Page/WaitingRoom";
+import { GameBoard } from "./classes/gameBoard";
 
-import { updateLoginStatus } from "./redux_app-state/actions/actions";
+import { initiateGameBoard, updateLoginStatus } from "./redux_app-state/actions/actions";
 
 const mapStateToProps = (state = {}) => {
     return {
@@ -28,6 +29,7 @@ const mapStateToProps = (state = {}) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        initiateGameBoard: (gameBoard) => dispatch(initiateGameBoard(gameBoard)),
         updateLoginStatus: (bool) => dispatch(updateLoginStatus(bool))
     };
 };
@@ -48,6 +50,9 @@ export class App extends React.Component {
         };
     }
 
+    componentDidMount() {                
+    }
+    
     componentWillUnmount() {
         if (tcpConnection) {
             console.log("closing connection");
@@ -77,14 +82,12 @@ export class App extends React.Component {
         return (<Router history={hashHistory}>
             <div>
                 <Navbar className="border-bottom" color="faded" light expand="md">
-                    <NavbarBrand onClick={()=>console.log(this.props.state)}>clue-less by northraki</NavbarBrand>
+                    <NavbarBrand className="brand-title" onClick={()=>console.log(this.props.state)}><strong>clue-less by northraki</strong></NavbarBrand>
                     <NavbarToggler onClick={this.toggle} />
                     <Collapse isOpen={this.state.isOpen} navbar>
                         <Nav className="ml-auto" navbar>
                             {this.navItem("/", "Home")}
                             { !isLoggedIn ? this.navItem("/login", "Login") : null }
-                            { !isLoggedIn ? null : this.navItem("/lobby", "Lobby") }
-                            { !isLoggedIn ? null : <NavItem><NavLink className='cursor-pointer' onClick={this.logout.bind(this)}>Log out</NavLink></NavItem> }
                         </Nav>
                     </Collapse>
                 </Navbar>                
@@ -99,12 +102,7 @@ export class App extends React.Component {
   
 }
 
-// const PrivateRoute = ({ component: Component, ...rest }) => {
-//     return <Route {...rest} render={props => (
-//       loggedIn() ? (
-//         <Component {...props}/>
-//       ) : null
-//     )}/>
-// }
+// { !isLoggedIn ? null : this.navItem("/lobby", "Lobby") }
+// { !isLoggedIn ? null : <NavItem><NavLink className='cursor-pointer link' onClick={this.logout.bind(this)}>Log out</NavLink></NavItem> }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

@@ -44,40 +44,125 @@ export var GameBoard = {
 			BrK, Kitchen],
 			
 			
-			
-	getNeighbors : function (x,y) {
-		//storing  coordinates of neighboring cells, initialized to -1,-1
-		var neighbors = [ [-1,-1] ,[-1,-1], [-1,-1], [-1,-1] ];
-		//check if a cell above current position exists
-		for ( var i = 0 ; i < board.length ; i++ ) {
-			if (board[i].m_x == (x-1) && board[i].m_y == y){
-				neighbors [0][0] = (x-1);
-				neighbors [0][1] = y;	
-			}
-		}
-		//check if a cell below current position exists
-		for ( var i = 0 ; i < board.length ; i++ ) {
-			if (board[i].m_x == (x+1) && board[i].m_y == y){
-				neighbors [1][0] = (x-1);
-				neighbors [1][1] = y;	
-			}
-		}
-		//check if a cell to left of current position exists
-		for ( var i = 0 ; i < board.length ; i++ ) {
-			if (board[i].m_x == x && board[i].m_y == (y-1)){
-				neighbors  [2][0] = x;
-				neighbors  [2][1] = y -1;	
-			}
-		}
-		//check if a cell to right of current position exists
-		for ( var i = 0 ; i < board.length ; i++ ) {
-			if (board[i].m_x == x && board[i].m_y == (y+1)){
-				neighbors  [3][0] = x;
-				neighbors  [3][1] = y+1;	
-			}
-		}
+	
+	// add character to cell		
+	addCharacter : function ( character, cell) {
+
+		board [cell].playerList.push (character);
+
+	},
+
+	getNeighbors : function (x,y,board) {
+		//assume cell has following four neighbors (up, down, left, right)
+		var neighbors = [ [(x-1),y] ,[(x+1),y], [x,(y-1)], [x,(y+1)] ];
+		console.log("board in ", x, y, board);
 		
-		return neighbors ;
+		//validate each neighbor
+		for (var i = 0; i < 4; i++){
+			for ( var j = 0 ; j < board.length ; j++ ) {
+				if (board[j] !== null && board[j].m_x == neighbors[i][0] && board[j].m_y == neighbors[i][1]){
+					if (board[j].isHallway && !board[j].playerList.length === 0){ //hallway is full 
+						neighbors[i][0] = -1; //can also make this null
+						neighbors[i][1] = -1; //can also make this null
+					}
+				}
+				else{
+					neighbors[i][0] = -1; //this is not a valid cell
+					neighbors[i][1] = -1;
+				}
+			}
+		}	
+		//if current position is study, add kitchen to neighbor
+		if (x == 0 && y == 0 ){
+			neighbors [0][0] = 4;
+			neighbors [0][1] = 4;
+		}
+		//if current position is lounge, add conservatory to neighbor
+		if (x == 0 && y == 4 ){
+			neighbors [0][0] = 4;
+			neighbors [0][1] = 0;
+		}
+			//if current position is conservatory, add lounge to neighbor
+		if (x == 4 && y == 0 ){
+			neighbors [1][0] = 0;
+			neighbors [1][1] = 4;
+		}
+			//if current position is kitchen, add study to neighbor
+		if (x == 0 && y == 4 ){
+			neighbors [1][0] = 0;
+			neighbors [1][1] = 0;
+		}
+
+		return neighbors;
+
+
+	},
+
+	getValidNeighbors : function (x,y,board) {
+		//assume cell has following four neighbors (up, down, left, right)
+		console.log("board in getValidNeighbors", x, y, board);
+
+		var neighbors = [];
+
+		let min = 0;
+		let max = 4;
+
+		if (y > min && board[x][y-1]) {
+			console.log("top");
+			let cell = board[x][y-1];
+			if (cell && (cell.m_isHallway && cell.playerList.length === 0 || !cell.m_isHallway)) {
+				neighbors.push([x, y-1]);
+			}
+		}
+		if ( y < max && board[x][y+1]) {
+			console.log("bottom");			
+			let cell = board[x][y+1];
+			if (cell && (cell.m_isHallway && cell.playerList.length === 0 || !cell.m_isHallway)) {
+				neighbors.push([x, y+1]);
+			}
+		}
+		if (x > min && board[x-1][y]) {
+			console.log("left");		
+			let cell = board[x-1][y];
+			if (cell && (cell.m_isHallway && cell.playerList.length === 0 || !cell.m_isHallway)) {
+				neighbors.push([x-1, y]);
+			}
+	
+		}
+		if (x < max && board[x+1][y]) {
+			console.log("right");	
+			let cell = board[x+1][y];
+			if (cell && (cell.m_isHallway && cell.playerList.length === 0 || !cell.m_isHallway)) {
+				neighbors.push([x+1, y]);
+			}
+		
+		}
+
+		//corners
+		
+		//if current position is study, add kitchen to neighbor
+		if (x == 0 && y == 0 ){
+			neighbors.push([4,4]);
+		}
+		//if current position is lounge, add conservatory to neighbor
+		if (x == 0 && y == 4 ){
+			neighbors.push([4,0]);
+		}
+			//if current position is conservatory, add lounge to neighbor
+		if (x == 4 && y == 0 ){
+			neighbors.push([0,4]);
+		}
+			//if current position is kitchen, add study to neighbor
+		if (x == 4 && y == 4 ){
+			neighbors.push([0,0]);
+		}
+
+		return neighbors;
+
+
 	}
+
 };
+	
+
 

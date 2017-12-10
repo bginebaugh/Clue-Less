@@ -74,7 +74,7 @@ export class Login extends React.Component {
 
         return <div className="container">
             <div className="card card-login mx-auto mt-5">
-                <div className="card-header">Login</div>
+                <div className="card-header"><h4>Login</h4></div>
                 <div className="card-body">
                     <Form onSubmit={this.handleSubmit.bind(this)}>
                         <FormGroup>

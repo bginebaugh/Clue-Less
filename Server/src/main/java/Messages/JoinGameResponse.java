@@ -1,5 +1,7 @@
 package Messages;
 
+import java.util.ArrayList;
+
 public class JoinGameResponse extends MessageBase {
 	private boolean joinedSuccessful;
 	private String gameRoomName;

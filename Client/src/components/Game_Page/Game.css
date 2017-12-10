@@ -1,7 +1,72 @@
 .game-board {
-    margin: 5%;
     display: flex;
     flex-wrap: wrap;
-    width: 550px;
-    height: 450px;
+    width: 500px;
+    height: 500px;
+}
+
+.stacked.rows{
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+}
+
+.right-top {
+    height: 15%;
+}
+
+.margin-top {
+    margin-top: 10px;
+}
+
+.margin-bottom-slim  {
+    margin-bottom: 5px;
+}
+.nav-item {
+    cursor: pointer;
+}
+
+.pull-right {
+    float: right;
+}
+
+.max-height {
+    height: 90%;
+}
+
+.highlight {
+    transition: 0.3s ease-in-out;
+    background-color:#f1c40f !important;
+}
+
+.tab-pane {
+    background-color: white !important;
+}
+
+.no-border {
+    border: none !important;
+}
+
+.card {
+    border: none !important;
+}
+
+.margin-left {
+    margin-left: 15px;
+}
+
+.dont-show {
+    display: none;
+}
+
+.show-text-briefly {
+    display: inline;
+}
+
+.highlight-accuse {
+    opacity: 0.5 !important;
+}
+
+.min-width {
+    min-width: 145px;
 }

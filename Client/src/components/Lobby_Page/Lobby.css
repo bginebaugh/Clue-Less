@@ -1,0 +1,25 @@
+.margin-bottom {
+    margin-bottom: 25px;
+}
+
+.card-background {
+    background-color: #EEEEEE !important;
+    border: none !important;
+}
+
+.card-header {
+    background-color: #2980b9;
+    text-align: center;
+}
+
+button {
+    cursor: pointer;
+}
+
+.margin-top-big {
+    margin-top: 50px;
+}
+
+.margin-bottom-big {
+    margin-top: 50px;
+}
