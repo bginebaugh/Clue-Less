@@ -12,6 +12,16 @@ public class Board {
 	private final int m_width = 5;
 	private final int m_height = 5;
 
+	public class Position {
+		public Position(int x_, int y_) {
+			x = x_;
+			y = y_;
+		}
+
+		public int x = -1;
+		public int y = -1;
+	}
+
 	public Board() {
 
 		// Size the board properly
@@ -74,4 +84,76 @@ public class Board {
 		return gbsm;
 	}
 
+	public Position getCharacterPosition(String name) {
+		Position p = new Position(-1, -1);
+		for (Cell cell : m_cells) {
+			if (cell.hasCharacter(name)) {
+				p.x = cell.getX();
+				p.y = cell.getY();
+				break;
+			}
+		}
+		return p;
+	}
+
+	public ArrayList<Cell> getNeighbors(int x, int y) {
+		return getNeighbors(this.getCell(x, y));
+	}
+
+	public ArrayList<Cell> getNeighbors(Cell cell) {
+		ArrayList<Cell> neighbors = new ArrayList<Cell>();
+
+		if (cell.getX() > 0) {
+			neighbors.add(this.getCell(cell.getX() - 1, cell.getY()));
+		}
+
+		if (cell.getX() < m_width - 1) {
+			neighbors.add(this.getCell(cell.getX() + 1, cell.getY()));
+		}
+
+		if (cell.getY() > 0) {
+			neighbors.add(this.getCell(cell.getX(), cell.getY() - 1));
+		}
+
+		if (cell.getY() < m_height - 1) {
+			neighbors.add(this.getCell(cell.getX(), cell.getY() + 1));
+		}
+
+		if (cell.getX() == 0 && cell.getY() == 0) {
+			neighbors.add(this.getCell(m_width - 1, m_height - 1));
+		}
+
+		if (cell.getX() == 0 && cell.getY() == m_height - 1) {
+			neighbors.add(this.getCell(m_width - 1, 0));
+		}
+
+		if (cell.getX() == m_width - 1 && cell.getY() == 0) {
+			neighbors.add(this.getCell(0, m_height - 1));
+		}
+
+		if (cell.getX() == m_width - 1 && cell.getY() == m_height - 1) {
+			neighbors.add(this.getCell(0, 0));
+		}
+
+		return neighbors;
+	}
+
+	public boolean moveCharacter(String name, int destX, int destY) {
+		System.out.println("Trying to move " + name + " to " + destX + ", " + destY);
+		boolean ret = false;
+		Position p = this.getCharacterPosition(name);
+		Cell current = this.getCell(p.x, p.y);
+
+		ArrayList<Cell> neighbors = this.getNeighbors(current);
+		Cell desired = this.getCell(destX, destY);
+		if (neighbors.contains(desired)) {
+			// Verify that the character can move there
+			if (desired.addCharacter(name)) {
+				current.removeCharacter(name);
+				ret = true;
+			}
+		}
+
+		return ret;
+	}
 }

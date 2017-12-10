@@ -15,8 +15,25 @@ public class Cell {
 	private int m_y;
 
 	public boolean addCharacter(String character) {
-		m_characterList.add(character);
-		return true;
+		boolean ret = false;
+		switch (m_cellType) {
+		case CELL_TYPE_EMPTY:
+			ret = false;
+			break;
+		case CELL_TYPE_HALLWAY:
+			if (m_characterList.size() == 0) {
+				ret = true;
+			}
+			break;
+		case CELL_TYPE_ROOM:
+			ret = true;
+			break;
+		}
+
+		if (ret) {
+			m_characterList.add(character);
+		}
+		return ret;
 	}
 
 	public void removeCharacter(String character) {
@@ -25,6 +42,10 @@ public class Cell {
 
 	public ArrayList<String> getCharacters() {
 		return m_characterList;
+	}
+
+	public boolean hasCharacter(String name) {
+		return (m_characterList.contains(name));
 	}
 
 	public boolean hasCharacters() {

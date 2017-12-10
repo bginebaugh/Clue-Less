@@ -190,6 +190,32 @@ public class Game {
 		}
 	}
 
+	public boolean moveUser(User user, int x, int y) {
+		boolean ret = false;
+		MoveResponse mr = new MoveResponse();
+		Message<MoveResponse> out = new Message<MoveResponse>();
+
+		mr.setCharacterName(user.getCharacter());
+		mr.setPosition(x, y);
+		out.setMessageType("moveResponse");
+		out.setGameId(this.getGameId());
+		out.setContent(mr);
+
+		if (m_board.moveCharacter(user.getCharacter(), x, y)) {
+			ret = true;
+			mr.setValid(true);
+			for (User tmp : m_userList) {
+				tmp.sendMessage(out);
+			}
+		} else {
+			// The move wasn't valid
+			ret = false;
+			mr.setValid(false);
+			user.sendMessage(out);
+		}
+		return ret;
+	}
+
 	public boolean makeSuggestion(int userId, ArrayList<Card> cards) {
 		// Check if this is a valid Suggestion
 		Card weapon = null;
