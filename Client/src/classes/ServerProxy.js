@@ -208,6 +208,14 @@ export default {
 
     },
 
+    showCard(card) {
+        
+        let showCardMessage = Messages.generateShowCardMessage(card);
+        console.log("sending message", showCardMessage);
+        tcpConnection.write(showCardMessage);
+
+    },
+
     endTurn() {
 
         let endTurnMessage = Messages.generateEndTurnMessage();

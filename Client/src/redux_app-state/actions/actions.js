@@ -52,6 +52,16 @@ export const updateGame = (game) => {
 	}
 };
 
+export const updateSuggestionCardChoices = (cards) => {
+	
+	console.log("updateSuggestionCardChoices :: ", cards);
+	
+	return {
+		type: "UPDATE_SUGGESTION_CARD_CHOICES",
+		cards
+	}
+};
+
 export const updateMyCharacter = (myCharacter) => {
 	
 	console.log("myCharacter action :: ", myCharacter);

@@ -9,7 +9,8 @@ const initialState = {
     myCards: null,
     playersList: null,
     readyToStartGamePlay: false,
-    playerTurn: null
+    playerTurn: null,
+    suggestionCardChoices: ["a","b"]
 }
 
 const GameSession = (state = initialState, action) => {
@@ -54,6 +55,14 @@ const GameSession = (state = initialState, action) => {
             return {
                 ...state,
                 myCards: action.myCards
+            }
+
+        case 'UPDATE_SUGGESTION_CARD_CHOICES':
+            console.log("UPDATE_SUGGESTION_CARD_CHOICES my cards", action);
+        
+            return {
+                ...state,
+                suggestionCardChoices: action.suggestionCardChoices
             }
 
         case 'UPDATE_PLAYERLIST':

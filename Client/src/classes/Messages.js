@@ -1,6 +1,6 @@
 import { store } from '../../renderer';
 import { addToGameRoomList, deleteFromGameRoomList, populateCharactersOnBoard, updateCharacterList, updateGameRoomList, updateGameStarted, 
-    updateMyCards, updateMyCharacter, updateMyPosition, updatePlayerTurn, updateReadyToStartGamePlay, updatePlayerList
+    updateMyCards, updateMyCharacter, updateMyPosition, updatePlayerTurn, updateReadyToStartGamePlay, updatePlayerList, updateSuggestionCardChoices
 } from "../redux_app-state/actions/actions";
 import ServerProxy from "./ServerProxy";
 
@@ -146,6 +146,20 @@ export default {
 
     },
 
+    generateShowCardMessage(card) {
+        
+        let messageHeader = this.generateMessageHeader("showCard");
+        
+        let obj = Object.assign({}, messageHeader, { content: { 
+            card: card
+        }});
+
+        let messageEnd = this.generateMessageEnder();
+        
+        return JSON.stringify(obj) + messageEnd;
+
+    },
+
     parseJsonResponseFromServer(incomingMessage) {
 
         return JSON.parse(incomingMessage);
@@ -244,7 +258,6 @@ export default {
                     let message = `Moving ${jsonResponse.content.characterName} to ${jsonResponse.content.row}, ${jsonResponse.content.col}`;
                     alert(message);
                     console.log(message);
-                    // store.dispatch(updatePlayerTurn(jsonResponse.content.turn));
                 }
                 break;  
 
@@ -275,8 +288,21 @@ export default {
                 let characterName = jsonResponse.content.characterName;
                 let cardChoices = jsonResponse.content.cardChoices;
                 console.log(`${characterName} and ${cardChoices}`);
+                if (cardChoices && cardChoices.length > 0) {
+                    store.dispatch(updateSuggestionCardChoices(cardChoices));
+                }
                 break;
 
+            case "ShowCardToUser":
+                console.log("ShowCardToUser", jsonResponse);
+                let characterName3 = jsonResponse.content.characterName;
+                let card3 = jsonResponse.content.card;
+                console.log(`${characterName} and ${cardChoices}`);
+                let message3 = `${characterName3} is showing you this card :: ${card3}`;
+                if (characterName3 && card3) {
+                    alert(message3);
+                }
+                break;
 
             default:
                 console.log("Response error :: not a proper messageType ::", messageType);

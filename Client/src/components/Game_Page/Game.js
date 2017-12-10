@@ -7,7 +7,7 @@ import { Jumbotron, Button, Col, Row,
     ModalBody, ModalFooter, ModalHeader, Dropdown, DropdownItem, DropdownMenu, DropdownToggle
 } from 'reactstrap';
 import { connect } from 'react-redux';
-import { initiateGameBoard, updateMyPosition, updateMyNeighbors } from "../../redux_app-state/actions/actions";
+import { initiateGameBoard, updateMyPosition, updateMyNeighbors, updateSuggestionCardChoices } from "../../redux_app-state/actions/actions";
 
 import { GameBoard } from "../../classes/gameBoard";
 import { Game as GameClass } from "../../classes/game";
@@ -24,7 +24,8 @@ const mapStateToProps = (state = {}) => {
         myNeighbors: state.GameBoard.myNeighbors,
         myCharacter: state.GameSession.myCharacter,
         myCards: state.GameSession.myCards,
-        playerTurn: state.GameSession.playerTurn
+        playerTurn: state.GameSession.playerTurn,
+        suggestionCardChoices: state.GameSession.suggestionCardChoices
     };
 };
 
@@ -32,7 +33,8 @@ const mapDispatchToProps = (dispatch) => {
     return {
         initiateGameBoard: (gameBoard) => dispatch(initiateGameBoard(gameBoard)),
         updateMyPosition: (cell) => dispatch(updateMyPosition(cell)),
-        updateMyNeighbors: (neighbors) => dispatch(updateMyNeighbors(neighbors))        
+        updateMyNeighbors: (neighbors) => dispatch(updateMyNeighbors(neighbors)),
+        updateSuggestionCardChoices: (cards) => dispatch(updateSuggestionCardChoices(cards))
     };
 };
 
@@ -50,16 +52,19 @@ export class Game extends React.Component {
         this.accuseCharacter = this.accuseCharacter.bind(this);
         this.accuseWeapon = this.accuseWeapon.bind(this);
         this.endTurn = this.endTurn.bind(this);
+        this.toggleSuggestionCardChoicesModal = this.toggleSuggestionCardChoicesModal.bind(this);
         this.state = {
           activeTab: null,
           neighbors: null,
           modal: false,
+          suggestionCardChoicesModal: true,
           dropDownCharacterWindowOpen: false,
           dropDownWeaponWindowOpen: false,
           suggestCharacterChoice: null,
           suggestWeaponChoice: null,
           accuseCharacterChoice: null,
-          accuseWeaponChoice: null
+          accuseWeaponChoice: null,
+          suggestedCardToSend: null
         };
         this.neighbors = null;
     }
@@ -81,6 +86,12 @@ export class Game extends React.Component {
           modal: !this.state.modal
         });
       }
+
+    toggleSuggestionCardChoicesModal() {
+        this.setState({
+            suggestionCardChoicesModal: !this.state.suggestionCardChoicesModal
+          });        
+    }
 
     toggleCharacterWindowDropdown() {
         this.setState({
@@ -108,11 +119,10 @@ export class Game extends React.Component {
             this.props.updateMyNeighbors(neighbors);
             console.log("neighbors", neighbors);
         }
-        console.log("board in componentwillreceiveprops", this.props.board, nextProps.board)
-        // if(this.props.board !== nextProps.board) {
-        //     console.log("forcing update in game");
-        //     this.forceUpdate();
-        // }
+        if(nextProps.suggestionCardChoices && suggestionCardChoices.length > 0) {
+            console.log("you need to show your cards");
+            this.setState({ suggestionCardChoicesModal: true });
+        }
     }
 
     renderCells() {
@@ -379,6 +389,41 @@ export class Game extends React.Component {
           );
     }
 
+    renderSuggestionCardModel() {
+        return (
+            <div>
+              <Modal style={{ width: '600px' }} isOpen={this.state.suggestionCardChoicesModal} toggle={this.toggleSuggestionCardChoicesModal.bind(this)} className={this.props.className}>
+                <ModalHeader>Your card choices to show the suggestor</ModalHeader>
+                <ModalBody>
+                    <Row>
+                    {this.props.suggestionCardChoices 
+                        ? this.props.suggestionCardChoices.map((card, i) => {
+                            return (
+                                <Col onClick={(event) => this.setState({suggestedCardToSend: event.target.innerText})}key={i} sm="4">
+                                    <Card className="max-height" inverse style={{ backgroundColor: '#333', borderColor: '#333' }} body outline>
+                                        <CardText>{card}</CardText>
+                                    </Card>
+                                </Col>
+                            )
+                        }) 
+                        : null }
+                    </Row>
+                </ModalBody>
+                <ModalFooter>
+                  <Button color="info" onClick={this.showCard.bind(this)}>{ this.state.suggestedCardToSend ? this.state.suggestedCardToSend : "Send to Suggestor"}</Button>
+                </ModalFooter>
+              </Modal>
+            </div>
+          );
+    }
+
+    showCard() {
+        ServerProxy.showCard(this.state.suggestedCardToSend);
+        this.setState({ suggestedCardToSend: null });
+        this.props.updateSuggestionCardChoices(null);
+        this.toggleSuggestionCardChoicesModal();
+    }
+
     render() {
         const { isLoggedIn, board, myPosition, myCharacter, playerTurn } = this.props;
 
@@ -393,6 +438,7 @@ export class Game extends React.Component {
                             <Button color="secondary" onClick={this.toggleModal}>View your cards</Button>
                             { myTurn ? <Button className="margin-left" color="danger" onClick={this.endTurn}>End your turn</Button> : null }
                             {this.renderCardModel()}
+                            {this.renderSuggestionCardModel()}
                         </Row>              
                     </Col>
                 </Row>
