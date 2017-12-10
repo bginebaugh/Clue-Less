@@ -13,6 +13,11 @@ public class Board {
 	private final int m_height = 5;
 
 	public class Position {
+
+		public Position() {
+
+		}
+
 		public Position(int row_, int col_) {
 			row = row_;
 			col = col_;
@@ -155,5 +160,27 @@ public class Board {
 		}
 
 		return ret;
+	}
+
+	// Like moveCharacter, but without any checks. For suggestion and accusation
+	public void warpCharacter(String name, int destRow, int destCol) {
+		Position p = this.getCharacterPosition(name);
+		Cell current = this.getCell(p.row, p.col);
+		Cell desired = this.getCell(destRow, destCol);
+
+		desired.addCharacter(name);
+		current.removeCharacter(name);
+	}
+
+	public Position getCellCoordinates(String name) {
+		Position p = new Position();
+		for (Cell cell : m_cells) {
+			if (cell.getName().equals(name)) {
+				p.col = cell.getCol();
+				p.row = cell.getRow();
+				break;
+			}
+		}
+		return p;
 	}
 }
