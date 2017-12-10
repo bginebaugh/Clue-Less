@@ -141,6 +141,10 @@ export class Game extends React.Component {
             this.setState({ alertTextShow: "show-text-briefly"});
             setTimeout(() => {
                 this.setState({ alertTextShow: "dont-show"});
+                if (nextProps.alertText.substr(0,25) === "The accusation was right!"){
+                    let path = '/lobby';
+                    this.props.history.push(path);
+                }
             }, 2000);
         }
     }
