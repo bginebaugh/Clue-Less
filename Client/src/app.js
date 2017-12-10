@@ -16,8 +16,9 @@ import Home from "./components/Home_Page/Home";
 import Login from "./components/Login_Page/Login";
 import Lobby from "./components/Lobby_Page/Lobby";
 import WaitingRoom from "./components/WaitingRoom_Page/WaitingRoom";
+import { GameBoard } from "./classes/gameBoard";
 
-import { updateLoginStatus } from "./redux_app-state/actions/actions";
+import { initiateGameBoard, updateLoginStatus } from "./redux_app-state/actions/actions";
 
 const mapStateToProps = (state = {}) => {
     return {
@@ -28,6 +29,7 @@ const mapStateToProps = (state = {}) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        initiateGameBoard: (gameBoard) => dispatch(initiateGameBoard(gameBoard)),
         updateLoginStatus: (bool) => dispatch(updateLoginStatus(bool))
     };
 };
@@ -48,6 +50,21 @@ export class App extends React.Component {
         };
     }
 
+    componentDidMount() {
+        console.log("this is the game board :: ", GameBoard);
+
+        // transform board into 5x5
+        let twoDBoard = [];
+        let firstRow = GameBoard.board.slice(0,5);
+        let secondRow = GameBoard.board.slice(5,10);
+        let thirdRow = GameBoard.board.slice(10,15);
+        let fourthRow = GameBoard.board.slice(15,20);
+        let fifthRow = GameBoard.board.slice(20);
+        twoDBoard = [[...firstRow], [...secondRow], [...thirdRow], [...fourthRow], [...fifthRow]];
+
+        this.props.initiateGameBoard(twoDBoard);
+                
+    }
     componentWillUnmount() {
         if (tcpConnection) {
             console.log("closing connection");

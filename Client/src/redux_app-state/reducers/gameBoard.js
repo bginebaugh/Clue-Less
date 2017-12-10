@@ -16,16 +16,19 @@ const GameBoard = (state = initialState, action) => {
             }
             
         case 'POPULATE_CHARACTER_LIST':
-            console.log("populate characters on board", action);
+            // console.log("populate characters on board", action);
             let characterList = action.characterList;
             let newBoard = state.board;
-            console.log("this is the board list", characterList);
+            // console.log("this is the board list", characterList);
             characterList.forEach((boardPiece, i) => {
                 let x = boardPiece.posX;
                 let y = boardPiece.posY;
+                // console.log("x and y", x, y);
+                // console.log("newBoard",newBoard);
+                // console.log("board piece in POPULATE_CHARACTER_LIST", newBoard[x][y]);
                 newBoard[x][y].playerList = boardPiece.characters;
             });
-            console.log("this is the new board", newBoard)
+            // console.log("this is the new board", newBoard)
             return {
                 ...state,
                 board: newBoard

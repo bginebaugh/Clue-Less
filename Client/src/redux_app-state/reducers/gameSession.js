@@ -7,7 +7,9 @@ const initialState = {
     hasGameStarted: false,
     myCharacter: null,
     myCards: null,
-    playersList: "aa"
+    playersList: null,
+    readyToStartGamePlay: false,
+    playerTurn: null
 }
 
 const GameSession = (state = initialState, action) => {
@@ -28,6 +30,14 @@ const GameSession = (state = initialState, action) => {
             return {
                 ...state,
                 hasGameStarted: action.gameStarted
+            }
+
+        case 'UPDATE_READY_TO_START_GAMEPLAY':
+            console.log("UPDATE_READY_TO_START_GAMEPLAY", action);
+        
+            return {
+                ...state,
+                readyToStartGamePlay: action.readyToStartGamePlay
             }
 
         case 'UPDATE_MYCHARACTER':
@@ -52,6 +62,14 @@ const GameSession = (state = initialState, action) => {
             return {
                 ...state,
                 playersList: action.playersList
+            }
+
+        case 'UPDATE_PLAYERTURN':
+            console.log("UPDATE_PLAYERTURN", action);
+        
+            return {
+                ...state,
+                playerTurn: action.playerTurn
             }
 
       default:

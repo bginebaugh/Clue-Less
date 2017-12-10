@@ -19,7 +19,8 @@ const mapStateToProps = (state = {}) => {
         gameRoomName: state.GameSession.game.name,
         gameList: state.Lobby.gameRoomList,
         hasGameStarted: state.GameSession.hasGameStarted,
-        playersList: state.GameSession.playersList
+        playersList: state.GameSession.playersList,
+        readyToStartGamePlay: state.GameSession.readyToStartGamePlay
     };
 };
 
@@ -56,6 +57,13 @@ export class WaitingRoom extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         this.setState({ modal: nextProps.hasGameStarted });
+
+        if (this.props.readyToStartGamePlay === false && nextProps.readyToStartGamePlay === true) {
+            setTimeout(() => {
+                let path = '/game';
+                this.props.history.push(path);
+            },100);
+        }
     }
 
     selectDropdownItem(event) {
@@ -91,10 +99,6 @@ export class WaitingRoom extends React.Component {
         ServerProxy.selectCharacter(this.state.dropdownValue);
 
         this.setState({ dropdownValue: "" });
-
-        // todo: this doesn't really happen here
-        let path = '/game';
-        this.props.history.push(path);
 
         e.preventDefault();
     

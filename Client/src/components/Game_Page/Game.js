@@ -14,14 +14,14 @@ import { Game as GameClass } from "../../classes/game";
 import Cell from "./Cell";
 
 const mapStateToProps = (state = {}) => {
-    console.log(state.GameBoard);
     return {
         isLoggedIn: state.User.isLoggedIn,
         board: state.GameBoard.board,
         myPosition: state.GameBoard.myPosition,
         myNeighbors: state.GameBoard.myNeighbors,
         myCharacter: state.GameSession.myCharacter,
-        myCards: state.GameSession.myCards
+        myCards: state.GameSession.myCards,
+        playerTurn: state.GameSession.playerTurn
     };
 };
 
@@ -62,22 +62,7 @@ export class Game extends React.Component {
         });
       }
 
-    componentDidMount() {
-        console.log("this is the game board :: ", GameBoard);
-
-        // transform board into 5x5
-        let twoDBoard = [];
-        let firstRow = GameBoard.board.slice(0,5);
-        let secondRow = GameBoard.board.slice(5,10);
-        let thirdRow = GameBoard.board.slice(10,15);
-        let fourthRow = GameBoard.board.slice(15,20);
-        let fifthRow = GameBoard.board.slice(20);
-        twoDBoard = [[...firstRow], [...secondRow], [...thirdRow], [...fourthRow], [...fifthRow]];
-
-        this.props.initiateGameBoard(twoDBoard);
-        this.props.updateMyPosition(GameBoard.board[0]);
-        this.props.updateMyNeighbors();
-        
+    componentDidMount() {        
     }
 
     componentWillReceiveProps(nextProps) {
@@ -129,6 +114,8 @@ export class Game extends React.Component {
                         key={key} 
                         cellPiece={board[i][j]} 
                         className={className}
+                        xCoord={i}
+                        yCoord={j}
                     />);
                 }
             }
@@ -190,8 +177,6 @@ export class Game extends React.Component {
 
     moveCharacter(destination) {
         GameClass.move(destination);
-        let message = `Moving you to coordinates ${destination}`; // TBU
-        alert(message);
         this.setState({ activeTab: null });
     }
 
@@ -246,7 +231,11 @@ export class Game extends React.Component {
     }
 
     renderTurnIndicator() {
-        return <h1>It is your turn</h1>;
+        let { myCharacter, playerTurn } = this.props;
+        let myTurn = myCharacter && playerTurn && myCharacter === playerTurn;
+        return myTurn 
+            ? <h1>It is your turn</h1>
+            : <h1>{playerTurn}'s turn</h1>
     }
 
     renderCardModel() {
@@ -278,7 +267,9 @@ export class Game extends React.Component {
     }
 
     render() {
-        const { isLoggedIn, board, myPosition, myCharacter } = this.props;
+        const { isLoggedIn, board, myPosition, myCharacter, playerTurn } = this.props;
+
+        let myTurn = myCharacter && playerTurn && myCharacter === playerTurn;
 
         if (this.props.isLoggedIn) {
             return (<div className="container">
@@ -296,7 +287,7 @@ export class Game extends React.Component {
                     <Col xs="7">{this.props.board ? this.renderCells() : null}</Col>
                     <Col className="stacked-rows" xs="5">
                         <Row className="right-top">{this.renderTurnIndicator()}</Row>              
-                        { board && myPosition ? <Row className="right-bottom">{this.renderSelectionAction()}</Row> : null }
+                        { board && myPosition && myTurn ? <Row className="right-bottom">{this.renderSelectionAction()}</Row> : null }
                     </Col>
                 </Row>
             </div>);

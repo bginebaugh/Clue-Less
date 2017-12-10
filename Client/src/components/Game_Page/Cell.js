@@ -28,17 +28,18 @@ export class Cell extends React.Component {
         this.props.history.push(path);
     }
 
-    componentWillReceiveProps(nextProps) {
-        if(this.props.board !== nextProps.board) {
-            console.log("forcing update");
-            this.forceUpdate();
-        }
-        this.forceUpdate();
-    }
+    // componentWillReceiveProps(nextProps) {
+    //     if(this.props.board !== nextProps.board) {
+    //         console.log("forcing update");
+    //         this.forceUpdate();
+    //     }
+    //     this.forceUpdate();
+    // }
 
     render() {
-        const { cellPiece, className, isLoggedIn } = this.props;
-        console.log("cellPiece", cellPiece);
+        const { board, className, isLoggedIn, xCoord, yCoord } = this.props;
+        let cellPiece = board[xCoord][yCoord];
+        // console.log("cellPiece", xCoord, yCoord, board, cellPiece);
         return (<div className="cell-piece hover01">
             <div className={(className ? className : "")}>
                 <div className="cell-name">{cellPiece !== null && !cellPiece.m_isHallway ? cellPiece.m_name : ""}</div>

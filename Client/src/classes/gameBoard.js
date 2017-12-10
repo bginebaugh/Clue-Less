@@ -55,7 +55,7 @@ export var GameBoard = {
 	getNeighbors : function (x,y,board) {
 		//assume cell has following four neighbors (up, down, left, right)
 		var neighbors = [ [(x-1),y] ,[(x+1),y], [x,(y-1)], [x,(y+1)] ];
-		console.log("this is board", x, y, board);
+		console.log("board in ", x, y, board);
 		
 		//validate each neighbor
 		for (var i = 0; i < 4; i++){
@@ -100,7 +100,7 @@ export var GameBoard = {
 
 	getValidNeighbors : function (x,y,board) {
 		//assume cell has following four neighbors (up, down, left, right)
-		console.log("this is board", x, y, board);
+		console.log("board in getValidNeighbors", x, y, board);
 
 		var neighbors = [];
 

@@ -1,6 +1,6 @@
 import { store } from '../../renderer';
 import { addToGameRoomList, deleteFromGameRoomList, populateCharactersOnBoard, updateCharacterList, updateGameRoomList, updateGameStarted, 
-    updateMyCards, updateMyCharacter, updateMyPosition, updatePlayerList
+    updateMyCards, updateMyCharacter, updateMyPosition, updatePlayerTurn, updateReadyToStartGamePlay, updatePlayerList
 } from "../redux_app-state/actions/actions";
 import ServerProxy from "./ServerProxy";
 
@@ -85,10 +85,14 @@ export default {
 
     generateMoveCharacterMessage(destinationCoordinates) {
         
-        let messageHeader = this.generateMessageHeader("moveCharacter");
+        let messageHeader = this.generateMessageHeader("move");
+        let x = destinationCoordinates[0];
+        let y = destinationCoordinates[1];
+        console.log("I want to go to ::", x, y);
         
         let obj = Object.assign({}, messageHeader, { content: { 
-            destinationCoordinates: destinationCoordinates
+            posX: x,
+            posY: y
         }});
 
         let messageEnd = this.generateMessageEnder();
@@ -149,6 +153,9 @@ export default {
                 console.log("cardAssignments", jsonResponse);
                 if (jsonResponse && jsonResponse.content && jsonResponse.content.cards) {
                     store.dispatch(updateMyCards(jsonResponse.content.cards));
+
+                    //then start game... if cards will be dispatched
+                    store.dispatch(updateReadyToStartGamePlay(true));
                 }
                 break;
 
@@ -175,9 +182,23 @@ export default {
                     }
                 }
                 break;
+
+            case "characterTurn":
+                console.log("characterTurn", jsonResponse);
+                if (jsonResponse && jsonResponse.content && jsonResponse.content.turn) {
+                    store.dispatch(updatePlayerTurn(jsonResponse.content.turn));
+                }
+                break;                
                 
-                
-                
+            case "moveResponse":
+                console.log("moveResponse", jsonResponse);
+                if (jsonResponse && jsonResponse.content && jsonResponse.content.valid && json.content.characterName) {
+                    let message = `Moving ${characterName} to ${jsonResponse.content.posX}, ${jsonResponse.content.posY}`;
+                    alert(message);
+                    // store.dispatch(updatePlayerTurn(jsonResponse.content.turn));
+                }
+                break;  
+
             default:
                 console.log("Response error :: not a proper messageType ::", messageType);
                 break;

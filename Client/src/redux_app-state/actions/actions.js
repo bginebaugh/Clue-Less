@@ -72,7 +72,35 @@ export const updateMyCards = (myCards) => {
 	}
 };
 
+export const updateGameStarted = (gameStarted) => {
+	
+	console.log("started game :: ", gameStarted);
+	
+	return {
+		type: "UPDATE_GAMESTARTED",
+		gameStarted
+	}
+};
 
+export const updateReadyToStartGamePlay = (readyToStartGamePlay) => {
+	
+	console.log("updateReadyToStartGamePlay :: ", readyToStartGamePlay);
+	
+	return {
+		type: "UPDATE_READY_TO_START_GAMEPLAY",
+		readyToStartGamePlay
+	}
+};
+
+export const updatePlayerTurn = (playerTurn) => {
+	
+	console.log("updatePlayerTurn :: ", playerTurn);
+	
+	return {
+		type: "UPDATE_PLAYERTURN",
+		playerTurn
+	}
+};
 
 // Lobby
 
@@ -118,16 +146,6 @@ export const updateCharacterList = (characterList) => {
 	}
 };
 
-export const updateGameStarted = (gameStarted) => {
-	
-	console.log("started game :: ", gameStarted);
-	
-	return {
-		type: "UPDATE_GAMESTARTED",
-		gameStarted
-	}
-};
-
 export const updatePlayerList = (playersList) => {
 	
 	console.log("new player list :: ", playersList);
@@ -162,7 +180,7 @@ export const updateMyPosition = (myPosition) => {
 
 export const populateCharactersOnBoard = (characterList) => {
 	
-	console.log("updating characters on board :: ", characterList);
+	console.log("action :: updating characters on board :: ", characterList);
 	
 	return {
 		type: "POPULATE_CHARACTER_LIST",
