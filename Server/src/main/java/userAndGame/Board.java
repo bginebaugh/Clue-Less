@@ -60,8 +60,6 @@ public class Board {
 					}
 				}
 				cell.setPosition(row, col);
-				System.out.println(
-						"Cell at (" + row + ", " + col + ") is type " + cell.getType() + ", called " + cell.getName());
 			}
 		}
 
