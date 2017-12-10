@@ -385,7 +385,7 @@ public class Game {
 	public void start() {
 		ServerSystem ss = ServerSystem.getInstance();
 		// Remove the game from the lobby, which will update all client's lobbies
-		ss.removeGameFromLobby(this.getGameOwner().getUserId());
+		ss.removeGameFromLobby(this);
 
 		// distribute the start message to all players
 		StartGameResponse sgr = new StartGameResponse();

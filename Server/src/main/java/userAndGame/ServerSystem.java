@@ -128,6 +128,11 @@ public class ServerSystem {
 		}
 	}
 	
+	public void removeGameFromLobby(Game game) {
+		m_gameLobbyList.remove(game);
+		distributeGameList();
+	}
+	
 	public void refreshGameList() {
 		this.distributeGameList();
 	}
