@@ -64,7 +64,10 @@ export class Game extends React.Component {
           suggestWeaponChoice: null,
           accuseCharacterChoice: null,
           accuseWeaponChoice: null,
-          suggestedCardToSend: null
+          suggestedCardToSend: null,
+          enableMoveOption: true,
+          enableSuggestionOption: true,
+          enableAccuseOption: true
         };
         this.neighbors = null;
     }
@@ -122,6 +125,13 @@ export class Game extends React.Component {
         if(nextProps.suggestionCardChoices && nextProps.suggestionCardChoices.length > 0) {
             console.log("you need to show your cards", nextProps.suggestionCardChoices);
             this.setState({ suggestionCardChoicesModal: true });
+        }
+        if(this.props.playerTurn !== this.props.myCharacter && nextProps.playerTurn === nextProps.myCharacter) {
+            this.setState({ 
+                enableMoveOption: true,
+                enableSuggestionOption: true,
+                enableAccuseOption: true
+             });
         }
     }
 
@@ -189,12 +199,14 @@ export class Game extends React.Component {
     }
 
     renderSelectionAction() {
+        const { enableAccuseOption, enableMoveOption, enableSuggestionOption } = this.state;
+        let message = enableAccuseOption && enableSuggestionOption && enableMoveOption ? "Select An Action" : "You are out of options. End your turn";
         return <div>
-            <h4>Select An Action</h4>
+            <h4>{message}</h4>
             <Nav tabs>
-                {this.generateNavItem('1','Move Character')}
-                {this.generateNavItem('2','Make Suggestion')}
-                {this.generateNavItem('3','Make Accusation')}
+                {this.state.enableMoveOption ? this.generateNavItem('1','Move Character') : null}
+                {this.state.enableSuggestionOption ? this.generateNavItem('2','Make Suggestion') : null}
+                {this.state.enableAccuseOption ? this.generateNavItem('3','Make Accusation') : null}
             </Nav>
             <TabContent activeTab={this.state.activeTab}>
                 <div className="margin-top"></div>
@@ -234,7 +246,10 @@ export class Game extends React.Component {
 
     moveCharacter(destination) {
         GameClass.move(destination);
-        this.setState({ activeTab: null });
+        this.setState({ 
+            activeTab: null,
+            enableMoveOption: false
+         });
     }
 
     dropDownForSuggestionOrAccusation(collection, dropdownType, toggleFunction, callback, stateItem) {    
@@ -308,6 +323,12 @@ export class Game extends React.Component {
     makeSuggestion(character, weapon) {
         let currentRoom = this.props.myPosition.m_name;
         GameClass.makeSuggestion(character, weapon, currentRoom);
+        this.setState({
+            suggestCharacterChoice: null,
+            suggestWeaponChoice: null,
+            enableSuggestionOption: false,
+            activeTab: null
+        });
     }
 
     renderMakeAccusationScreen() {
@@ -351,6 +372,12 @@ export class Game extends React.Component {
     makeAccusation(character, weapon) {
         let currentRoom = this.props.myPosition.m_name;
         GameClass.makeAccusation(character, weapon, currentRoom);
+        this.setState({
+            accuseCharacterChoice: null,
+            accuseWeaponChoice: null,
+            enableAccuseOption: false,
+            activeTab: null
+        });
     }
 
     renderTurnIndicator() {

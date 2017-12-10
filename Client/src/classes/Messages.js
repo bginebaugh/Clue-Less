@@ -293,17 +293,6 @@ export default {
                 }
                 break;
 
-            // case "ShowCardToUser":
-            //     console.log("ShowCardToUser", jsonResponse);
-            //     let characterName3 = jsonResponse.content.characterName;
-            //     let card3 = jsonResponse.content.card;
-            //     console.log(`${characterName} and ${cardChoices}`);
-            //     let message3 = `${characterName3} is showing you this card :: ${card3}`;
-            //     if (characterName3 && card3) {
-            //         alert(message3);
-            //     }
-            //     break;
-
             case "showCardToUser":
                 console.log("showCardToUser", jsonResponse);
                 let characterName4 = jsonResponse.content.characterName;
