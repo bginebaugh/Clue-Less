@@ -285,7 +285,7 @@ export default {
 
                 if (valid2) {
                     setTimeout(() => {
-                        store.dispatch(updateAlertText("Your Accusation was right. You won the game!"));
+                        store.dispatch(updateAlertText(`The accusation was right! Game over. ${character2} wins!`));
                     }, 2000);
                 }
                 console.log(message2);                
