@@ -243,9 +243,40 @@ export default {
                 if (jsonResponse && jsonResponse.content && jsonResponse.content.valid && jsonResponse.content.characterName) {
                     let message = `Moving ${jsonResponse.content.characterName} to ${jsonResponse.content.row}, ${jsonResponse.content.col}`;
                     alert(message);
+                    console.log(message);
                     // store.dispatch(updatePlayerTurn(jsonResponse.content.turn));
                 }
                 break;  
+
+            case "suggestionBroadcast":
+                console.log("suggestionBroadcast", jsonResponse);
+                let characterName1 = jsonResponse.content.characterName;
+                let character1 = jsonResponse.content.character;
+                let weapon1 = jsonResponse.content.weapon;
+                let room1 = jsonResponse.content.room;
+                let message1 = `${characterName1} suggested ${character1} obliterated the victim with a ${weapon1} in the ${room1}`;
+                alert(message1);
+                console.log(message1);
+                break;
+
+            case "accusationBroadcast":
+                console.log("accusationBroadcast", jsonResponse);
+                let characterName2 = jsonResponse.content.characterName;
+                let character2 = jsonResponse.content.character;
+                let weapon2 = jsonResponse.content.weapon;
+                let room2 = jsonResponse.content.room;
+                let message2 = `${characterName2} suggested ${character2} obliterated the victim with a ${weapon2} in the ${room2}`;
+                alert(message2);
+                console.log(message2);                
+                break;
+
+            case "suggestionResponsePrompt":
+                console.log("suggestionResponsePrompt", jsonResponse);
+                let characterName = jsonResponse.content.characterName;
+                let cardChoices = jsonResponse.content.cardChoices;
+                console.log(`${characterName} and ${cardChoices}`);
+                break;
+
 
             default:
                 console.log("Response error :: not a proper messageType ::", messageType);
