@@ -26,7 +26,7 @@ public class User extends Thread {
 	}
 
 	public void run() {
-		m_gsonBuilder.setPrettyPrinting();
+//		m_gsonBuilder.setPrettyPrinting();
 		Gson gson = m_gsonBuilder.registerTypeAdapter(MessageContainer.class, new CluelessDeserializer()).create();
 
 		while (!m_deleteMe) {
@@ -71,6 +71,8 @@ public class User extends Thread {
 
 	public void clearGame() {
 		m_game = null;
+		m_character = "";
+		m_hand = new Hand();
 	}
 
 	public String getCharacter() {

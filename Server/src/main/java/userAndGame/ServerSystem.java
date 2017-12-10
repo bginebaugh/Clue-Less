@@ -117,6 +117,11 @@ public class ServerSystem {
 			}
 		}
 	}
+	
+	public void deleteGame(Game game) {
+		m_gameLobbyList.remove(game);
+		m_gameList.remove(game);
+	}
 
 	public void removeGameFromLobby(int userId) {
 		for (int i = 0; i < m_gameLobbyList.size(); ++i) {

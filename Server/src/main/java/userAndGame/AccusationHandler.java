@@ -13,6 +13,14 @@ public class AccusationHandler {
 
 		Game game = user.getGame();
 
-		game.makeAccusation(user, cards);
+		if (game.makeAccusation(user, cards)) {
+			// Game over
+			for (User tmp : game.getUserList()) {
+				tmp.clearGame();
+			}
+			
+			ServerSystem.getInstance().deleteGame(game);
+			System.out.println("Game Over!");
+		}
 	}
 }
