@@ -13,7 +13,7 @@ public class ShowCardHandler {
 
 		sctu.setCharacterName(user.getCharacter());
 		sctu.setCard(msg.getCard());
-		sctuOut.setMessageType("ShowCardToUser");
+		sctuOut.setMessageType("showCardToUser");
 		sctuOut.setGameId(game.getGameId());
 		sctuOut.setContent(sctu);
 		currentUser.sendMessage(sctuOut);
